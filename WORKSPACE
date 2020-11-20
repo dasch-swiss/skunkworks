@@ -6,10 +6,13 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 
 # The rules_foreign_cc rule repository
+rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
+rules_foreign_cc_version_sha256 = "3e6b0691fc57db8217d535393dcc2cf7c1d39fc87e9adb6e7d7bab1483915110"
 http_archive(
-   name = "rules_foreign_cc",
-   strip_prefix = "rules_foreign_cc-master",
-   url = "https://github.com/bazelbuild/rules_foreign_cc/archive/master.zip",
+    name = "rules_foreign_cc",
+    strip_prefix = "rules_foreign_cc-master",
+    url = "https://github.com/bazelbuild/rules_foreign_cc/archive/%s.zip" % rules_foreign_cc_version,
+    sha256 = rules_foreign_cc_version_sha256,
 )
 
 load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependencies")

@@ -25,9 +25,9 @@
 #include <openssl/buffer.h>
 #include <openssl/pem.h>
 
-#include <jansson.h>
+#include "jansson.h"
 
-#include <jwt.h>
+#include "jwt.h"
 
 //#if !defined(USE_CMAKE)
 //#include "config.h"
