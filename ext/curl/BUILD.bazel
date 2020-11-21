@@ -3,12 +3,13 @@ package(default_visibility = ["//visibility:public"])
 
 # build sqlite
 configure_make(
-    name = "sqlite3",
+    name = "curl",
     configure_options = [
-        "--enable-fts5",
+        "--disable-ldap",
         # "--enable-shared",
         "--enable-static",
+        "--without-libidn2",
     ],
-    lib_source = "@sqlite3//:all",
-    static_libraries = ["libsqlite3.a"],
+    lib_source = "@curl//:all",
+    static_libraries = ["libcurl.a"],
 )

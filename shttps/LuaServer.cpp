@@ -57,7 +57,7 @@
 
 #ifdef SHTTPS_ENABLE_SSL
 
-#include "jwt.h"
+#include "ext/jwt/jwt.h"
 
 #endif
 

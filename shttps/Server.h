@@ -64,7 +64,7 @@
 #include "SocketControl.h"
 
 
-#include "lua.hpp"
+#include "external/lua/lua.hpp"
 
 /*
  * How to create a self-signed certificate

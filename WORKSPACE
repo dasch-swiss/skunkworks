@@ -5,7 +5,7 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 
-# The rules_foreign_cc rule repository
+# The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
 rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
 http_archive(
@@ -89,4 +89,13 @@ http_archive(
     strip_prefix = "file-5.37",
     urls = ["https://astron.com/pub/file/file-5.37.tar.gz"],
     sha256 = "e9c13967f7dd339a3c241b7710ba093560b9a33013491318e88e6b8b57bae07f",
+)
+
+# curl
+http_archive(
+    name = "curl",
+    build_file_content = all_and_magic_files,
+    strip_prefix = "curl-7.70.0",
+    urls = ["https://curl.haxx.se/download/curl-7.70.0.tar.gz"],
+    sha256 = "ca2feeb8ef13368ce5d5e5849a5fd5e2dd4755fecf7d8f0cc94000a4206fb8e7",
 )

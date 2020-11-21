@@ -39,7 +39,7 @@
 #include <signal.h>
 #include <sys/stat.h>
 
-// #include "Connection.h" // do we need this?
+#include "Connection.h"
 #include "Error.h"
 #include "ChunkReader.h"
 

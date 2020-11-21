@@ -36,7 +36,7 @@
 #include "Error.h"
 #include "Connection.h"
 
-#include "lua.h"
+#include "external/lua/lua.hpp"
 
 
 namespace shttps {

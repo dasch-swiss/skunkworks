@@ -30,6 +30,7 @@
 #include "Error.h"
 #include "Server.h"
 #include "LuaServer.h"
+#include "LuaSqlite.h"
 
 shttps::Server *serverptr = nullptr;
 
@@ -209,7 +210,7 @@ int main(int argc, char *argv[]) {
     server.max_post_size(max_post_size); // set the maximal post size
     server.luaRoutes(routes);
     server.keep_alive_timeout(keep_alive); // set the keep alive timeout
-    server.add_lua_globals_func(sqliteGlobals, &server);
+    server.add_lua_globals_func(shttps::sqliteGlobals, &server);
     server.add_lua_globals_func(new_lua_func); // add new lua function "gaga"
 
     //

@@ -14,6 +14,7 @@ cc_library(
             "lauxlib.h",
             "lua.c",
             "lua.h",
+            "lua.hpp",
             "luac.c",
             "lualib.h",
             "print.c",
@@ -23,6 +24,7 @@ cc_library(
         "lauxlib.h",
         "lua.h",
         "lualib.h",
+        "lua.hpp",
     ],
     visibility = ["//visibility:public"],
 )
