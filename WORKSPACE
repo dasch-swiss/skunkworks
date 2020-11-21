@@ -45,7 +45,7 @@ http_archive(
 # @lua//:all
 http_archive(
     name = "lua",
-    build_file = "@//ext:lua.BUILD",
+    build_file = "@//ext/lua:BUILD.bazel",
     #build_file_content = all_content,
     strip_prefix = "lua-5.3.5/src",
     urls = ["https://www.lua.org/ftp/lua-5.3.5.tar.gz"],

@@ -6,7 +6,9 @@ cc_binary(
     name = "main",
     srcs = ["Shttp.cpp"],
     deps = [
-        ":shttps_lib",
+        ":error",
+        ":server",
+        ":lua_server",
         "//ext:jwt",
         "//ext:sole",
         "//ext:jansson",
@@ -16,41 +18,131 @@ cc_binary(
 )
 
 cc_library(
-    name = "shttps_lib",
-    srcs = [
-        "ChunkReader.cpp",
-        "Connection.cpp",
-        "Error.cpp",
-        "Hash.cpp",
-        "jwt.c",
-        "LuaServer.cpp",
-        "LuaSqlite.cpp",
-        "Parsing.cpp",
-        "Server.cpp",
-        "SocketControl.cpp",
-        "SockStream.cpp",
-        "ThreadControl.cpp",
-    ],
-    hdrs = [
-        "ChunkReader.h",
-        "Connection.h",
-        "Error.h",
-        "Global.h",
-        "Hash.h",
-        "jwt.h",
-        "LuaServer.h",
-        "LuaSqlite.h",
-        "makeunique.h",
-        "Parsing.h",
-        "Server.h",
-        "SocketControl.h",
-        "SockStream.h",
-        "sole.hpp",
-        "ThreadControl.h",
-    ],
-    deps = [
-        "//ext:file",
-        "//ext:jansson",
-        "//ext:openssl",
-    ]
+    name = "chunk_reader",
+    srcs = ["ChunkReader.cpp"],
+    hdrs = ["ChunkReader.h"],
+    deps = [],
 )
+
+cc_library(
+    name = "connection",
+    srcs = ["Connection.cpp"],
+    hdrs = ["Connection.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "error",
+    srcs = ["Error.cpp"],
+    hdrs = ["Error.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "hash",
+    srcs = ["Hash.cpp"],
+    hdrs = ["Hash.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "jwt",
+    srcs = ["jwt.c"],
+    hdrs = ["jwt.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "lua_server",
+    srcs = ["LuaServer.cpp"],
+    hdrs = ["LuaServer.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "lua_sqlite",
+    srcs = ["LuaSqlite.cpp"],
+    hdrs = ["LuaSqlite.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "parsing",
+    srcs = ["Parsing.cpp"],
+    hdrs = ["Parsing.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "server",
+    srcs = ["Server.cpp"],
+    hdrs = ["Server.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "socket_control",
+    srcs = ["SocketControl.cpp"],
+    hdrs = ["SocketControl.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "sock_stream",
+    srcs = ["SockStream.cpp"],
+    hdrs = ["SockStream.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "thread_control",
+    srcs = ["ThreadControl.cpp"],
+    hdrs = ["ThreadControl.h"],
+    deps = [],
+)
+
+cc_library(
+    name = "sole",
+    srcs = ["sole.hpp"],
+    deps = [],
+)
+
+#cc_library(
+#    name = "shttps_lib",
+#    srcs = [
+#        "ChunkReader.cpp",
+#        "Connection.cpp",
+#        "Error.cpp",
+#        "Hash.cpp",
+#        "jwt.c",
+#        "LuaServer.cpp",
+#        "LuaSqlite.cpp",
+#        "Parsing.cpp",
+#        "Server.cpp",
+#        "SocketControl.cpp",
+#        "SockStream.cpp",
+#        "ThreadControl.cpp",
+#    ],
+#    hdrs = [
+#        "ChunkReader.h",
+#        "Connection.h",
+#        "Error.h",
+#        "Global.h",
+#        "Hash.h",
+#        "jwt.h",
+#        "LuaServer.h",
+#        "LuaSqlite.h",
+#        "makeunique.h",
+#        "Parsing.h",
+#        "Server.h",
+#        "SocketControl.h",
+#        "SockStream.h",
+#        "sole.hpp",
+#        "ThreadControl.h",
+#    ],
+#    deps = [
+#        "//ext:file",
+#        "//ext:jansson",
+#        "//ext:openssl",
+#    ]
+#)
