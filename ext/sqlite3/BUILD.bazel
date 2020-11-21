@@ -1,0 +1,17 @@
+load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
+package(default_visibility = ["//visibility:public"])
+
+# build sqlite
+configure_make(
+    name = "sqlite3",
+    configure_options = [
+        "--enable-fts5",
+        "--enable-shared",
+        "--enable-static",
+    ],
+    lib_source = "@sqlite3//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = ["libsqlite3.a"],
+)

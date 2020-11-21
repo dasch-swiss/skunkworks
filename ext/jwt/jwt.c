@@ -25,7 +25,7 @@
 #include <openssl/buffer.h>
 #include <openssl/pem.h>
 
-#include <jansson.h>
+#include "jansson.h"
 
 #include "jwt.h"
 

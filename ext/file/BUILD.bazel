@@ -1,0 +1,19 @@
+load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
+package(default_visibility = ["//visibility:public"])
+
+# build file aka libmagic
+configure_make(
+    name = "file",
+    configure_options = [
+        "--disable-dependency-tracking",
+        "--disable-silent-rules",
+        "--enable-fsect-man5",
+        "--enable-static=yes",
+        "--enable-shared=no",
+    ],
+    lib_source = "@file//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = ["libmagic.a"],
+)

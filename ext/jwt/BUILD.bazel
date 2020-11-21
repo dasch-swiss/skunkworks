@@ -1,0 +1,17 @@
+package(default_visibility = ["//visibility:public"])
+
+# build JWT from local source
+cc_library(
+    name = "jwt",
+    srcs = [
+        "jwt.c",
+    ],
+    hdrs = [
+        "jwt.h"
+    ],
+    deps = [
+        "//ext/openssl",
+        "//ext/jansson",
+    ],
+    linkstatic = True, # only create static libraries
+)

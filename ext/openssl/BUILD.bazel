@@ -1,0 +1,23 @@
+load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
+package(default_visibility = ["//visibility:public"])
+
+# build openssl
+configure_make(
+    name = "openssl",
+    configure_command = "config",
+    configure_options = [
+        "zlib",
+        "no-shared",
+    ],
+    lib_source = "@openssl//:all",
+    deps = [
+        "//ext/zlib",
+    ],
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = [
+        "libcrypto.a",
+        "libssl.a",
+    ],
+)

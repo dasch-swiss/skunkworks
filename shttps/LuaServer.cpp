@@ -51,7 +51,7 @@
 #include "Error.h"
 //#include "ChunkReader.h"
 
-#include "sole.hpp"
+#include "ext/sole/sole.hpp"
 #include "Parsing.h"
 
 

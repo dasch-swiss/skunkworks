@@ -1,0 +1,15 @@
+load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
+package(default_visibility = ["//visibility:public"])
+
+# build zlib
+configure_make(
+    name = "zlib",
+    configure_options = [
+        "--static",
+    ],
+    lib_source = "@zlib//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = ["libz.a"],
+)

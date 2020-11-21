@@ -39,9 +39,10 @@
 #include <signal.h>
 #include <sys/stat.h>
 
+// #include "Connection.h" // do we need this?
 #include "Error.h"
-#include "Connection.h"
 #include "ChunkReader.h"
+
 
 static const char __file__[] = __FILE__;
 

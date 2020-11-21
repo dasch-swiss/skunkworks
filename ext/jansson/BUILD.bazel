@@ -1,0 +1,9 @@
+load("@rules_foreign_cc//tools/build_defs:cmake.bzl", "cmake_external")
+package(default_visibility = ["//visibility:public"])
+
+# build jansson
+cmake_external(
+   name = "jansson",
+   lib_source = "@jansson//:all",
+   static_libraries = ["libjansson.a"],
+)

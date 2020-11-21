@@ -1,5 +1,5 @@
 # Description:
-#   Build rule for Lua 5.1: copied from https://github.com/deepmind/lab/blob/master/lua.BUILD
+#   Build rule for Lua 5.1: copied from https://github.com/deepmind/lab/blob/master/bazel/lua.BUILD
 
 # this build file is used directly in the workspace
 

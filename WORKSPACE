@@ -7,10 +7,10 @@ all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//v
 
 # The rules_foreign_cc rule repository
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
-rules_foreign_cc_version_sha256 = "3e6b0691fc57db8217d535393dcc2cf7c1d39fc87e9adb6e7d7bab1483915110"
+rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
 http_archive(
     name = "rules_foreign_cc",
-    strip_prefix = "rules_foreign_cc-master",
+    strip_prefix = "rules_foreign_cc-%s" % rules_foreign_cc_version,
     url = "https://github.com/bazelbuild/rules_foreign_cc/archive/%s.zip" % rules_foreign_cc_version,
     sha256 = rules_foreign_cc_version_sha256,
 )
@@ -31,7 +31,6 @@ http_archive(
     sha256 = "c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1",
 )
 
-
 # @openssl//:all
 http_archive(
     name = "openssl",
@@ -41,17 +40,17 @@ http_archive(
     sha256 = "23011a5cc78e53d0dc98dfa608c51e72bcd350aa57df74c5d5574ba4ffb62e74"
 )
 
-
-# @lua//:all
+# @lua//:lua
 http_archive(
     name = "lua",
-    build_file = "@//ext/lua:BUILD.bazel",
-    #build_file_content = all_content,
-    strip_prefix = "lua-5.3.5/src",
-    urls = ["https://www.lua.org/ftp/lua-5.3.5.tar.gz"],
+    build_file = "@//bazel:lua.BUILD",
     sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
+    strip_prefix = "lua-5.3.5/src",
+    urls = [
+        "https://mirror.bazel.build/www.lua.org/ftp/lua-5.3.5.tar.gz",
+        "https://www.lua.org/ftp/lua-5.3.5.tar.gz",
+    ],
 )
-
 
 # @jansson//:all
 http_archive(
@@ -89,5 +88,5 @@ http_archive(
     build_file_content = all_and_magic_files,
     strip_prefix = "file-5.37",
     urls = ["https://astron.com/pub/file/file-5.37.tar.gz"],
-    # sha256 = "8c5a50db089bd2a1b08dbc5b00d2027602ca7ff238ba7658fabca454d4298e60",
+    sha256 = "e9c13967f7dd339a3c241b7710ba093560b9a33013491318e88e6b8b57bae07f",
 )
