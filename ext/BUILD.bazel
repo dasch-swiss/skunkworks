@@ -9,15 +9,21 @@ configure_make(
         "--with-ssl=\"$$EXT_BUILD_DEPS$$/openssl\"",
         "--with-zlib=\"$$EXT_BUILD_DEPS$$/zlib\"",
         "--disable-ldap",
-        # "--enable-shared",
+        "--enable-shared=no",
         "--enable-static",
         "--without-libidn2",
     ],
     lib_source = "@curl//:all",
-    static_libraries = ["libcurl.a"],
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = [
+        "libcurl.a"
+    ],
     deps = [
-        ":openssl",
+        "//ext:openssl",
         ":zlib",
+        # "@openssl//:ssl",
     ]
 )
 
@@ -32,14 +38,21 @@ configure_make(
         "--enable-shared=no",
     ],
     lib_source = "@file//:all",
-    static_libraries = ["libmagic.a"],
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = [
+        "libmagic.a",
+    ],
 )
 
 # build jansson
 cmake_external(
-   name = "jansson",
-   lib_source = "@jansson//:all",
-   static_libraries = ["libjansson.a"],
+    name = "jansson",
+    lib_source = "@jansson//:all",
+    static_libraries = [
+        "libjansson.a"
+    ],
 )
 
 # build openssl
@@ -47,16 +60,22 @@ configure_make(
     name = "openssl",
     configure_command = "config",
     configure_options = [
-        "zlib=\"$$EXT_BUILD_DEPS$$/zlib\"",
+        "zlib",
+        "--with-zlib-include=\"$$EXT_BUILD_DEPS$$/zlib/include\"",
+        "--with-zlib-lib=\"$$EXT_BUILD_DEPS$$/zlib/lib\"",
         "no-shared",
+        "no-tests",
     ],
     lib_source = "@openssl//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
     deps = [
         "//ext:zlib",
     ],
     static_libraries = [
-        "libcrypto.a",
         "libssl.a",
+        "libcrypto.a",
     ],
 )
 
@@ -69,6 +88,9 @@ configure_make(
         "--enable-static",
     ],
     lib_source = "@sqlite3//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
     static_libraries = ["libsqlite3.a"],
 )
 

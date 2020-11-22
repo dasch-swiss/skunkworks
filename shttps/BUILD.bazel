@@ -20,6 +20,7 @@ cc_binary(
         "//ext/jwt",
         "//ext/sole",
         "@lua//:lua",
+        # "@openssl//:ssl",
     ],
 )
 
@@ -90,6 +91,7 @@ cc_library(
         ":error",
         ":make_unique",
         "//ext:openssl",
+        # "@openssl//:ssl",
     ],
 )
 
@@ -144,6 +146,7 @@ cc_library(
         ":error",
         ":thread_control",
         "//ext:openssl",
+        # "@openssl//:ssl",
     ],
 )
 
@@ -157,6 +160,7 @@ cc_library(
     ],
     deps = [
         "//ext:openssl",
+        # "@openssl//:ssl",
     ],
 )
 

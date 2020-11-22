@@ -10,8 +10,9 @@ cc_library(
         "jwt.h"
     ],
     deps = [
-        "//ext/openssl",
-        "//ext/jansson",
+        "//ext:jansson",
+        "//ext:openssl",
+        # "@openssl//:ssl",
     ],
     linkstatic = True, # only create static libraries
 )
