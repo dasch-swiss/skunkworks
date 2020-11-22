@@ -23,7 +23,6 @@ configure_make(
     deps = [
         ":openssl",
         ":zlib",
-        # "@openssl//:ssl",
     ]
 )
 
