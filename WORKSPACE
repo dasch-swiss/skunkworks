@@ -40,15 +40,6 @@ http_archive(
     sha256 = "281e4f13142b53657bd154481e18195b2d477572fdffa8ed1065f73ef5a19777"
 )
 
-# @openssl//:ssl
-#http_archive(
-#    name = "openssl",
-#    build_file = "@//bazel:openssl.BUILD",
-#    sha256 = "281e4f13142b53657bd154481e18195b2d477572fdffa8ed1065f73ef5a19777",
-#    strip_prefix = "openssl-OpenSSL_1_1_1g",
-#    urls = ["https://github.com/openssl/openssl/archive/OpenSSL_1_1_1g.tar.gz"],
-#)
-
 # @lua_archive//:lua
 http_archive(
     name = "lua",

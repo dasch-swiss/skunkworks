@@ -20,7 +20,6 @@ cc_binary(
         "//third_party/jwt",
         "//third_party/sole",
         "@lua//:lua",
-        # "@openssl//:ssl",
     ],
 )
 
@@ -91,7 +90,6 @@ cc_library(
         ":error",
         ":make_unique",
         "//third_party:openssl",
-        # "@openssl//:ssl",
     ],
 )
 
@@ -147,7 +145,6 @@ cc_library(
         ":error",
         ":thread_control",
         "//third_party:openssl",
-        # "@openssl//:ssl",
     ],
 )
 
@@ -161,7 +158,6 @@ cc_library(
     ],
     deps = [
         "//third_party:openssl",
-        # "@openssl//:ssl",
     ],
 )
 

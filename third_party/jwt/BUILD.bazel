@@ -12,7 +12,6 @@ cc_library(
     deps = [
         "//third_party:jansson",
         "//third_party:openssl",
-        # "@openssl//:ssl",
     ],
     linkstatic = True, # only create static libraries
 )
