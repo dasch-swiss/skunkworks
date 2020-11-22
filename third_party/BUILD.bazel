@@ -21,7 +21,7 @@ configure_make(
         "libcurl.a"
     ],
     deps = [
-        "//ext:openssl",
+        ":openssl",
         ":zlib",
         # "@openssl//:ssl",
     ]
@@ -71,27 +71,12 @@ configure_make(
             "AR": "",
     },
     deps = [
-        "//ext:zlib",
+        ":zlib",
     ],
     static_libraries = [
         "libssl.a",
         "libcrypto.a",
     ],
-)
-
-# build sqlite
-configure_make(
-    name = "sqlite3",
-    configure_options = [
-        "--enable-fts5",
-        # "--enable-shared",
-        "--enable-static",
-    ],
-    lib_source = "@sqlite3//:all",
-    configure_env_vars = {
-            "AR": "",
-    },
-    static_libraries = ["libsqlite3.a"],
 )
 
 # build zlib

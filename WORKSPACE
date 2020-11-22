@@ -49,16 +49,13 @@ http_archive(
 #    urls = ["https://github.com/openssl/openssl/archive/OpenSSL_1_1_1g.tar.gz"],
 #)
 
-# @lua//:lua
+# @lua_archive//:lua
 http_archive(
     name = "lua",
-    build_file = "@//bazel:lua.BUILD",
-    sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
+    build_file = "@//third_party:lua.BUILD",
     strip_prefix = "lua-5.3.5/src",
-    urls = [
-        "https://mirror.bazel.build/www.lua.org/ftp/lua-5.3.5.tar.gz",
-        "https://www.lua.org/ftp/lua-5.3.5.tar.gz",
-    ],
+    urls = ["https://www.lua.org/ftp/lua-5.3.5.tar.gz"],
+    sha256 = "0c2eed3f960446e1a3e4b9a1ca2f3ff893b6ce41942cf54d5dd59ab4b3b058ac",
 )
 
 # @jansson//:all
@@ -70,13 +67,13 @@ http_archive(
     sha256 = "76260d30e9bbd0ef392798525e8cd7fe59a6450c54ca6135672e3cd6a1642941",
 )
 
-# @sqlite//:all
+# @sqlite3//:sqlite3
 http_archive(
     name = "sqlite3",
-    build_file_content = all_content,
-    strip_prefix = "sqlite-autoconf-3300100",
-    urls = ["https://www.sqlite.org/2019/sqlite-autoconf-3300100.tar.gz"],
-    sha256 = "8c5a50db089bd2a1b08dbc5b00d2027602ca7ff238ba7658fabca454d4298e60",
+    build_file = "@//third_party:sqlite3.BUILD",
+    strip_prefix = "sqlite-amalgamation-3330000",
+    urls = ["https://www.sqlite.org/2020/sqlite-amalgamation-3330000.zip"],
+    sha256 = "b34f4c0c0eefad9a7e515c030c18702e477f4ef7d8ade6142bdab8011b487ac6",
 )
 
 # google test

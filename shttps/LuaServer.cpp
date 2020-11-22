@@ -51,13 +51,13 @@
 #include "Error.h"
 //#include "ChunkReader.h"
 
-#include "ext/sole/sole.hpp"
+#include "third_party//sole/sole.hpp"
 #include "Parsing.h"
 
 
 #ifdef SHTTPS_ENABLE_SSL
 
-#include "ext/jwt/jwt.h"
+#include "third_party/jwt/jwt.h"
 
 #endif
 

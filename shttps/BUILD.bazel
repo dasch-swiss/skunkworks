@@ -14,11 +14,11 @@ cc_binary(
         ":error",
         ":lua_sqlite",
         ":sock_stream",
-        "//ext:curl",
-        "//ext:jansson",
-        "//ext:openssl",
-        "//ext/jwt",
-        "//ext/sole",
+        "//third_party:curl",
+        "//third_party:jansson",
+        "//third_party:openssl",
+        "//third_party/jwt",
+        "//third_party/sole",
         "@lua//:lua",
         # "@openssl//:ssl",
     ],
@@ -49,11 +49,11 @@ cc_library(
         ":make_unique",
         ":parsing",
         ":sock_stream",
-        "socket_control",
-        "thread_control",
-        "//ext:curl",
-        "//ext/jwt",
-        "//ext/sole",
+        ":socket_control",
+        ":thread_control",
+        "//third_party:curl",
+        "//third_party/jwt",
+        "//third_party/sole",
         "@lua//:lua",
     ],
 )
@@ -90,7 +90,7 @@ cc_library(
     deps = [
         ":error",
         ":make_unique",
-        "//ext:openssl",
+        "//third_party:openssl",
         # "@openssl//:ssl",
     ],
 )
@@ -107,6 +107,7 @@ cc_library(
         ":error",
         ":ccs_lib",
         "@lua//:lua",
+        "@sqlite3//:sqlite3",
     ],
 )
 
@@ -130,7 +131,7 @@ cc_library(
     ],
     deps = [
         ":error",
-        "//ext:file",
+        "//third_party:file",
     ],
 )
 
@@ -145,7 +146,7 @@ cc_library(
     deps = [
         ":error",
         ":thread_control",
-        "//ext:openssl",
+        "//third_party:openssl",
         # "@openssl//:ssl",
     ],
 )
@@ -159,7 +160,7 @@ cc_library(
         "-DSHTTPS_ENABLE_SSL",
     ],
     deps = [
-        "//ext:openssl",
+        "//third_party:openssl",
         # "@openssl//:ssl",
     ],
 )

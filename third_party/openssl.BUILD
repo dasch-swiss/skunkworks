@@ -1,3 +1,7 @@
+#
+# this build file is used directly in the workspace
+#
+
 # https://github.com/envoyproxy/envoy-openssl/blob/master/openssl.BUILD
 
 licenses(["notice"])  # Apache 2
