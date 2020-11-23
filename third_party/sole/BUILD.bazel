@@ -1,0 +1,12 @@
+package(default_visibility = ["//visibility:public"])
+
+# build sole from local source
+cc_library(
+    name = "sole",
+    srcs = [
+        "sole.hpp"
+    ],
+    hdrs = [
+        "sole.hpp"
+    ],
+)

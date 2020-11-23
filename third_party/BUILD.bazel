@@ -1,0 +1,89 @@
+load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
+load("@rules_foreign_cc//tools/build_defs:cmake.bzl", "cmake_external")
+package(default_visibility = ["//visibility:public"])
+
+# build curl
+configure_make(
+    name = "curl",
+    configure_options = [
+        "--with-ssl=\"$$EXT_BUILD_DEPS$$/openssl\"",
+        "--with-zlib=\"$$EXT_BUILD_DEPS$$/zlib\"",
+        "--disable-ldap",
+        "--enable-shared=no",
+        "--enable-static",
+        "--without-libidn2",
+    ],
+    lib_source = "@curl//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = [
+        "libcurl.a"
+    ],
+    deps = [
+        ":openssl",
+        ":zlib",
+    ]
+)
+
+# build file aka libmagic
+configure_make(
+    name = "file",
+    configure_options = [
+        "--disable-dependency-tracking",
+        "--disable-silent-rules",
+        "--enable-fsect-man5",
+        "--enable-static=yes",
+        "--enable-shared=no",
+    ],
+    lib_source = "@file//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    static_libraries = [
+        "libmagic.a",
+    ],
+)
+
+# build jansson
+cmake_external(
+    name = "jansson",
+    lib_source = "@jansson//:all",
+    static_libraries = [
+        "libjansson.a"
+    ],
+)
+
+# build openssl
+configure_make(
+    name = "openssl",
+    configure_command = "config",
+    configure_options = [
+        "zlib",
+        "--with-zlib-include=\"$$EXT_BUILD_DEPS$$/zlib/include\"",
+        "--with-zlib-lib=\"$$EXT_BUILD_DEPS$$/zlib/lib\"",
+        "no-shared",
+        "no-tests",
+    ],
+    lib_source = "@openssl//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    deps = [
+        ":zlib",
+    ],
+    static_libraries = [
+        "libssl.a",
+        "libcrypto.a",
+    ],
+)
+
+# build zlib
+configure_make(
+    name = "zlib",
+    configure_options = [
+        "--static",
+    ],
+    lib_source = "@zlib//:all",
+    static_libraries = ["libz.a"],
+)

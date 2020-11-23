@@ -1,0 +1,173 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_binary(
+    name = "main",
+    srcs = ["Shttp.cpp"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":ccs_lib",
+        ":error",
+        ":lua_sqlite",
+        ":sock_stream",
+        "//third_party:curl",
+        "//third_party:jansson",
+        "//third_party:openssl",
+        "//third_party/jwt",
+        "//third_party/sole",
+        "@lua//:lua",
+    ],
+)
+
+# FIXME: has circular dependencies. Should/need we break them up?
+cc_library(
+    name = "ccs_lib",
+    srcs = [
+        "ChunkReader.cpp",
+        "Connection.cpp",
+        "LuaServer.cpp",
+        "Server.cpp",
+    ],
+    hdrs = [
+        "ChunkReader.h",
+        "Connection.h",
+        "LuaServer.h",
+        "Server.h",
+    ],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":error",
+        ":global",
+        ":make_unique",
+        ":parsing",
+        ":sock_stream",
+        ":socket_control",
+        ":thread_control",
+        "//third_party:curl",
+        "//third_party/jwt",
+        "//third_party/sole",
+        "@lua//:lua",
+    ],
+)
+
+cc_library(
+    name = "error",
+    srcs = ["Error.cpp"],
+    hdrs = ["Error.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [],
+)
+
+cc_library(
+    name = "global",
+    srcs = ["Global.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [],
+)
+
+cc_library(
+    name = "hash",
+    srcs = ["Hash.cpp"],
+    hdrs = ["Hash.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":error",
+        ":make_unique",
+        "//third_party:openssl",
+    ],
+)
+
+cc_library(
+    name = "lua_sqlite",
+    srcs = ["LuaSqlite.cpp"],
+    hdrs = ["LuaSqlite.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":error",
+        ":ccs_lib",
+        "@lua//:lua",
+        "@sqlite3//:sqlite3",
+    ],
+)
+
+cc_library(
+    name = "make_unique",
+    srcs = ["makeunique.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [],
+)
+
+cc_library(
+    name = "parsing",
+    srcs = ["Parsing.cpp"],
+    hdrs = ["Parsing.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":error",
+        "//third_party:file",
+    ],
+)
+
+cc_library(
+    name = "socket_control",
+    srcs = ["SocketControl.cpp"],
+    hdrs = ["SocketControl.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        ":error",
+        ":thread_control",
+        "//third_party:openssl",
+    ],
+)
+
+cc_library(
+    name = "sock_stream",
+    srcs = ["SockStream.cpp"],
+    hdrs = ["SockStream.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [
+        "//third_party:openssl",
+    ],
+)
+
+cc_library(
+    name = "thread_control",
+    srcs = ["ThreadControl.cpp"],
+    hdrs = ["ThreadControl.h"],
+    copts = [
+        "-std=c++17",
+        "-DSHTTPS_ENABLE_SSL",
+    ],
+    deps = [],
+)

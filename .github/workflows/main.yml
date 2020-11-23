@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  release:
+    types: [published]
+
+jobs:
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v1
+        with:
+          fetch-depth: 50
+      - uses: joschi/setup-jdk@v2
+        with:
+          java-version: '11' # The OpenJDK version to make available on the path
+          architecture: 'x64' # defaults to 'x64'
+      - name: install requirements
+        run: sudo apt-get install ca-certificates-java expect
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Set up Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12'
+      - name: Install dependencies
+        run: |
+          npm install --global @bazel/bazelisk
+      - name: run build
+        run: make build
