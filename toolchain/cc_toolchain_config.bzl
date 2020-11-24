@@ -1,3 +1,19 @@
+# Defines the C++ settings that tell Bazel precisely how to construct C++
+# commands. This is unique to C++ toolchains: other languages don't require
+# anything like this.
+#
+# This is mostly boilerplate. It provides all the structure Bazel's C++ logic
+# expects (like where to find the compiler, linker, object code copier, etc).
+#
+# See
+# https://docs.bazel.build/versions/master/cc-toolchain-config-reference.html
+# for all the gory details.
+#
+# This file is more about C++-specific toolchain configuration than how to
+# declare toolchains and match them to platforms. It's important if you want to
+# write your own custom C++ toolchains. But if you want to write toolchains for
+# other languages or figure out how to select toolchains for custom CPU types,
+# OSes, etc., the BUILD file is much more interesting.
 
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 load(

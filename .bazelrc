@@ -1,6 +1,9 @@
 build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=yes
 build --compilation_mode dbg
 
+# force using platforms for toolchain resolution (will become default at some point)
+build --incompatible_enable_cc_toolchain_resolution
+
 # Use our custom-configured c++ toolchain.
 build:clang_config --crosstool_top=//toolchain:clang_suite
 
