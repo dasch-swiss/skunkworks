@@ -20,7 +20,7 @@ jobs:
           architecture: 'x64' # defaults to 'x64'
       - name: install requirements
         run: sudo apt-get install ca-certificates-java expect
-      - name: Set up Python 3.8
+      - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
           python-version: 3.9

@@ -5,10 +5,6 @@ package(default_visibility = ["//visibility:public"])
 cc_binary(
     name = "main",
     srcs = ["Shttp.cpp"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":ccs_lib",
         ":error",
@@ -38,10 +34,6 @@ cc_library(
         "LuaServer.h",
         "Server.h",
     ],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":error",
         ":global",
@@ -61,20 +53,12 @@ cc_library(
     name = "error",
     srcs = ["Error.cpp"],
     hdrs = ["Error.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [],
 )
 
 cc_library(
     name = "global",
     srcs = ["Global.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [],
 )
 
@@ -82,10 +66,6 @@ cc_library(
     name = "hash",
     srcs = ["Hash.cpp"],
     hdrs = ["Hash.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":error",
         ":make_unique",
@@ -97,10 +77,6 @@ cc_library(
     name = "lua_sqlite",
     srcs = ["LuaSqlite.cpp"],
     hdrs = ["LuaSqlite.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":error",
         ":ccs_lib",
@@ -112,10 +88,6 @@ cc_library(
 cc_library(
     name = "make_unique",
     srcs = ["makeunique.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [],
 )
 
@@ -123,10 +95,6 @@ cc_library(
     name = "parsing",
     srcs = ["Parsing.cpp"],
     hdrs = ["Parsing.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":error",
         "//third_party:file",
@@ -137,10 +105,6 @@ cc_library(
     name = "socket_control",
     srcs = ["SocketControl.cpp"],
     hdrs = ["SocketControl.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         ":error",
         ":thread_control",
@@ -152,10 +116,6 @@ cc_library(
     name = "sock_stream",
     srcs = ["SockStream.cpp"],
     hdrs = ["SockStream.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [
         "//third_party:openssl",
     ],
@@ -165,9 +125,5 @@ cc_library(
     name = "thread_control",
     srcs = ["ThreadControl.cpp"],
     hdrs = ["ThreadControl.h"],
-    copts = [
-        "-std=c++17",
-        "-DSHTTPS_ENABLE_SSL",
-    ],
     deps = [],
 )
