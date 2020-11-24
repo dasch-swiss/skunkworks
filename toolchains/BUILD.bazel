@@ -2,25 +2,25 @@ package(default_visibility = ["//visibility:public"])
 
 # This is C++-specific overhead required for all C++ toolchains. See
 # cc_toolchain_config.bzl for details.
-load(":cc_toolchain_config.bzl", "cc_toolchain_config")
-cc_toolchain_config(name = "k8_toolchain_config")
+#load(":cc_toolchain_config.bzl", "cc_toolchain_config")
+#cc_toolchain_config(name = "k8_toolchain_config")
 
 # Define our cc_toolchain
 # (https://docs.bazel.build/versions/master/be/c-cpp.html#cc_toolchain).
 # The cc_toolchain rule is pre-defined by the C++ rule owners. It uses these
 # parameters to construct a ToolchainInfo provider, as required by Bazel's
 # platform/toolchain APIs.
-cc_toolchain(
-    name = "k8_toolchain_definition",
-    all_files = ":empty",
-    compiler_files = ":empty",
-    dwp_files = ":empty",
-    linker_files = ":empty",
-    objcopy_files = ":empty",
-    strip_files = ":empty",
-    supports_param_files = 0,
-    toolchain_config = ":k8_toolchain_config",
-)
+#cc_toolchain(
+#    name = "k8_toolchain_definition",
+#    all_files = ":empty",
+#    compiler_files = ":empty",
+#    dwp_files = ":empty",
+#    linker_files = ":empty",
+#    objcopy_files = ":empty",
+#    strip_files = ":empty",
+#    supports_param_files = 0,
+#    toolchain_config = ":k8_toolchain_config",
+#)
 
 # Bazel's platform/toolchain APIs require this wrapper around the actual
 # toolchain defined above. It serves two purposes: declare which
@@ -32,9 +32,9 @@ cc_toolchain(
 # toolchain" (this is encoded in the cc_binary rule definition) and needs to
 # use a toolchain that matches whatever you set --platforms to at the command
 # line.
-toolchain(
-  name = "k8_toolchain",
-  toolchain = ":k8_toolchain_definition",
-  toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
-  target_compatible_with = ["@platforms//cpu:x86_64"],
-)
+#toolchain(
+#  name = "k8_toolchain",
+#  toolchain = ":k8_toolchain_definition",
+#  toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+#  target_compatible_with = ["@platforms//cpu:x86_64"],
+#)
