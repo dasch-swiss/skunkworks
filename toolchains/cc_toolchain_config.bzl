@@ -95,7 +95,7 @@ def _impl(ctx):
         toolchain_identifier = "k8-toolchain",
         host_system_name = "local",
         target_system_name = "local",
-        target_cpu = "k8",
+        target_cpu = "x86_64",
         target_libc = "unknown",
         compiler = "clang",
         abi_version = "unknown",
