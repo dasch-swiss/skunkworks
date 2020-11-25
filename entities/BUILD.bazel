@@ -2,20 +2,28 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_library(
-    name = "project_data_model",
-    srcs = ["project_data_model.cc"],
-    deps = ["project_data_model.h"],
+cc_binary(
+    name = "main",
+    srcs = ["main.cc"],
+    deps = [
+        ":entities",
+    ],
 )
 
 cc_library(
-    name = "resource_class",
-    srcs = ["resource_class.cc"],
-    deps = ["resource_class.h"],
-)
-
-cc_library(
-    name = "property",
-    srcs = ["Property.cpp"],
-    deps = ["Property.h"],
+    name = "entities",
+    srcs = [
+        "Property.cc",
+        "ResourceClass.cc",
+        "ValueClass.cc",
+    ],
+    hdrs = [
+        "Property.h",
+        "ResourceClass.h",
+        "ValueClass.h",
+    ],
+    deps = [
+        "//helpers:error",
+        "//helpers:uuid",
+    ],
 )

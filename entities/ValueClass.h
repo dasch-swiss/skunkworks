@@ -30,7 +30,9 @@ namespace dsp {
         std::string stringval;
     };
 
-    class IntegerValue : public Value
+    class IntegerValue : public Value {
+        std::string intval;
+    };
 
 }
 

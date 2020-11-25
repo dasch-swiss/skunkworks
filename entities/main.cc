@@ -2,7 +2,9 @@
 #include <string>
 #include <unordered_map>
 
+#include "Property.h"
 #include "ResourceClass.h"
+#include "ValueClass.h"
 
 int main(int argc, char *argv[]) {
 

@@ -2,13 +2,17 @@
 // Created by Ivan Subotic on 25/11/2020.
 //
 
+#ifndef SKUNKWORKS_RESOURCE_CLASS_H
+#define SKUNKWORKS_RESOURCE_CLASS_H
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
 
-#ifndef SKUNKWORKS_RESOURCE_CLASS_H
-#define SKUNKWORKS_RESOURCE_CLASS_H
+#include "Property.h"
+
 namespace dsp {
+
     class ResourceClass {
 
         struct has_property {
