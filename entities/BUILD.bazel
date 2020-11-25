@@ -1,0 +1,15 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "project_data_model",
+    srcs = ["project_data_model.cc"],
+    deps = ["project_data_model.h"],
+)
+
+cc_library(
+    name = "resource_class",
+    srcs = ["resource_class.cc"],
+    deps = ["resource_class.h"],
+)
