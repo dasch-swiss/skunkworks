@@ -1,10 +1,15 @@
 //
+<<<<<<< HEAD
 // Created by Lukas Rosenthaler on 25.11.20.
+=======
+// Created by Ivan Subotic on 25/11/2020.
+>>>>>>> 5c98e6b8a9734b783ebaf1bff116ca1c3ba1e671
 //
 
 #ifndef SKUNKWORKS_PROPERTY_H
 #define SKUNKWORKS_PROPERTY_H
 
+<<<<<<< HEAD
 #include <string>
 
 #include "ResourceClass.h"
@@ -30,6 +35,12 @@ namespace dsp {
         inline std::string id() { return id_; }
     };
 }
+=======
+
+class Property {
+
+};
+>>>>>>> 5c98e6b8a9734b783ebaf1bff116ca1c3ba1e671
 
 
 #endif //SKUNKWORKS_PROPERTY_H
