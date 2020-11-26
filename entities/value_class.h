@@ -2,8 +2,8 @@
 // Created by Lukas Rosenthaler on 25.11.20.
 //
 
-#ifndef SKUNKWORKS_VALUECLASS_H
-#define SKUNKWORKS_VALUECLASS_H
+#ifndef SKUNKWORKS_VALUE_CLASS_H
+#define SKUNKWORKS_VALUE_CLASS_H
 
 #include <string>
 
@@ -37,4 +37,4 @@ namespace dsp {
 }
 
 
-#endif //SKUNKWORKS_VALUECLASS_H
+#endif //SKUNKWORKS_VALUE_CLASS_H

@@ -5,7 +5,7 @@
 
 
 #include "helpers/uuid.h"
-#include "ValueClass.h"
+#include "value_class.h"
 
 namespace dsp {
     ValueClass::ValueClass(const std::string class_label,

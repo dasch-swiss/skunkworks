@@ -6,8 +6,8 @@
 
 #include <string>
 
-#include "ResourceClass.h"
-#include "ValueClass.h"
+#include "resource_class.h"
+#include "value_class.h"
 
 namespace dsp {
 
@@ -22,7 +22,7 @@ namespace dsp {
 
         Property(const std::string class_label,
                  const std::string class_description,
-                 const std::shared_ptr <ResourceClass> resource_class,
+                 const std::shared_ptr <resource_class> resource_class,
                  const std::shared_ptr <ValueClass> value_class,
                  const std::shared_ptr <Property> sub_class_of = nullptr);
 

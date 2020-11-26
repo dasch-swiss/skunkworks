@@ -6,7 +6,7 @@
 
 #include "helpers/uuid.h"
 
-#include "Property.h"
+#include "property.h"
 
 
 namespace dsp {
