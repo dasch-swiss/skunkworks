@@ -19,15 +19,16 @@ class Property {
   std::shared_ptr<ResourceClass> resource_class_;
   std::shared_ptr<ValueClass> value_class_;
   std::shared_ptr<Property> sub_class_of_;
-
+ public:
   Property(const std::string class_label,
            const std::string class_description,
-           const std::shared_ptr<resource_class> resource_class,
+           const std::shared_ptr<ResourceClass> resource_class,
            const std::shared_ptr<ValueClass> value_class,
            const std::shared_ptr<Property> sub_class_of = nullptr);
 
   inline std::string id() { return id_; }
 };
+
 }
 
 #endif //SKUNKWORKS_PROPERTY_H

@@ -3,7 +3,7 @@
 //
 
 #include "helpers/uuid.h"
-#include "helpers/Error.h"
+#include "helpers/error.h"
 
 #include "property.h"
 #include "resource_class.h"
@@ -25,11 +25,11 @@ void ResourceClass::add_property(const std::shared_ptr<Property> property,
                                  int min_count,
                                  int max_count) {
   try {
-    std::string tmp = this->has_properties_.at(property->id())
+    HasProperty tmp = this->has_properties_.at(property->id());
   }
   catch (const std::out_of_range &err) {
-    HasProperty hp = {property, min_count, max_count}
-    has_properties[property.id()] = hp;
+    HasProperty hp = {property, min_count, max_count};
+    has_properties_[property->id()] = hp;
     return;
   } // TODO: Use C++20 with contains ASAP!
   throw Error(__file__, __LINE__, "Property with same id already exists!");

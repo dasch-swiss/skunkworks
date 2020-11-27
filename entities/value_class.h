@@ -10,12 +10,13 @@
 namespace dsp {
 
 class ValueClass {
+ private:
   std::string id_;
   std::string class_label_;
   std::string class_description_;
-
-  ValueClass(const std::string class_label,
-             const std::string class_description);
+ public:
+  ValueClass(const std::string class_label, const std::string class_description);
+  ValueClass(const char *class_label, const char *class_description);
 
   inline std::string id() { return id_; }
 

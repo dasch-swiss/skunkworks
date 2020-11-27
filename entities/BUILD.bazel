@@ -27,5 +27,6 @@ cc_library(
     deps = [
         "//helpers/xsd_types:error",
         "//helpers:uuid",
+        "//helpers:error",
     ],
 )

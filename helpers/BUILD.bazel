@@ -13,3 +13,9 @@ cc_library(
     srcs = ["uuid.cc"],
     hdrs = ["uuid.h"],
 )
+
+cc_library(
+    name = "error",
+    srcs = ["error.cc"],
+    hdrs = ["error.h"],
+)
