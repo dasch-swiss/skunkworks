@@ -9,7 +9,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "Property.h"
+#include "property.h"
 
 namespace dsp {
 

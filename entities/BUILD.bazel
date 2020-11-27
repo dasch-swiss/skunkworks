@@ -2,25 +2,27 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_binary(
-    name = "main",
-    srcs = ["main.cc"],
+cc_test(
+    name = "entities_test",
+    srcs = ["entities_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":entities",
+        "//entities",
+        "@gtest//:main"
     ],
 )
 
 cc_library(
     name = "entities",
     srcs = [
-        "Property.cc",
-        "ResourceClass.cc",
-        "ValueClass.cc",
+        "property.cc",
+        "resource_class.cc",
+        "value_class.cc",
     ],
     hdrs = [
-        "Property.h",
-        "ResourceClass.h",
-        "ValueClass.h",
+        "property.h",
+        "resource_class.h",
+        "value_class.h",
     ],
     deps = [
         "//helpers:error",

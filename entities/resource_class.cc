@@ -5,8 +5,8 @@
 #include "helpers/uuid.h"
 #include "helpers/Error.h"
 
-#include "Property.h"
-#include "ResourceClass.h"
+#include "property.h"
+#include "resource_class.h"
 
 static const char __file__[] = __FILE__;
 

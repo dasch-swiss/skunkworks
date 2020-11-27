@@ -4,6 +4,9 @@
 
 #ifndef SKUNKWORKS_UUID_H
 #define SKUNKWORKS_UUID_H
+
+#include <string>
+
 namespace uuid {
 
     std::string generate_uuid_v4();
