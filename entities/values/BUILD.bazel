@@ -11,6 +11,7 @@ cc_library(
         "agent.h",
     ],
     deps = [
+        "//helpers/xsd_types:others"
     ],
 )
 

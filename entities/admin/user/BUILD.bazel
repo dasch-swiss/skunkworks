@@ -1,0 +1,23 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "user",
+    srcs = ["user.cpp"],
+    hdrs = ["user.h"],
+    deps = [
+        "//entities/values:agent",
+        "//helpers:uuid"
+    ],
+)
+
+cc_test(
+    name = "user_test",
+    srcs = ["user_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
+    deps = [
+        ":user",
+        "@gtest//:main"
+    ],
+)
