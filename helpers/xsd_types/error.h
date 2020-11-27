@@ -22,15 +22,15 @@
  *//*!
  * \brief Implements an error class for the http server.
  */
-#ifndef __defined_shttps_error_h
-#define __defined_shttps_error_h
+#ifndef __defined_error_h
+#define __defined_error_h
 
 #include <iostream>
 #include <string>
 #include <exception>
 #include <stdexcept>
 
-namespace dsp {
+namespace xsd {
 
     /*!
      * \brief Class used to thow errors from the web server implementation
@@ -39,7 +39,7 @@ namespace dsp {
      * errors from the web server. The error contains the cpp-file, line number, a user given
      * description and, if available, the system error message.
      */
-    class Error : public std::runtime_error {
+    class Error : std::runtime_error {
     protected:
         int line;            //!< Linenumber where the exception has been throwns
         std::string file;    //!< Name of source code file where the exception has been thrown
@@ -78,8 +78,10 @@ namespace dsp {
         */
         Error(const char *file, const int line, const std::string &msg, int errno_p = 0);
 
+        inline ~Error() throw() {};
+
         /*!
-         * Retuns the error as a one-line string
+         * Returns the error as a one-line string
          *
          * \returns Error string
          */
