@@ -8,10 +8,14 @@
 #include "value_class.h"
 
 namespace dsp {
-    ValueClass::ValueClass(const std::string class_label,
-                           const std::string class_description) :
-                           class_label_(class_label),
-                           class_description_(class_description) {
-        id_ = uuid::generate_uuid_v4();
-    }
+
+ValueClass::ValueClass(
+    const std::string class_label,
+    const std::string class_description
+) :
+    class_label_(class_label),
+    class_description_(class_description) {
+  id_ = uuid::generate_uuid_v4();
+}
+
 }
