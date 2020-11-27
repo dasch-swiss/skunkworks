@@ -21,19 +21,6 @@ namespace dsp {
         inline std::string id() { return id_; }
 
     };
-
-    class Value {
-        std::string creation_date;
-    };
-
-    class TextValue : public Value {
-        std::string stringval;
-    };
-
-    class IntegerValue : public Value {
-        std::string intval;
-    };
-
 }
 
 
