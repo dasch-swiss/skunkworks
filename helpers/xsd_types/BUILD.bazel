@@ -1,0 +1,46 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "date_time",
+    srcs = ["date_time.cc"],
+    hdrs = ["date_time.h"],
+    deps = [
+        ":error"
+    ],
+)
+
+cc_library(
+    name = "date_time_stamp",
+    srcs = ["date_time_stamp.cc"],
+    hdrs = ["date_time_stamp.h"],
+    deps = [":date_time"],
+)
+
+cc_library(
+    name = "error",
+    srcs = ["error.cc"],
+    hdrs = ["error.h"],
+)
+
+cc_library(
+    name = "lang_string",
+    srcs = ["lang_string.cc"],
+    hdrs = ["lang_string.h"],
+)
+
+cc_library(
+    name = "others",
+    srcs = ["others.h"],
+    hdrs = ["others.h"],
+)
+
+cc_binary(
+    name = "types.spec",
+    srcs = ["types.spec.cc"],
+    deps = [
+        ":date_time",
+        ":error"
+    ],
+)
