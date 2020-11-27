@@ -9,7 +9,7 @@
 
 namespace uuid {
 
-    std::string generate_uuid_v4();
+std::string generate_uuid_v4();
 
 }
 #endif //SKUNKWORKS_UUID_H

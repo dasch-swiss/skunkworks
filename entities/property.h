@@ -11,23 +11,23 @@
 
 namespace dsp {
 
-    class Property {
-    private:
-        std::string id_;
-        std::string class_label_;
-        std::string class_description_;
-        std::shared_ptr<ResourceClass> resource_class_;
-        std::shared_ptr<ValueClass> value_class_;
-        std::shared_ptr<Property> sub_class_of_;
+class Property {
+ private:
+  std::string id_;
+  std::string class_label_;
+  std::string class_description_;
+  std::shared_ptr<ResourceClass> resource_class_;
+  std::shared_ptr<ValueClass> value_class_;
+  std::shared_ptr<Property> sub_class_of_;
 
-        Property(const std::string class_label,
-                 const std::string class_description,
-                 const std::shared_ptr <resource_class> resource_class,
-                 const std::shared_ptr <ValueClass> value_class,
-                 const std::shared_ptr <Property> sub_class_of = nullptr);
+  Property(const std::string class_label,
+           const std::string class_description,
+           const std::shared_ptr<resource_class> resource_class,
+           const std::shared_ptr<ValueClass> value_class,
+           const std::shared_ptr<Property> sub_class_of = nullptr);
 
-        inline std::string id() { return id_; }
-    };
+  inline std::string id() { return id_; }
+};
 }
 
 #endif //SKUNKWORKS_PROPERTY_H

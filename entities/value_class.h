@@ -9,19 +9,17 @@
 
 namespace dsp {
 
+class ValueClass {
+  std::string id_;
+  std::string class_label_;
+  std::string class_description_;
 
-    class ValueClass {
-        std::string id_;
-        std::string class_label_;
-        std::string class_description_;
+  ValueClass(const std::string class_label,
+             const std::string class_description);
 
-        ValueClass(const std::string class_label,
-                   const std::string class_description);
+  inline std::string id() { return id_; }
 
-        inline std::string id() { return id_; }
-
-    };
+};
 }
-
 
 #endif //SKUNKWORKS_VALUE_CLASS_H
