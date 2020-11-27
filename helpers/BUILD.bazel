@@ -3,9 +3,9 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "error",
-    srcs = ["Error.cc"],
-    hdrs = ["Error.h"],
+    name = "h_tree_node",
+    srcs = ["h_tree_node.cc"],
+    hdrs = ["h_tree_node.h"],
 )
 
 cc_library(
