@@ -19,6 +19,14 @@ namespace xsd {
 
 class DateTime {
  private:
+  int year_;
+  int month_;
+  int day_;
+  int hour_;
+  int min_;
+  float second_;
+  int tz_hour_;
+  int tz_min_;
   std::string value_;
  public:
   DateTime();

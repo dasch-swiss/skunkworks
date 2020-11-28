@@ -2,45 +2,31 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_library(
-    name = "date_time",
-    srcs = ["date_time.cc"],
-    hdrs = ["date_time.h"],
+cc_test(
+    name = "xsd_types_test",
+    srcs = ["xsd_types_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":error"
+        "//helpers/xsd_types:xsd_types",
+        "@gtest//:main"
     ],
 )
 
 cc_library(
-    name = "date_time_stamp",
-    srcs = ["date_time_stamp.cc"],
-    hdrs = ["date_time_stamp.h"],
-    deps = [":date_time"],
-)
+    name = "xsd_types",
+    srcs = [
 
-cc_library(
-    name = "error",
-    srcs = ["error.cc"],
-    hdrs = ["error.h"],
-)
-
-cc_library(
-    name = "lang_string",
-    srcs = ["lang_string.cc"],
-    hdrs = ["lang_string.h"],
-)
-
-cc_library(
-    name = "others",
-    srcs = ["others.h"],
-    hdrs = ["others.h"],
-)
-
-cc_binary(
-    name = "types.spec",
-    srcs = ["types.spec.cc"],
-    deps = [
-        ":date_time",
-        ":error"
+        "date_time.cc",
+        "date_time_stamp.cc",
+        "lang_string.cc",
+        "error.cc",
+    ],
+    hdrs = [
+        "date_time.h",
+        "date_time_stamp.h",
+        "lang_string.h",
+        "error.h",
+        "others.h"
     ],
 )
+
