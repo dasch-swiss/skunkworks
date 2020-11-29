@@ -9,14 +9,34 @@
 
 TEST(XsdDateTime, GetGreet) {
 
-xsd::DateTime t9 = xsd::DateTime();
-xsd::DateTime t10 = xsd::DateTime("2001-10-26T19:32:52.3+14:00");
-xsd::DateTime t11 = xsd::DateTime("2001-10-26T19:32:52.3Z");
-xsd::DateTime t12 = xsd::DateTime("2001-10-26T19:32:52.3+11:22");
-xsd::DateTime t13 = xsd::DateTime("2001-10-26T24:00:00Z");
-xsd::DateTime t14 = xsd::DateTime("2001-10-26T24:00:00.000Z");
-xsd::DateTime t1 = xsd::DateTime("2001-10-26T19:32:52+11:22");
+EXPECT_NO_THROW(xsd::DateTime t9 = xsd::DateTime());
 
+xsd::DateTime t10 = xsd::DateTime("2001-10-26T19:32:52.3+14:00");
+std::ostringstream ss10;
+ss10 << t10;
+EXPECT_EQ(ss10.str(), "2001-10-26T19:32:52.3+14:00");
+
+xsd::DateTime t11 = xsd::DateTime("2001-10-26T19:32:52.3Z");
+std::ostringstream ss11;
+ss11 << t11;
+EXPECT_EQ(ss11.str(), "2001-10-26T19:32:52.3Z");
+
+xsd::DateTime t12 = xsd::DateTime("2001-10-26T19:32:52.3+11:22");
+std::ostringstream ss12;
+ss12 << t12;
+EXPECT_EQ(ss12.str(), "2001-10-26T19:32:52.3+11:22");
+
+xsd::DateTime t13 = xsd::DateTime("2001-10-26T24:00:00Z");
+std::ostringstream ss13;
+ss13 << t13;
+EXPECT_EQ(ss13.str(), "2001-10-26T00:00:00Z");
+
+xsd::DateTime t14 = xsd::DateTime("2001-10-26T24:00:00.000Z");
+std::ostringstream ss14;
+ss14 << t14;
+EXPECT_EQ(ss14.str(), "2001-10-26T00:00:00Z");
+
+xsd::DateTime t1 = xsd::DateTime("2001-10-26T19:32:52+11:22");
 std::ostringstream ss1;
 ss1 << t1;
 EXPECT_EQ(ss1.str(), "2001-10-26T19:32:52+11:22");
