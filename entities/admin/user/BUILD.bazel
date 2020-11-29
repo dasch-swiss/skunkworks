@@ -7,6 +7,7 @@ cc_library(
     srcs = ["user.cpp"],
     hdrs = ["user.h"],
     deps = [
+        "//entities:error",
         "//entities/values:agent",
         "//helpers:uuid"
     ],
@@ -16,8 +17,10 @@ cc_test(
     name = "user_test",
     srcs = ["user_test.cc"],
     copts = ["-Iexternal/gtest/include"],
+    size = "small",
     deps = [
         ":user",
+        "//entities:error",
         "@gtest//:main"
     ],
 )

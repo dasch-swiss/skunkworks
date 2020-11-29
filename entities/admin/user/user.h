@@ -9,19 +9,22 @@
 
 #include "entities/values/agent.h"
 
-namespace dsp {
+static const char __file__[] = __FILE__;
+
+namespace dsp::admin {
 
 /*!
  * The class represents a user in the system.
  */
 class User : dsp::Agent {
+ private:
   xsd::ID id_;
   std::string username_;
   std::string email_;
   std::string password_;
   std::string token_;
-  std::string given_name;
-  std::string family_name;
+  std::string given_name_;
+  std::string family_name_;
   std::string status_;
   std::string lang_;
  public:
@@ -35,6 +38,12 @@ class User : dsp::Agent {
        std::string lang);
   inline xsd::string username() { return username_; };
   inline xsd::string email() { return email_; };
+  inline xsd::string password() { return password_; };
+  inline xsd::string token() { return token_; };
+  inline xsd::string given_name() { return given_name_; };
+  inline xsd::string family_name() { return family_name_; };
+  inline xsd::string status() { return status_; };
+  inline xsd::string lang() { return lang_; };
 };
 
 }

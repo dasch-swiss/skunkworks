@@ -13,6 +13,13 @@ cc_test(
 )
 
 cc_library(
+    name = "error",
+    srcs = ["error.cc"],
+    hdrs = ["error.h"],
+    deps = [],
+)
+
+cc_library(
     name = "entities",
     srcs = [
         "property.cc",
