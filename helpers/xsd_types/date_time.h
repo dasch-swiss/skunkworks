@@ -17,6 +17,10 @@ static const char __file__[] = __FILE__;
 
 namespace xsd {
 
+const int TZ_WEST_GMT = -1;
+const int TZ_EAST_GMT = 1;
+
+// see https://www.w3.org/TR/xmlschema11-2/#dateTime
 class DateTime {
  private:
   int year_;
@@ -25,9 +29,12 @@ class DateTime {
   int hour_;
   int min_;
   float second_;
+  int tz_sign_;
   int tz_hour_;
   int tz_min_;
-  std::string value_;
+
+  void parse_datetime_string(const std::string &str);
+  void validate_values(void);
  public:
   DateTime();
 
@@ -37,7 +44,7 @@ class DateTime {
    *
    * @param value String with correctly formated dateTime
    */
-  DateTime(std::string value);
+  DateTime(const std::string &value);
 
   /**
    *
@@ -52,7 +59,11 @@ class DateTime {
    */
   DateTime(int year, int month, int day,
            int hour, int min, float second,
-           int tz_hour = 0, int tz_min = 0);
+           int tz_sign = TZ_EAST_GMT, int tz_hour = 0, int tz_min = 0);
+
+  operator std::string(void) const;
+
+  void debug();
 
   /**
    * Output to stream
