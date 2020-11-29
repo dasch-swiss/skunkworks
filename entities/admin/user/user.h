@@ -11,7 +11,7 @@
 
 static const char __file__[] = __FILE__;
 
-namespace dsp::admin {
+namespace dsp::admin::user {
 
 /*!
  * The class represents a user in the system.

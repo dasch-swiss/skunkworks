@@ -8,7 +8,7 @@
 
 #include <utility>
 
-namespace dsp::admin {
+namespace dsp::admin::user {
 
 User::User(
     std::string username,
@@ -79,4 +79,4 @@ User::User(
   }
 }
 
-}
+} // namespace dsp::admin::user
