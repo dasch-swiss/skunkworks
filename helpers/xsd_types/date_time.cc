@@ -154,6 +154,7 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
 
 
 DateTime::DateTime() {
+  xsd_type_ = "dateTime";
   char time_buf[21];
   time_t now;
   time(&now);
@@ -163,6 +164,7 @@ DateTime::DateTime() {
 //=====================================================================
 
 DateTime::DateTime(const std::string &value) {
+  xsd_type_ = "dateTime";
   this->parse(value);
   this->validate_values();
 }
@@ -174,6 +176,7 @@ DateTime::DateTime(int year, int month, int day,
                    year_(year), month_(month), day_(day),
                    hour_(hour), min_(min), second_(second),
                    tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
+  xsd_type_ = "dateTime";
   validate_values();
 }
 //=====================================================================

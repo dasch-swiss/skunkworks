@@ -30,12 +30,15 @@ class DataType {
    * @return the ostream used
    */
   virtual std::ostream &print_to_stream(std::ostream &out_stream) const = 0;
+ protected:
+  std::string xsd_type_;
  public:
+  inline const std::string xsd_type(void) const { return xsd_type_; };
 
   /*!
    * Convert the pure value to string (no xsd type modifiers)
    *
-   * @return C++ string with the value converted toa string
+   * @return C++ string with the value converted to a string
    */
   virtual operator std::string(void) const = 0;
 
@@ -46,7 +49,7 @@ class DataType {
    * @param rhs Right hand side
    * @return Output stream
    */
-  friend std::ostream &operator<<(std::ostream &out_stream, const DataType &rhs) {
+  inline friend std::ostream &operator<<(std::ostream &out_stream, const DataType &rhs) {
     return rhs.print_to_stream(out_stream);
   }
 };

@@ -21,6 +21,7 @@ cc_library(
         "error.cc",
     ],
     hdrs = [
+        "xsd.h",
         "data_type.h",
         "date_time.h",
         "date_time_stamp.h",

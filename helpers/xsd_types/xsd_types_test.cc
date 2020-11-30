@@ -4,17 +4,21 @@
 
 #include "gtest/gtest.h"
 
-#include "helpers/xsd_types/date_time.h"
+//#include "helpers/xsd_types/date_time.h"
+#include "helpers/xsd_types/xsd.h"
 
 TEST(XsdDateTime, Parsing) {
 
-EXPECT_NO_THROW(xsd::DateTime
-t9 = xsd::DateTime()
+EXPECT_NO_THROW(xsd::DateTime()
 );
+
+EXPECT_EQ(xsd::DateTime().xsd_type(), "dateTime");
 
 EXPECT_EQ(static_cast
 <std::string>(xsd::DateTime("2001-10-26T19:32:52.3+14:00")
 ), "2001-10-26T19:32:52.3+14:00");
+
+EXPECT_EQ(xsd::DateTime("2001-10-26T19:32:52.3+14:00").xsd_type(), "dateTime");
 
 EXPECT_EQ(static_cast
 <std::string>(xsd::DateTime("2001-10-26T19:32:52.3Z")
@@ -47,6 +51,7 @@ EXPECT_THROW(xsd::DateTime("2001-10-26X19:32:52+00:00"), xsd::Error);
 TEST(XsdDateTime, ByValueConstructor) {
 
 EXPECT_EQ(static_cast<std::string>(xsd::DateTime(2000, 2, 10, 12, 30, 33, xsd::TZ_WEST_GMT, 1, 0)), "2000-02-10T12:30:33-01:00");
+EXPECT_EQ(xsd::DateTime(2000, 2, 10, 12, 30, 33, xsd::TZ_WEST_GMT, 1, 0).xsd_type(), "dateTime");
 
 EXPECT_EQ(static_cast<std::string>(xsd::DateTime(2000, 2, 29, 12, 0, 2.345, xsd::TZ_WEST_GMT, 1, 0)), "2000-02-29T12:00:02.345-01:00");
 EXPECT_THROW(xsd::DateTime(2000, 2, 30, 12, 0, 2.345, xsd::TZ_WEST_GMT, 1, 0), xsd::Error);
