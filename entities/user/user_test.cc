@@ -8,7 +8,7 @@
 #include "user.h"
 
 TEST(UserTest, CreateUserSucessfully) {
-  dsp::admin::user::User user = dsp::admin::user::User("dduck", "dduck@example.com", "1234", "none", "Donald", "Duck", "none", "en");
+  entities::user::User user = entities::user::User("dduck", "dduck@example.com", "1234", "none", "Donald", "Duck", "none", "en");
   EXPECT_EQ(user.username(),"dduck");
   EXPECT_EQ(user.email(),"dduck@example.com");
   EXPECT_EQ(user.password(),"1234");
@@ -22,6 +22,6 @@ TEST(UserTest, CreateUserSucessfully) {
 
 TEST(UserTest, CreateUserWithExceptions) {
   EXPECT_THROW(
-      dsp::admin::user::User("", "", "", "", "", "", "", ""),
+      entities::user::User("", "", "", "", "", "", "", ""),
       dsp::Error);
 }

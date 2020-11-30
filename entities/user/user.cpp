@@ -8,7 +8,7 @@
 
 #include <utility>
 
-namespace dsp::admin::user {
+namespace entities::user {
 
 User::User(
     std::string username,

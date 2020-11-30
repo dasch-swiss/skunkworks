@@ -11,7 +11,7 @@
 
 static const char __file__[] = __FILE__;
 
-namespace dsp::admin::user {
+namespace entities::user {
 
 /*!
  * The class represents a user in the system.
@@ -19,7 +19,8 @@ namespace dsp::admin::user {
 class User : dsp::Agent {
  private:
   xsd::ID id_;
-  std::string username_;
+  std:: username_;
+
   std::string email_;
   std::string password_;
   std::string token_;

@@ -7,6 +7,7 @@ cc_library(
     srcs = ["user.cpp"],
     hdrs = ["user.h"],
     deps = [
+        "//entities/user/values",
         "//entities:error",
         "//entities/values:agent",
         "//helpers:uuid"

@@ -4,7 +4,7 @@
 #include "entities/error.h"
 #include "username.h"
 
-namespace dsp::admin::user {
+namespace entities::user {
 
 Username::Username(const std::string& value) {
 

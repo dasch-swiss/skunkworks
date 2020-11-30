@@ -9,7 +9,7 @@
 
 static const char __file__[] = __FILE__;
 
-namespace dsp::admin::user {
+namespace entities::user {
 
 class Username {
  public:
