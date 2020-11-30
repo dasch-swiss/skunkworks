@@ -32,8 +32,9 @@ const static std::regex re("^-?([1-9][0-9]{3,}|0[0-9]{3})"
                            "T(([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9](\\.[0-9]+)?)|(24:00:00(\\.0+)?))"
                            "(Z|(\\+|-)((0[0-9]|1[0-3]):([0-5][0-9])|14:00))?$");
 
-void DateTime::parse_datetime_string(const std::string &str) {
-  std::cerr << str << std::endl;
+//---------------------------------------------------------------------
+void DateTime::parse(const std::string &str) {
+  //...................................................................
   std::cmatch m;
   if (std::regex_match(str.c_str(), m, re)) {
     //
@@ -80,7 +81,9 @@ void DateTime::parse_datetime_string(const std::string &str) {
 }
 //=====================================================================
 
+//---------------------------------------------------------------------
 void DateTime::validate_values(void) {
+  //...................................................................
   if (tz_sign_ != TZ_WEST_GMT && tz_sign_ != TZ_EAST_GMT) {
     throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
   }
@@ -98,26 +101,69 @@ void DateTime::validate_values(void) {
     throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
   }
   if (month_ == 2) {
-    if ((((year_ % 400) == 0 || (year_ % 4) == 0) && (year_ % 100) != 0) && (day_ > 29)) {
+    bool leap_year = ((year_ % 4) == 0);
+    if (leap_year) {
+      leap_year = ((year_ % 100) != 0);
+      if (!leap_year) {
+        leap_year = ((year_ % 400) == 0);
+      }
+    }
+    if (leap_year && (day_ > 29)) {
+      std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
       throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
-    } else if (day_ > 28) {
+    } else if (!leap_year && (day_ > 28)) {
+      std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
       throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
     }
   }
 }
 //=====================================================================
 
+//---------------------------------------------------------------------
+std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
+  //...................................................................
+  out_stream << year_ << "-"
+  << std::setfill('0') << std::setw(2) << month_ << "-"
+  << std::setw(2) << day_
+  << "T" << std::setw(2) << hour_ << ":"
+  << std::setw(2) << min_ << ":";
+
+  int width = 2;
+  int precision = 0;
+  float seconds = second_;
+  for (int i = 0; i < 7; ++i) {
+    float intpart, fracpart = modf(seconds, &intpart);
+    if (fracpart == 0.0f) break;
+    if (i == 0) ++width; // decimal point
+      ++width;
+      ++precision;
+      seconds *= 10.0f;
+  }
+  out_stream << std::fixed << std::setw(width) << std::setprecision(precision) << second_;
+
+  if (tz_hour_ == 0 && tz_min_ == 0) {
+    out_stream << "Z";
+  } else {
+    out_stream << ((tz_sign_ == TZ_WEST_GMT) ? "-" : "+") << std::setw(2)
+    << ((tz_hour_ < 0) ? -tz_hour_ : tz_hour_) << ":"
+    << std::setw(2) << tz_min_;
+  }
+  return out_stream;
+}
+//=====================================================================
+
+
 DateTime::DateTime() {
   char time_buf[21];
   time_t now;
   time(&now);
   strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
-  this->parse_datetime_string(time_buf);
+  this->parse(time_buf);
 }
 //=====================================================================
 
 DateTime::DateTime(const std::string &value) {
-  this->parse_datetime_string(value);
+  this->parse(value);
   this->validate_values();
 }
 //=====================================================================
@@ -128,9 +174,7 @@ DateTime::DateTime(int year, int month, int day,
                    year_(year), month_(month), day_(day),
                    hour_(hour), min_(min), second_(second),
                    tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
-  std::cerr << "*****" << std::endl;
   validate_values();
-  std::cerr << "?????" << std::endl;
 }
 //=====================================================================
 
@@ -145,32 +189,10 @@ void DateTime::debug() {
   std::cerr << "year=" << year_ << " month=" << month_ << " day=" << day_ << std::endl;
 }
 //=====================================================================
-
+/*
 std::ostream &operator<<(std::ostream &out_stream, const DateTime &rhs) {
-  out_stream << rhs.year_ << "-" << std::setfill('0') << std::setw(2) << rhs.month_ << "-" << std::setw(2) << rhs.day_
-  << "T" << std::setw(2) << rhs.hour_ << ":" << std::setw(2) << rhs.min_ << ":";
-
-  int width = 2;
-  int precision = 0;
-  float seconds = rhs.second_;
-  for (int i = 0; i < 7; ++i) {
-    float intpart, fracpart = modf(seconds, &intpart);
-    if (fracpart == 0.0f) break;
-    if (i == 0) ++width; // decimal point
-    ++width;
-    ++precision;
-    seconds *= 10.0f;
-  }
-  out_stream << std::fixed << std::setw(width) << std::setprecision(precision) << rhs.second_;
-
-  if (rhs.tz_hour_ == 0 && rhs.tz_min_ == 0) {
-    out_stream << "Z";
-  } else {
-    out_stream << ((rhs.tz_sign_ == TZ_WEST_GMT) ? "-" : "+") << std::setw(2)
-    << ((rhs.tz_hour_ < 0) ? -rhs.tz_hour_ : rhs.tz_hour_) << ":"
-    << std::setw(2) << rhs.tz_min_;
-  }
   return out_stream;
 }
+ */
 //=====================================================================
 }

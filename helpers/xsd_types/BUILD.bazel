@@ -15,13 +15,13 @@ cc_test(
 cc_library(
     name = "xsd_types",
     srcs = [
-
         "date_time.cc",
         "date_time_stamp.cc",
         "lang_string.cc",
         "error.cc",
     ],
     hdrs = [
+        "data_type.h",
         "date_time.h",
         "date_time_stamp.h",
         "lang_string.h",

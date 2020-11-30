@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include "error.h"
+#include "data_type.h"
 
 static const char __file__[] = __FILE__;
 
@@ -21,7 +22,7 @@ const int TZ_WEST_GMT = -1;
 const int TZ_EAST_GMT = 1;
 
 // see https://www.w3.org/TR/xmlschema11-2/#dateTime
-class DateTime {
+class DateTime : public DataType {
  private:
   int year_;
   int month_;
@@ -33,7 +34,8 @@ class DateTime {
   int tz_hour_;
   int tz_min_;
 
-  void parse_datetime_string(const std::string &str);
+  void parse(const std::string &str) override;
+  std::ostream &print_to_stream(std::ostream &out_stream) const override;
   void validate_values(void);
  public:
   DateTime();
@@ -61,18 +63,10 @@ class DateTime {
            int hour, int min, float second,
            int tz_sign = TZ_EAST_GMT, int tz_hour = 0, int tz_min = 0);
 
-  operator std::string(void) const;
+  operator std::string(void) const override;
 
   void debug();
 
-  /**
-   * Output to stream
-   *
-   * @param out_stream
-   * @param rhs
-   * @return out_stream
-   */
-  friend std::ostream &operator<<(std::ostream &out_stream, const DateTime &rhs);
 };
 
 }
