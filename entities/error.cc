@@ -26,7 +26,7 @@
 
 #include "error.h"
 
-namespace dsp {
+namespace entities {
 
 Error::Error(const char *file_p, const int line_p, const char *msg, int errno_p) : runtime_error(
     std::string(msg)

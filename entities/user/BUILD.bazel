@@ -21,6 +21,7 @@ cc_test(
     size = "small",
     deps = [
         ":user",
+        "//entities/user/values",
         "//entities:error",
         "@gtest//:main"
     ],

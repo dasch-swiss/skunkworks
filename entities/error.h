@@ -30,7 +30,7 @@
 #include <exception>
 #include <stdexcept>
 
-namespace dsp {
+namespace entities {
 
 /*!
  * \brief Class used to throw errors

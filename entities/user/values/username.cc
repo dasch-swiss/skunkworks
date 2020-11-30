@@ -22,9 +22,9 @@ Username::Username(const std::string& value) {
   if (std::regex_match(value.c_str(), match, re)) {
     value_ = value;
   } else {
-    throw dsp::Error(__file__, __LINE__, "Invalid dsp::admin::user::Username value!");
+    throw entities::Error(__file__, __LINE__, "Invalid dsp::admin::user::Username value!");
   }
 
 }
 
-} // namespace dsp::admin::user
+} // namespace entities::user

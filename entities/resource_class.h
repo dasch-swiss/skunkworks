@@ -11,7 +11,7 @@
 
 #include "property.h"
 
-namespace dsp {
+namespace entities {
 
 class ResourceClass {
 

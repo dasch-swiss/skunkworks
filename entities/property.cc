@@ -8,7 +8,7 @@
 
 #include "property.h"
 
-namespace dsp {
+namespace entities {
 
 Property::Property(const std::string class_label,
                    const std::string class_description,

@@ -15,14 +15,14 @@ TEST(EntitiesTest, GetGreet) {
     //
     // init value classes (SYSTEM)
     //
-    dsp::ValueClass text_value = dsp::ValueClass("TextValueClass", "bla bla");
-    dsp::ValueClass integer_value = dsp::ValueClass("IntegerValueClass", "bla bla");
+    entities::ValueClass text_value = entities::ValueClass("TextValueClass", "bla bla");
+    entities::ValueClass integer_value = entities::ValueClass("IntegerValueClass", "bla bla");
 
 
-    dsp::ResourceClass my_resclass = dsp::ResourceClass("myresclass", "This is my resource class", nullptr);
+    entities::ResourceClass my_resclass = entities::ResourceClass("myresclass", "This is my resource class", nullptr);
 
-    dsp::Property title = dsp::Property("hasTitle", "bla bla", my_resclass, text_value);
-    dsp::Property age = dsp::Property("hasAge", "bla bla", my_resclass, integer_value);
+    entities::Property title = entities::Property("hasTitle", "bla bla", my_resclass, text_value);
+    entities::Property age = entities::Property("hasAge", "bla bla", my_resclass, integer_value);
 
     my_resclass.add_property(title, 1, 3);
     my_resclass.add_property(age, 0, 1);

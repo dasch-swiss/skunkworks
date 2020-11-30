@@ -7,18 +7,18 @@
 
 #include <string>
 
-namespace dsp {
+namespace entities {
 
 class ValueClass {
+ public:
+  ValueClass(const std::string& class_label,
+             std::string class_description);
+  inline std::string id() { return id_; }
+
+ private:
   std::string id_;
   std::string class_label_;
   std::string class_description_;
-
-  ValueClass(const std::string class_label,
-             const std::string class_description);
-
-  inline std::string id() { return id_; }
-
 };
 }
 

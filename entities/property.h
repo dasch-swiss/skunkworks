@@ -9,7 +9,7 @@
 #include "resource_class.h"
 #include "value_class.h"
 
-namespace dsp {
+namespace entities {
 
 class Property {
  private:

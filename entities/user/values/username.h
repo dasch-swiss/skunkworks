@@ -18,10 +18,9 @@ class Username {
 
  private:
   std::string value_;
-
 };
 
-} // namespace dsp::admin::user
+} // namespace entities::user
 
 
 

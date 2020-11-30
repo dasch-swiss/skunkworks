@@ -3,14 +3,13 @@
 //
 
 #include "helpers/uuid.h"
-#include "helpers/Error.h"
-
+#include "error.h"
 #include "property.h"
 #include "resource_class.h"
 
 static const char __file__[] = __FILE__;
 
-namespace dsp {
+namespace entities {
 
 ResourceClass::ResourceClass(const std::string class_label,
                              const std::string class_description,
