@@ -8,6 +8,15 @@ implementing the CQRS pattern and using Event-Sourcing.
 The code follows the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html) and the
 exceptions which are documented in this section.
 
+## Prerequisites
+
+- on macOS, this might be necessary:
+  ```asm
+  export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+  export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+  ```
+
+
 ## References
 
 ### DDD, CQRS, Event Sourcing
@@ -20,3 +29,4 @@ exceptions which are documented in this section.
 
 ### Other
 - Performance Matters (CppCon 2020): https://youtu.be/koTf7u0v41o
+
