@@ -116,10 +116,10 @@ class StringRestrictionEnumeration : public StringRestriction {
  * Implements the xsd:string datatype (including restrictions)
  */
 class String : public DataType {
- public:
- private:
+ protected:
   std::string strval_;
 
+ private:
   /*!
    * Implement interface requirement (parsing)
    * @param str String to be parsed

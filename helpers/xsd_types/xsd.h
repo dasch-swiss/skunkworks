@@ -10,6 +10,7 @@
 #include "xsd_string.h"
 #include "xsd_data_type.h"
 #include "xsd_date_time.h"
+#include "xsd_any_uri.h"
 
 const std::string xmlSchemaPrefix = "xsd:";
 

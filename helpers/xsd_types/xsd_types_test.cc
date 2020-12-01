@@ -41,6 +41,14 @@ TEST(XsdString_Generic_Test, Restrictions) {
 
 }
 
+TEST(XsdAnyUri, Generic) {
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org")), "http://example.org");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org:25/gaga/%20test.jpg?a=b&x=y")),
+            "http://example.org:25/gaga/%20test.jpg?a=b&x=y");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://äüöéèà.org")), "http://äüöéèà.org");
+
+}
+
 TEST(XsdDateTime, Parsing) {
 
   EXPECT_NO_THROW(xsd::DateTime());

@@ -24,6 +24,7 @@ cc_library(
         "xsd.h",
         "xsd_data_type.h",
         "xsd_string.h",
+        "xsd_any_uri.h",
         "xsd_date_time.h",
         "xsd_date_time_stamp.h",
         "lang_string.h",
