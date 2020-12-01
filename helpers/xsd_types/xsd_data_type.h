@@ -2,8 +2,8 @@
 // Created by Lukas Rosenthaler on 29.11.20.
 //
 
-#ifndef SKUNKWORKS_HELPERS_XSD_TYPES_DATA_TYPE_H_
-#define SKUNKWORKS_HELPERS_XSD_TYPES_DATA_TYPE_H_
+#ifndef SKUNKWORKS_HELPERS_XSD_TYPES_XSD_DATA_TYPE_H_
+#define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_DATA_TYPE_H_
 
 #include <string>
 #include <iomanip>
@@ -17,7 +17,9 @@ namespace xsd {
 class DataType {
  private:
   /*!
-   * Parse a xsd date from a string. This does not include parsing xsd datatypes references such as "^^xsd:dateTime"
+   * Parse a xsd date from a string. This does not include parsing xsd datatypes references such as "^^xsd:dateTime".
+   * This method parses the input string and must fill the internal representation (by assigning values to the private
+   * member variables that hold the state.
    *
    * @param str String with the value
    */
@@ -56,4 +58,4 @@ class DataType {
 
 }
 
-#endif //SKUNKWORKS_HELPERS_XSD_TYPES_DATA_TYPE_H_
+#endif //SKUNKWORKS_HELPERS_XSD_TYPES_XSD_DATA_TYPE_H_

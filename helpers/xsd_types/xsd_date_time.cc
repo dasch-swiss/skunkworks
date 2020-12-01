@@ -5,7 +5,7 @@
 #include <time.h>
 #include <math.h>
 
-#include "date_time.h"
+#include "xsd_date_time.h"
 
 namespace xsd {
 
@@ -87,7 +87,6 @@ void DateTime::validate_values(void) {
   if (tz_sign_ != TZ_WEST_GMT && tz_sign_ != TZ_EAST_GMT) {
     throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
   }
-
   if (((month_ < 1) || (month_ > 12))
       || ((day_ < 1) || (day_ > 31))
       || ((hour_ < 0) || (hour_ > 23))

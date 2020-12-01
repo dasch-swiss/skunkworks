@@ -11,8 +11,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "error.h"
-#include "data_type.h"
+#include "xsd_error.h"
+#include "xsd_data_type.h"
 
 static const char __file__[] = __FILE__;
 

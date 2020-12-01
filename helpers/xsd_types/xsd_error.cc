@@ -24,7 +24,7 @@
 #include <cstring>      // std::strerror
 #include <sstream>      // std::ostringstream
 
-#include "error.h"
+#include "xsd_error.h"
 
 namespace xsd {
 

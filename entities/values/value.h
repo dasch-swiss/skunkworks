@@ -7,8 +7,8 @@
 
 #include <shared_ptr>
 
-#include "helpers/xsd_types/error.h"
-#include "helpers/xsd_types/date_time_stamp.h"
+#include "helpers/xsd_types/xsd_error.h"
+#include "helpers/xsd_types/xsd_date_time_stamp.h"
 #include "helpers/xsd_types/lang_string.h
 #include "helpers/xsd_types/others.h"
 

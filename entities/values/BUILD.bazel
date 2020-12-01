@@ -24,6 +24,5 @@ cc_library(
     ],
     deps = [
         ":agent",
-        "//helpers/xsd_types:lang_string"
     ],
 )

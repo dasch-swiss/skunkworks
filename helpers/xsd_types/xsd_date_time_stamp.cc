@@ -2,7 +2,7 @@
 // Created by Lukas Rosenthaler on 26.11.20.
 //
 
-#include "date_time_stamp.h"
+#include "xsd_date_time_stamp.h"
 
 namespace xsd {
 

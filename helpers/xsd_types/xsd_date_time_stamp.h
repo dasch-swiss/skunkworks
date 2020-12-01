@@ -5,7 +5,7 @@
 #ifndef SKUNKWORKS_DATE_TIME_STAMP_H
 #define SKUNKWORKS_DATE_TIME_STAMP_H
 
-#include "date_time.h"
+#include "xsd_date_time.h"
 
 namespace xsd {
 
