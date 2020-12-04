@@ -16,7 +16,7 @@ configure_make(
     lib_source = "@curl//:all",
     configure_env_vars = {
         "CPPFLAGS": "-I$EXT_BUILD_DEPS/openssl/include",
-        "LDFLAGS": "-L$EXT_BUILD_DEPS/openssl/lib",
+        "LDFLAGS": "-L$EXT_BUILD_DEPS/openssl/lib -lpthread",
         "PKG_CONFIG_PATH": "$EXT_BUILD_DEPS/openssl/lib/pkgconfig:$EXT_BUILD_DEPS/zlib/lib/pkgconfig",
         "AR": "",
     },
