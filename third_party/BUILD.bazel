@@ -6,8 +6,8 @@ package(default_visibility = ["//visibility:public"])
 configure_make(
     name = "curl",
     configure_options = [
-        "--with-ssl=$$EXT_BUILD_DEPS$$/openssl",
-        "--with-zlib=$$EXT_BUILD_DEPS$$/zlib",
+        # "--with-ssl=$$EXT_BUILD_DEPS$$/openssl",
+        # "--with-zlib=$$EXT_BUILD_DEPS$$/zlib",
         "--disable-ldap",
         "--enable-shared=no",
         "--enable-static",
