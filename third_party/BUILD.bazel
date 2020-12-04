@@ -19,6 +19,7 @@ configure_make(
         "LDFLAGS": "-L$$EXT_BUILD_DEPS$$/openssl/lib",
         "AR": "",
     },
+    configure_in_place = true,
     static_libraries = [
         "libcurl.a"
     ],
@@ -71,6 +72,7 @@ configure_make(
     configure_env_vars = {
             "AR": "",
     },
+    configure_in_place = true,
     deps = [
         ":zlib",
     ],
@@ -86,6 +88,7 @@ configure_make(
     configure_options = [
         "--static",
     ],
+    configure_in_place = true,
     lib_source = "@zlib//:all",
     static_libraries = ["libz.a"],
 )
