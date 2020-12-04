@@ -31,5 +31,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm install --global @bazel/bazelisk
-      - name: run build
-        run: make build
+          sudo apt-get install libpthread-stubs0-dev
+      - name: run test
+        run: bazel test //...
