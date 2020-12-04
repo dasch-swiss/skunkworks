@@ -6,7 +6,10 @@ cc_binary(
     name = "main",
     srcs = ["Shttp.cpp"],
     copts = ["-std=c++17"],
-    linkopts = ["-lpthread"],
+    linkopts = [
+        "-lpthread",
+        "-ldl",
+    ],
     deps = [
         ":ccs_lib",
         ":error",
