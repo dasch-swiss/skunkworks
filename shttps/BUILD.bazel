@@ -5,6 +5,11 @@ package(default_visibility = ["//visibility:public"])
 cc_binary(
     name = "main",
     srcs = ["Shttp.cpp"],
+    copts = ["-std=c++17"],
+    linkopts = [
+        "-lpthread",
+        "-ldl",
+    ],
     deps = [
         ":ccs_lib",
         ":error",
