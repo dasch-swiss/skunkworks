@@ -31,5 +31,5 @@ jobs:
       - name: Install dependencies
         run: |
           npm install --global @bazel/bazelisk
-      - name: run build
-        run: make build
+      - name: run test
+        run: bazel test //...
