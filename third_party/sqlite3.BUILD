@@ -16,5 +16,8 @@ cc_library(
         "sqlite3.h",
         "sqlite3ext.h",
     ],
+    linkopts = [
+        "-ldl",
+    ],
     visibility = ["//visibility:public"],
 )
