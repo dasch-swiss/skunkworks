@@ -6,34 +6,54 @@
 #define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_ANY_URI_H_
 
 #include <string>
-#include <regex>
 
+#include <regex>
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+#include "xsd_data_type.h"
 #include "xsd_string.h"
 
 namespace xsd {
+//
+// https://en.wikipedia.org/wiki/List_of_URI_schemes
+//
 
-class AnyUri : public String {
- private:
-  inline bool validate_uri(const std::string strval) const {
-    std::regex url_regex(
-        R"(^(([^:\/?#]+):)?(//([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)",
-        std::regex::extended);
-    std::smatch url_match_result;
-    return std::regex_match(strval, url_match_result, url_regex);
-  }
 
+
+class AnyUri : public DataType {
  public:
-  inline AnyUri(const std::string strval) : String(strval) {
-    if (!this->validate_uri(strval_)) throw Error(__FILE__, __LINE__, "Invalid IRI!");
-  }
+  explicit AnyUri(const std::string &strval);
 
-  inline AnyUri(const std::string strval, const StringRestriction &restriction) : String(strval, restriction) {
-    if (!this->validate_uri(strval_)) throw Error(__FILE__, __LINE__, "Invalid IRI!");
-  }
+  AnyUri(const std::string &protocol, const std::string &server, const std::string &path);
 
-  inline AnyUri(const std::string &strval, const std::vector<StringRestriction> &restrictions) : String(strval,restrictions) {
-    if (!this->validate_uri(strval_)) throw Error(__FILE__, __LINE__, "Invalid IRI!");
-  }
+  explicit operator std::string() const override;
+
+ private:
+  static std::unordered_map<std::string, std::string> protocol_schemes;
+  bool has_protocol_;
+  std::string  protocol_;
+  bool has_host_;
+  std::string  host_;
+  bool has_user_;
+  std::string  user_;
+  bool has_password_;
+  std::string  password_;
+  bool has_port_;
+  int port_;
+  bool has_path_;
+  bool abspath_;
+  std::vector<std::string> path_;
+  bool has_fragment_;
+  std::string  fragment_;
+  bool has_options_;
+  std::vector<std::string> options_;
+
+  void parse_host_part(const std::string &rest, char user_passwd_separator = ':', char user_host_separator = '@');
+
+  void parse(const std::string &str);
+  std::ostream &print_to_stream(std::ostream &out_stream) const override;
 };
 
 }

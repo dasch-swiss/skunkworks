@@ -124,7 +124,7 @@ class String : public DataType {
    * Implement interface requirement (parsing)
    * @param str String to be parsed
    */
-  inline void parse(const std::string &str) override {
+  inline void parse(const std::string &str) {
     strval_ = str;
   }
 

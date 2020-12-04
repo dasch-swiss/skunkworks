@@ -4,6 +4,8 @@
 
 #include "xsd_date_time_stamp.h"
 
+static const char file_[] = __FILE__;
+
 namespace xsd {
 
 const static std::regex re("^-?([1-9][0-9]{3,}|0[0-9]{3})"
@@ -15,7 +17,7 @@ const static std::regex re("^-?([1-9][0-9]{3,}|0[0-9]{3})"
 DateTimeStamp::DateTimeStamp(std::string value) : DateTime(value){
   std::cmatch m;
   if (!std::regex_match(value.c_str(), m, re)) {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTimeStamp string!");
+    throw Error(file_, __LINE__, "Invalid xsd:dateTimeStamp string!");
   }
 }
 //=====================================================================

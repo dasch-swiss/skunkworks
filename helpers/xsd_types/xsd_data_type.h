@@ -12,19 +12,10 @@
 namespace xsd {
 
 /*!
- * This is an abstract class that defines the common interface for all xsd datatypes
+ * This is an abstract class that defines the common interface for all xsd data types
  */
 class DataType {
  private:
-  /*!
-   * Parse a xsd date from a string. This does not include parsing xsd datatypes references such as "^^xsd:dateTime".
-   * This method parses the input string and must fill the internal representation (by assigning values to the private
-   * member variables that hold the state.
-   *
-   * @param str String with the value
-   */
-  virtual void parse(const std::string &str) = 0;
-
   /*!
    * Prints the pure value to a ostream
    *
@@ -42,7 +33,7 @@ class DataType {
    *
    * @return C++ string with the value converted to a string
    */
-  virtual operator std::string(void) const = 0;
+  virtual explicit operator std::string(void) const = 0;
 
   /*!
    * Friend method to use the "<<" operator for xsd:values

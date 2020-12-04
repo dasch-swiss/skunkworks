@@ -43,10 +43,32 @@ TEST(XsdString_Generic_Test, Restrictions) {
 
 TEST(XsdAnyUri, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org")), "http://example.org");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org:25/gaga/%20test.jpg?a=b&x=y")),
-            "http://example.org:25/gaga/%20test.jpg?a=b&x=y");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://äüöéèà.org")), "http://äüöéèà.org");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#")), "http://example.org#");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#frag")), "http://example.org#frag");
 
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org/a/b#id")), "http://example.org/a/b#id");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#frag?a=b")), "http://example.org#frag?a=b");
+
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org:25/gaga/test")),
+            "http://example.org:25/gaga/test");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri(u8"http://aé.org")), u8"http://aé.org");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org/wiki/Wikipedia/en")),
+            "https://zh.wikipedia.org/wiki/Wikipedia/en");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/Wikipedia关于中文维基百科/en?gaga=gugu&x=y")),
+      "https://zh.wikipedia.org:42/wiki/Wikipedia关于中文维基百科/en?gaga=gugu&x=y");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus")), "/gaga/gugus");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("//gaga/gugus")), "//gaga/gugus");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus#frag")), "/gaga/gugus#frag");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga/gugus")), "gaga/gugus");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga//gugus")), "gaga//gugus");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga.xml")), "gaga.xml");
+  try {
+    EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("file://gugus/gaga.xml")), "file://gugus/gaga.xml");
+  } catch (const xsd::Error &err) {
+    std::cerr << err;
+    throw 1;
+  }
+  EXPECT_THROW(xsd::AnyUri("://gaga/gugus"), xsd::Error);
 }
 
 TEST(XsdDateTime, Parsing) {

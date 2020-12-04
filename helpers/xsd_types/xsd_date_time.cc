@@ -2,10 +2,12 @@
 // Created by Lukas Rosenthaler on 26.11.20.
 //
 
-#include <time.h>
-#include <math.h>
+#include <ctime>
+#include <cmath>
 
 #include "xsd_date_time.h"
+
+static const char file_[] = __FILE__;
 
 namespace xsd {
 
@@ -76,16 +78,16 @@ void DateTime::parse(const std::string &str) {
       }
     }
   } else {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTime string!");
+    throw Error(file_, __LINE__, "Invalid xsd:dateTime string!");
   }
 }
 //=====================================================================
 
 //---------------------------------------------------------------------
-void DateTime::validate_values(void) {
+void DateTime::validate_values() const {
   //...................................................................
   if (tz_sign_ != TZ_WEST_GMT && tz_sign_ != TZ_EAST_GMT) {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
+    throw Error(file_, __LINE__, "Invalid xsd:dateTime");
   }
   if (((month_ < 1) || (month_ > 12))
       || ((day_ < 1) || (day_ > 31))
@@ -93,11 +95,11 @@ void DateTime::validate_values(void) {
       || ((min_ < 0) || (min_ > 59))
       || ((tz_hour_ < -14) || (tz_hour_ > 14))
       || ((tz_min_ < 0) || (tz_min_ > 60))) {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
+    throw Error(file_, __LINE__, "Invalid xsd:dateTime");
   }
 
   if ((month_ == 4 || month_ == 6 || month_ == 9 || month_ == 11) && (day_ > 30)) {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
+    throw Error(file_, __LINE__, "Invalid xsd:dateTime");
   }
   if (month_ == 2) {
     bool leap_year = ((year_ % 4) == 0);
@@ -109,10 +111,10 @@ void DateTime::validate_values(void) {
     }
     if (leap_year && (day_ > 29)) {
       std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
-      throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
+      throw Error(file_, __LINE__, "Invalid xsd:dateTime");
     } else if (!leap_year && (day_ > 28)) {
       std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
-      throw Error(__file__, __LINE__, "Invalid xsd:dateTime");
+      throw Error(file_, __LINE__, "Invalid xsd:dateTime");
     }
   }
 }
@@ -153,19 +155,37 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
 
 
 DateTime::DateTime() {
+  year_ = 0;
+  month_ = 0;
+  day_ = 0;
+  hour_ = 0;
+  min_ = 0;
+  second_ = 0.0f;
+  tz_sign_ = TZ_WEST_GMT;
+  tz_hour_ = 0;
+  tz_min_ = 0;
   xsd_type_ = "dateTime";
   char time_buf[21];
   time_t now;
   time(&now);
   strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
-  this->parse(time_buf);
+  parse(time_buf);
 }
 //=====================================================================
 
 DateTime::DateTime(const std::string &value) {
   xsd_type_ = "dateTime";
-  this->parse(value);
-  this->validate_values();
+  year_ = 0;
+  month_ = 0;
+  day_ = 0;
+  hour_ = 0;
+  min_ = 0;
+  second_ = 0.0f;
+  tz_sign_ = TZ_WEST_GMT;
+  tz_hour_ = 0;
+  tz_min_ = 0;
+  parse(value);
+  validate_values();
 }
 //=====================================================================
 
@@ -180,17 +200,13 @@ DateTime::DateTime(int year, int month, int day,
 }
 //=====================================================================
 
-DateTime::operator std::string(void) const {
+DateTime::operator std::string() const {
   std::stringstream ss;
   ss << *this;
   return ss.str();
 }
 //=====================================================================
 
-void DateTime::debug() {
-  std::cerr << "year=" << year_ << " month=" << month_ << " day=" << day_ << std::endl;
-}
-//=====================================================================
 /*
 std::ostream &operator<<(std::ostream &out_stream, const DateTime &rhs) {
   return out_stream;

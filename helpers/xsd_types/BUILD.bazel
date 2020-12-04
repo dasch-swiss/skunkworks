@@ -7,7 +7,7 @@ cc_test(
     srcs = ["xsd_types_test.cc"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
-        "//helpers/xsd_types:xsd_types",
+        ":xsd_types",
         "@gtest//:main"
     ],
 )
@@ -15,6 +15,7 @@ cc_test(
 cc_library(
     name = "xsd_types",
     srcs = [
+        "xsd_any_uri.cc",
         "xsd_date_time.cc",
         "xsd_date_time_stamp.cc",
         "lang_string.cc",

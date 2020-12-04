@@ -14,8 +14,6 @@
 #include "xsd_error.h"
 #include "xsd_data_type.h"
 
-static const char __file__[] = __FILE__;
-
 namespace xsd {
 
 const int TZ_WEST_GMT = -1;
@@ -34,9 +32,9 @@ class DateTime : public DataType {
   int tz_hour_;
   int tz_min_;
 
-  void parse(const std::string &str) override;
+  void parse(const std::string &str);
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
-  void validate_values(void);
+  void validate_values() const;
  public:
   DateTime();
 

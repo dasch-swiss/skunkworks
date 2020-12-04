@@ -7,6 +7,7 @@
 
 #include <string>
 
+#include "xsd_error.h"
 #include "xsd_string.h"
 #include "xsd_data_type.h"
 #include "xsd_date_time.h"
