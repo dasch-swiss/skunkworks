@@ -5,8 +5,12 @@ THIS_FILE := $(abspath $(lastword $(MAKEFILE_LIST)))
 CURRENT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY:build
-build: ## build the projec
+build: ## build the project
 	bazel build //...
+
+.PHONY:test
+test: ## test the project
+	bazel test //...
 
 .PHONY: help
 help: ## this help
