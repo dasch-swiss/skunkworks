@@ -11,7 +11,7 @@ namespace entities {
 
 class ValueClass {
  public:
-  ValueClass(const std::string& class_label,
+  ValueClass(std::string class_label,
              std::string class_description);
   inline std::string id() { return id_; }
 

@@ -20,7 +20,7 @@ ResourceClass::ResourceClass(const std::string class_label,
   id_ = uuid::generate_uuid_v4();
 }
 
-void ResourceClass::add_property(const std::shared_ptr<Property> property,
+void ResourceClass::add_property(const std::shared_ptr<entities::Property> property,
                                  int min_count,
                                  int max_count) {
   try {

@@ -25,6 +25,9 @@ cc_library(
     ],
     deps = [
         ":agent",
-        "//helpers/xsd_types:lang_string"
+        "//helpers/xsd_types:date_time_stamp",
+        "//helpers/xsd_types:lang_string",
+        "//helpers/xsd_types:error",
+        "//helpers/xsd_types:others",
     ],
 )

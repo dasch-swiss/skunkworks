@@ -18,14 +18,15 @@ enum Language {
 };
 
 class LangString {
- private:
-  std::unordered_map<Language, std::string> lang_string_;
  public:
   LangString(Language lang, const std::string text);
 
-  std::string operator[](Language lang);
+//  std::string operator[](Language lang);
 
-  void delete(Language lang);
+  void remove(Language lang);
+
+ private:
+  std::unordered_map<Language, std::string> lang_string_;
 };
 }
 

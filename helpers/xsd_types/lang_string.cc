@@ -11,19 +11,19 @@ namespace xsd {
         lang_string_[lang] = text;
     }
 
-    std::string LangString::operator[](Language lang) {
-        std::string result;
-        try {
-            result = lang_string_.at(lang)
-        } catch(const std::std::out_of_range &err) {
-            if (lang_string_.empty()) return result; //empty string!
-            for (auto s: lang_string_) { // return first available string...
-                return s;
-            }
-        }
-    }
+//    std::string LangString::operator[](Language lang) {
+//        std::string result;
+//        try {
+//            result = lang_string_.at(lang);
+//        } catch (const std::out_of_range &err) {
+//            if (lang_string_.empty()) return result; //empty string!
+//            for (auto s: lang_string_.) { // return first available string...
+//                return s;
+//            }
+//        }
+//    }
 
-    void LangString::delete(Language lang) {
+    void LangString::remove(Language lang) {
         lang_string_.erase(lang);
     }
 }

@@ -9,7 +9,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "property.h"
+#include "entities/property.h"
 
 namespace entities {
 
@@ -20,13 +20,6 @@ class ResourceClass {
     int min_count_;
     int max_count_;
   } HasProperty;
-
- private:
-  std::string id_;
-  std::string class_label_;
-  std::string class_description_;
-  std::shared_ptr<ResourceClass> sub_class_of_;
-  std::unordered_map<std::string, HasProperty> has_properties_;
 
  public:
   /*!
@@ -53,6 +46,13 @@ class ResourceClass {
               "id=" << rhs.id_ << std::endl <<
               "class_label=" << rhs.class_label_ << std::endl;
   }
+
+ private:
+  std::string id_;
+  std::string class_label_;
+  std::string class_description_;
+  std::shared_ptr<ResourceClass> sub_class_of_;
+  std::unordered_map<std::string, HasProperty> has_properties_;
 
 };
 
