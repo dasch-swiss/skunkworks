@@ -62,6 +62,17 @@ TEST(XsdAnyUri, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga/gugus")), "gaga/gugus");
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga//gugus")), "gaga//gugus");
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga.xml")), "gaga.xml");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("doi:10.1000/182")), "doi:10.1000/182");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("git://github.com/user/project-name.git")), "git://github.com/user/project-name.git");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ark:/12025/654xz321/s3/f8.05v.tiff")), "ark:/12025/654xz321/s3/f8.05v.tiff");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("s3://mybucket/puppy.jpg")), "s3://mybucket/puppy.jpg");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("svn+ssh://svn.example.org/gaga")), "svn+ssh://svn.example.org/gaga");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("urn:oasis:names:specification:docbook:dtd:xml:4.1.2")), "urn:oasis:names:specification:docbook:dtd:xml:4.1.2");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ws://localhost:9998/echo")), "ws://localhost:9998/echo");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("wss://localhost:9998/echo")), "wss://localhost:9998/echo");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)")), "xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)");
+  //EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html")), "xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html");
+
   try {
     EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("file://gugus/gaga.xml")), "file://gugus/gaga.xml");
   } catch (const xsd::Error &err) {

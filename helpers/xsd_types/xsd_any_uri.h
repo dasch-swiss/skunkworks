@@ -43,7 +43,7 @@ class AnyUri : public DataType {
   bool has_port_;
   int port_;
   bool has_path_;
-  bool abspath_;
+  std::string path_sep_;
   std::vector<std::string> path_;
   bool has_fragment_;
   std::string  fragment_;

@@ -15,23 +15,22 @@ static const char file_[] = __FILE__;
 namespace xsd {
 
 std::unordered_map<std::string, std::string> AnyUri::protocol_schemes = {
-    {"afp", "host|/|path"}, // [user@]host[:port]/][/path]
-    {"ark", "X|\n"},
-    {"doi:", "X|\n"},
-    {"file", "?host|/|path|\n"},
-    {"geo", "X|\n"},
-    {"git", "X|\n"},
-    {"http", "host|/|?path|#|?fragment|?|?options|\n"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
-    {"https", "host|/|path|#|fragment|?|options|\n"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
+    {"afp", "host|/|path/"}, // [user@]host[:port]/][/path]
+    {"ark", "protocol||path/|\n"},
+    {"doi", "protocol||path/|\n"},
+    {"file", "protocol|//|?host|/|path/|\n"},
+    {"geo", "protocol||path/|\n"},
+    {"git", "protocol|//|host|/|path/|\n"},
+    {"http", "protocol|//|host|/|?path/|#|?fragment|?|?options|\n"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
+    {"https", "protocol|//|host|/|path/|#|fragment|?|options|\n"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
     {"mailto", "host|?|?options|\n"},
-    {"rsync", "host|/|path|\n"},
-    {"s3", "path|\n"},
-    {"svn", "host|/|path|\n"},
-    {"svn+ssh", "host|/|path|\n"},
-    {"urn", "X|\n"},
-    {"ws", "path|\n"},
-    {"wss", "path|\n"},
-    {"xri", "host|/|?path|?|?options|#|?fragment|\n"},
+    {"s3", "protocol|//|path/|\n"},
+    {"svn", "protocol|//|host|/|path/|\n"},
+    {"svn+ssh", "protocol|//|host|/|path/|\n"},
+    {"urn", "protocol||path:|\n"},
+    {"ws", "protocol|//|host|/|path/|\n"},
+    {"wss", "protocol|//|host|/|path/|\n"},
+    {"xri", "protocol|//|host|/|?path/|?|?options|#|?fragment|\n"},
 
 };
 
@@ -115,11 +114,13 @@ void AnyUri::parse_host_part(const std::string &rest, char user_passwd_separator
     //
     // let's see if the user has a password...
     //
-    tmp = split_first(user_, ':');
-    if (tmp.success) {
-      user_ = tmp.first;
-      password_ = tmp.second;
-      has_password_ = true;
+    if (!user_.empty()) {
+      tmp = split_first(user_, ':');
+      if (tmp.success) {
+        user_ = tmp.first;
+        password_ = tmp.second;
+        has_password_ = true;
+      }
     }
     tmp = split_first(host_, ':');
     if (tmp.success) {
@@ -134,18 +135,43 @@ void AnyUri::parse_host_part(const std::string &rest, char user_passwd_separator
 }
 
 void AnyUri::parse(const std::string &strval) {
-  abspath_ = false;
   std::string rest;
 
   std::cerr << "======================" << std::endl;
   //
   // first get the protocol if it's an absolute IRI with protocol etc.
   //
-  auto tmp = split_first(strval, "://");
+  std::vector<std::string> parts;
+  auto tmp = split_first(strval, ":");
   if (tmp.success) {
     protocol_ = tmp.first;
+    std::cerr << "-->PROTOCOL=" << protocol_ << "===" << std::endl;
     has_protocol_ = true;
     rest = tmp.second;
+    std::cerr << "***" << __LINE__ << std::endl;
+    try {
+      std::cerr << "***" << __LINE__ << std::endl;
+      std::string schema = protocol_schemes.at(protocol_);
+      std::cerr << "***" << __LINE__ << std::endl;
+      parts = split(schema, '|');
+      std::cerr << "***" << __LINE__ << std::endl;
+    } catch (const std::out_of_range &err) {
+      std::cerr << "***" << __LINE__ << std::endl;
+      throw Error(file_, __LINE__, "URI-schema not supported");
+    }
+    std::cerr << "***" << __LINE__ << std::endl;
+    if ((parts.size() % 2) != 0) throw Error(file_, __LINE__, "Internal error in URI schema data!");
+    std::cerr << "***" << __LINE__ << std::endl;
+    if (parts[0] != "protocol") throw Error(file_, __LINE__, "Internal error in URI schema data: \"protocol\" must be first entry");
+    std::cerr << "***" << __LINE__ << std::endl;
+    if (!parts[1].empty()) {
+      int i = 0;
+      for (auto c: parts[1]) {
+        if (c != rest[i]) throw Error(file_, __LINE__, "Protocol separator does not match!");
+        ++i;
+      }
+      rest = rest.substr(parts[1].length(), std::string::npos);
+    }
   } else {
     protocol_ = "";
     has_protocol_ = false;
@@ -154,18 +180,10 @@ void AnyUri::parse(const std::string &strval) {
 
   std::cerr << "REST=" << rest << std::endl;
 
-  std::vector<std::string> parts;
   if (has_protocol_) {
     std::cerr << "PROTOCOL=" << protocol_ << std::endl;
-    try {
-      std::string schema = protocol_schemes.at(protocol_);
-      parts = split(schema, '|');
-    } catch (const std::out_of_range &err) {
-      throw Error(file_, __LINE__, "URI-schema not supported");
-    }
-    if ((parts.size() % 2) != 0) throw Error(file_, __LINE__, "Internal error in URI schema data!");
 
-    for (int i = 0; i < parts.size(); i += 2) {
+    for (int i = 2; i < parts.size(); i += 2) { // start with 2 to skip protocol entry
       if (parts[i][0] == '?') {
         std::vector<std::string> splitters;
         for (int ii = i; ii < parts.size(); ii += 2) {
@@ -187,9 +205,17 @@ void AnyUri::parse(const std::string &strval) {
         parse_host_part(host_);
         std::cerr << "host: " << host_ << std::endl;
         if (tmp.success || (parts[i + 1] == "\n")) rest = tmp.second;
-      } else if ((parts[i] == "path") || (parts[i] == "?path")) {
+      } else if ((parts[i] == "path/") || (parts[i] == "?path/")) {
         std::string tmp_path = tmp.first;
         has_path_ = true;
+        path_sep_ = "/";
+        path_ = split(tmp_path, '/');
+        for (auto p: path_) std::cerr << "path: " << p << std::endl;
+        if (tmp.success || (parts[i + 1] == "\n")) rest = tmp.second;
+      } else if ((parts[i] == "path:") || (parts[i] == "?path:")) {
+        std::string tmp_path = tmp.first;
+        has_path_ = true;
+        path_sep_ = ":";
         path_ = split(tmp_path, '/');
         for (auto p: path_) std::cerr << "path: " << p << std::endl;
         if (tmp.success || (parts[i + 1] == "\n")) rest = tmp.second;
@@ -209,23 +235,34 @@ void AnyUri::parse(const std::string &strval) {
     }
   } else {
     path_ = split(rest, "/");
+    path_sep_ = "/";
     has_path_ = true;
   }
 }
 
 
 std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
-  if (has_protocol_) out_stream << protocol_;
-  if (has_host_) out_stream << "://" << host_;
+
+  if (has_protocol_) {
+    std::vector<std::string> parts;
+    try {
+      std::string schema = protocol_schemes.at(protocol_);
+      parts = split(schema, '|');
+    } catch (const std::out_of_range &err) {
+      throw Error(file_, __LINE__, "URI-schema not supported");
+    }
+    out_stream << protocol_ << ":" << parts[1];
+  }
+  if (has_host_) out_stream << host_;
   if (has_port_) out_stream << ":" << port_;
   if (has_path_) {
     int i = 0;
     for (const auto &p: path_) {
       if (i == 0) {
-        if (abspath_ || has_protocol_) out_stream << "/";
+        if (has_host_) out_stream << "/";
         out_stream << p;
       } else {
-        out_stream << "/" << p;
+        out_stream << path_sep_ << p;
       }
       ++i;
     }
@@ -249,7 +286,6 @@ AnyUri::AnyUri(const std::string &strval) {
   has_port_ = false;
   has_host_ = false;
   has_path_ = false;
-  abspath_ = false;
   has_fragment_ = false;
   has_options_ = false;
   port_ = -1;
