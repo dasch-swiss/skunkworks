@@ -40,30 +40,21 @@ namespace entities {
  * if available, the system error message.
  */
 class Error : std::runtime_error {
- protected:
-  int line;            //!< Linenumber where the exception has been throwns
-  std::string file;    //!< Name of source code file where the exception has been thrown
-  std::string message; //!< Description of the problem
-  int sysErrno;        //!< If there is a system error number
-
  public:
-
   inline int getLine(void) const { return line; }
-
   inline std::string getFile(void) const { return file; }
-
   inline std::string getMessage(void) const { return message; }
-
   inline int getSysErrno(void) const { return sysErrno; }
+  inline ~Error() throw() {};
 
   /*!
-  * Constructor with all (char *) strings
-  *
-  * \param[in] file The filename, usually the __FILE__ macro.
-  * \param[in] line The source code line, usually the __LINE__ macro.
-  * \param[in] msg The message describing the error.
-  * \param[in] errno_p Retrieve and display the system error message from errno.
-  */
+ * Constructor with all (char *) strings
+ *
+ * \param[in] file The filename, usually the __FILE__ macro.
+ * \param[in] line The source code line, usually the __LINE__ macro.
+ * \param[in] msg The message describing the error.
+ * \param[in] errno_p Retrieve and display the system error message from errno.
+ */
   Error(const char *file, const int line, const char *msg, int errno_p = 0);
 
   /*!
@@ -77,8 +68,6 @@ class Error : std::runtime_error {
   * \param[in] syserr Retrieve and display the system error message from errno.
   */
   Error(const char *file, const int line, const std::string &msg, int errno_p = 0);
-
-  inline ~Error() throw() {};
 
   /*!
    * Returns the error as a one-line string
@@ -95,6 +84,12 @@ class Error : std::runtime_error {
   * \returns Returns an std::ostream object
   */
   friend std::ostream &operator<<(std::ostream &outStream, const Error &rhs);
+
+ protected:
+  int line;            //!< Linenumber where the exception has been throwns
+  std::string file;    //!< Name of source code file where the exception has been thrown
+  std::string message; //!< Description of the problem
+  int sysErrno;        //!< If there is a system error number
 };
 }
 

@@ -11,7 +11,7 @@
 namespace entities::user {
 
 User::User(
-    std::shared_ptr<Username> username,
+    Username username,
     std::string email,
     std::string password,
     std::string token,
@@ -22,7 +22,7 @@ User::User(
 
   id_ = uuid::generate_uuid_v4();
 
-  username_ = std::move(username);
+  username_ = username;
 
   //ToDo: check with regex for validity
   if (email.length() > 0) {

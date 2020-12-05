@@ -20,18 +20,18 @@ ResourceClass::ResourceClass(const std::string class_label,
   id_ = uuid::generate_uuid_v4();
 }
 
-void ResourceClass::add_property(const std::shared_ptr<entities::Property> property,
-                                 int min_count,
-                                 int max_count) {
-  try {
-    std::string tmp = this->has_properties_.at(property->id())
-  }
-  catch (const std::out_of_range &err) {
-    HasProperty hp = {property, min_count, max_count}
-    has_properties[property.id()] = hp;
-    return;
-  } // TODO: Use C++20 with contains ASAP!
-  throw Error(__file__, __LINE__, "Property with same id already exists!");
-}
+//void ResourceClass::add_property(const std::shared_ptr<entities::Property> property,
+//                                 int min_count,
+//                                 int max_count) {
+//  try {
+//    std::string tmp = this->has_properties_.at(property->id())
+//  }
+//  catch (const std::out_of_range &err) {
+//    HasProperty hp = {property, min_count, max_count}
+//    has_properties[property.id()] = hp;
+//    return;
+//  } // TODO: Use C++20 with contains ASAP!
+//  throw Error(__file__, __LINE__, "Property with same id already exists!");
+//}
 
 }

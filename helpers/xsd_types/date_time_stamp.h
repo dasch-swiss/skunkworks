@@ -11,7 +11,7 @@ namespace xsd {
 
 class DateTimeStamp : DateTime {
  public:
-  inline DateTimeStamp() : DateIme() {}
+  inline DateTimeStamp() : DateTime() {}
 
   DateTimeStamp(std::string value);
 

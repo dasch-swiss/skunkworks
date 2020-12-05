@@ -24,5 +24,5 @@ TEST(UserTest, CreateUserSucessfully) {
 TEST(UserTest, CreateUserWithExceptions) {
   EXPECT_THROW(
       entities::user::User(entities::user::Username("dduck"), "", "", "", "", "", "", ""),
-      dsp::Error);
+      entities::Error);
 }

@@ -14,13 +14,6 @@
 namespace entities {
 
 class ResourceClass {
-
-  struct has_property {
-    std::shared_ptr<Property> property_;
-    int min_count_;
-    int max_count_;
-  } HasProperty;
-
  public:
   /*!
    *
@@ -38,7 +31,7 @@ class ResourceClass {
 
   inline std::string class_description() { return class_description_; }
 
-  void add_property(const std::shared_ptr<Property> property, int min_count, int max_count);
+//  void add_property(std::shared_ptr<Property> property, int min_count, int max_count);
 
   // usage: cout << resource_class_instance << ...;
   inline friend std::ostream &operator<<(std::ostream &outStream, const ResourceClass &rhs) {
@@ -48,11 +41,16 @@ class ResourceClass {
   }
 
  private:
+//  struct has_property {
+//    std::shared_ptr<Property> property_;
+//    int min_count_;
+//    int max_count_;
+//  } HasProperty;
   std::string id_;
   std::string class_label_;
   std::string class_description_;
   std::shared_ptr<ResourceClass> sub_class_of_;
-  std::unordered_map<std::string, HasProperty> has_properties_;
+//  std::unordered_map<std::string, HasProperty> has_properties_;
 
 };
 
