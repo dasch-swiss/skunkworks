@@ -17,7 +17,7 @@ namespace entities::user {
  */
 class User {
  public:
-  User(Username username,
+  User(std::shared_ptr<Username> username,
        std::string email,
        std::string password,
        std::string token,
@@ -26,7 +26,7 @@ class User {
        std::string status,
        std::string lang);
   inline xsd::ID id() { return id_; };
-  inline Username username() { return username_; };
+  inline std::shared_ptr<Username> username() { return username_; };
   inline xsd::string email() { return email_; };
   inline xsd::string password() { return password_; };
   inline xsd::string token() { return token_; };
@@ -36,7 +36,7 @@ class User {
   inline xsd::string lang() { return lang_; };
  private:
   xsd::ID id_;
-  Username username_;
+  std::shared_ptr<Username> username_;
   std::string email_;
   std::string password_;
   std::string token_;

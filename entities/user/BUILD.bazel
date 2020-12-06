@@ -15,14 +15,14 @@ cc_library(
 )
 
 cc_test(
-    name = "user_test",
-    srcs = ["user_test.cc"],
-    copts = ["-Iexternal/gtest/include"],
-    size = "small",
-    deps = [
-        ":user",
-        "//entities/user/values",
-        "//entities:error",
-        "@gtest//:main"
-    ],
+  name = "user_test",
+  srcs = ["user_test.cc"],
+  size = "small",
+  deps = [
+      ":user",
+      "//entities/user/values",
+      "//entities:error",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
 )

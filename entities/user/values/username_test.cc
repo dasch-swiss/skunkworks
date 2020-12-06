@@ -2,20 +2,40 @@
 // Created by Ivan Subotic on 29/11/2020.
 //
 
-#include "gtest/gtest.h"
+#include "catch2/catch.hpp"
 
 #include "entities/error.h"
 #include "username.h"
 
-TEST(UserValuesTest, Username) {
-  EXPECT_EQ(entities::user::Username("dduck").value(),"dduck") << "create 'dduck' username";
+TEST_CASE("creating the username value type", "[entities][user][username]") {
+using namespace entities::user;
 
-  // 4 - 50 characters long
-  EXPECT_THROW(entities::user::Username("abc"), entities::Error) << "username has 3 characters";
-  EXPECT_NO_THROW(entities::user::Username("root")) << "username has 4 characters";
-  EXPECT_NO_THROW(entities::user::Username("12345678901234567890123456789012345678901234567890")) << "username has 50 characters";
-  EXPECT_THROW(entities::user::Username("123456789012345678901234567890123456789012345678901"), entities::Error) << "username has 51 characters";
-
-  // Only contains alphanumeric characters
-  EXPECT_THROW(entities::user::Username("abc123._"), entities::Error) << "username has not allowed characters";
+SECTION( "create username" ) {
+CHECK(Username("dduck").value() == "dduck");
 }
+
+// allowed length is 4 - 50 characters long
+SECTION( "length restricions" ) {
+
+// username has 3 characters
+CHECK_THROWS_AS(Username("abc"), entities::Error);
+
+// username has 4 characters
+CHECK_NOTHROW(Username("root"));
+
+// username has 50 characters
+CHECK_NOTHROW(Username("12345678901234567890123456789012345678901234567890"));
+
+// username has 51 characters
+CHECK_THROWS_AS(Username("123456789012345678901234567890123456789012345678901"), entities::Error);
+}
+
+// Only contains alphanumeric characters
+SECTION( "allowed characters" ) {
+  // username has not allowed characters
+CHECK_THROWS_AS(entities::user::Username("abc123._"), entities::Error);
+}
+
+}
+
+

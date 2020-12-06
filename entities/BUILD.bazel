@@ -3,14 +3,16 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_test(
-    name = "entities_test",
-    srcs = ["entities_test.cc"],
-    copts = ["-Iexternal/gtest/include"],
-    deps = [
-        ":entities",
-        "@gtest//:main"
-    ],
+  name = "entities_test",
+  srcs = ["entities_test.cc"],
+  size = "small",
+  deps = [
+      ":entities",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
 )
+
 
 cc_library(
     name = "error",

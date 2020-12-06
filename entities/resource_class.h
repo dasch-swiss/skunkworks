@@ -34,11 +34,11 @@ class ResourceClass {
 //  void add_property(std::shared_ptr<Property> property, int min_count, int max_count);
 
   // usage: cout << resource_class_instance << ...;
-  inline friend std::ostream &operator<<(std::ostream &outStream, const ResourceClass &rhs) {
-    outStream << "ResourceClass:: " << std::endl <<
-              "id=" << rhs.id_ << std::endl <<
-              "class_label=" << rhs.class_label_ << std::endl;
-  }
+//  inline friend std::ostream &operator<<(std::ostream &outStream, const ResourceClass &rhs) {
+//    outStream << "ResourceClass:: " << std::endl <<
+//              "id=" << rhs.id_ << std::endl <<
+//              "class_label=" << rhs.class_label_ << std::endl;
+//  }
 
  private:
 //  struct has_property {

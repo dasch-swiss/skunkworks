@@ -11,7 +11,7 @@
 namespace entities::user {
 
 User::User(
-    Username username,
+    std::shared_ptr<Username> username,
     std::string email,
     std::string password,
     std::string token,

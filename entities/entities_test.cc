@@ -2,13 +2,13 @@
 #include <string>
 #include <unordered_map>
 
-#include "gtest/gtest.h"
+#include "catch2/catch.hpp"
 
 #include "property.h"
 #include "resource_class.h"
 #include "value_class.h"
 
-TEST(EntitiesTest, GetGreet) {
+TEST_CASE("entities test", "[entities]") {
 
     // EXPECT_EQ(get_greet("Bazel"), "Hello Bazel");
 

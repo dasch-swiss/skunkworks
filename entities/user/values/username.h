@@ -13,7 +13,7 @@ namespace entities::user {
 
 class Username {
  public:
-  explicit Username(const std::string& value);
+  Username(const std::string& value);
   inline std::string value() {return value_; }
 
  private:

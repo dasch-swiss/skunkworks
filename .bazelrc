@@ -9,5 +9,5 @@ build --incompatible_enable_cc_toolchain_resolution
 # add some compiler settings
 build --repo_env=CC=clang --cxxopt="-std=c++17" --cxxopt="-DSHTTPS_ENABLE_SSL"
 
-# set to "error" (less output) or "all" (more output)
-test --test_output=all
+# set to "errors" (less output) or "all" (more output)
+test --test_output=errors
