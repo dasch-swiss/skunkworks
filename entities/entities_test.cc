@@ -15,20 +15,20 @@ TEST(EntitiesTest, GetGreet) {
     //
     // init value classes (SYSTEM)
     //
-    dsp::ValueClass text_value = dsp::ValueClass("TextValueClass", "bla bla");
-    dsp::ValueClass integer_value = dsp::ValueClass("IntegerValueClass", "bla bla");
-
-
-    dsp::ResourceClass my_resclass = dsp::ResourceClass("myresclass", "This is my resource class", nullptr);
-
-    dsp::Property title = dsp::Property("hasTitle", "bla bla", my_resclass, text_value);
-    dsp::Property age = dsp::Property("hasAge", "bla bla", my_resclass, integer_value);
-
-    my_resclass.add_property(title, 1, 3);
-    my_resclass.add_property(age, 0, 1);
-
-    EXPECT_EQ(my_resclass.class_label(), "myresclass");
-    EXPECT_EQ(my_resclass.class_description(), "This is my resource class");
+//    dsp::ValueClass text_value = dsp::ValueClass("TextValueClass", "bla bla");
+//    dsp::ValueClass integer_value = dsp::ValueClass("IntegerValueClass", "bla bla");
+//
+//
+//    dsp::ResourceClass my_resclass = dsp::ResourceClass("myresclass", "This is my resource class", nullptr);
+//
+//    dsp::Property title = dsp::Property("hasTitle", "bla bla", my_resclass, text_value);
+//    dsp::Property age = dsp::Property("hasAge", "bla bla", my_resclass, integer_value);
+//
+//    my_resclass.add_property(title, 1, 3);
+//    my_resclass.add_property(age, 0, 1);
+//
+//    EXPECT_EQ(my_resclass.class_label(), "myresclass");
+//    EXPECT_EQ(my_resclass.class_description(), "This is my resource class");
 
     // finished creating/reading ontologies
     //----------------------------

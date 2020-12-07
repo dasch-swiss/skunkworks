@@ -12,14 +12,14 @@ const static std::regex re("^-?([1-9][0-9]{3,}|0[0-9]{3})"
                            "T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]+)?|(24:00:00(\\.0+)?))"
                            "(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00))$");
 
-DateTimeStamp::DateTimeStamp(std::string value) {
-  std::cmatch m;
-  if (std::regex_match(value.c_str(), m, re)) {
-    value_ = value;
-  } else {
-    throw Error(__file__, __LINE__, "Invalid xsd:dateTimeStamp string!");
-  }
-}
+//DateTimeStamp::DateTimeStamp(std::string value) {
+//  std::cmatch m;
+//  if (std::regex_match(value.c_str(), m, re)) {
+//    value_ = value;
+//  } else {
+//    throw Error(__file__, __LINE__, "Invalid xsd:dateTimeStamp string!");
+//  }
+//}
 //=====================================================================
 
 DateTimeStamp::DateTimeStamp(int year, int month, int day,

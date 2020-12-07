@@ -5,11 +5,8 @@
 #ifndef SKUNKWORKS_VALUE_H
 #define SKUNKWORKS_VALUE_H
 
-#include <shared_ptr>
-
-#include "helpers/xsd_types/error.h"
 #include "helpers/xsd_types/date_time_stamp.h"
-#include "helpers/xsd_types/lang_string.h
+#include "helpers/xsd_types/lang_string.h"
 #include "helpers/xsd_types/others.h"
 
 #include "agent.h"
@@ -17,10 +14,10 @@
 class Value {
 private:
     xsd::DateTimeStamp creation_date_;
-    shared_ptr<Agent> created_by_;
+    std::shared_ptr<dsp::Agent> created_by_;
     xsd::boolean is_deleted_;
     xsd::DateTimeStamp delete_date_;
-    shared_ptr<Agent> deleted_by_;
+    std::shared_ptr<dsp::Agent> deleted_by_;
     xsd::langstring delete_comment_;
     xsd::langstring comment_;
     xsd::string strval;
@@ -48,7 +45,7 @@ public:
      * @param creation_date std::string with correct xsd formatting!
      */
     inline void creation_date(const std::string &creation_date) {
-        creation_date_ = xsd::DateTimeStamp(creation_date)
+        creation_date_ = xsd::DateTimeStamp(creation_date);
     }
 
     /**
@@ -56,7 +53,7 @@ public:
      *
      * @param deleted_by The Agent deleting the value
      */
-    void delete(const shared_ptr<Agent> deleted_by);
+    // void delete(const shared_ptr<Agent> deleted_by);
 
     /**
      * Delete the value
@@ -64,7 +61,7 @@ public:
      * @param deleted_by The Agent deleting the value
      * @param delete_comment xsd::LangString Comment why the value is being deleted
      */
-    void delete(const shared_ptr<Agent> deleted_by, const xsd::LangString delete_comment);
+    // void delete(const shared_ptr<Agent> deleted_by, const xsd::LangString delete_comment);
 
     /**
      * Delete the value
@@ -73,10 +70,10 @@ public:
      * @param lang Language of the comment
      * @param delete_comment std::string Comment why the value is being deleted
      */
-    delete(const shared_ptr<Agent> deleted_by, Language lang, const std::string &delete_comment);
+    // delete(const shared_ptr<Agent> deleted_by, Language lang, const std::string &delete_comment);
 
     virtual std::string to_string() = 0;
-}
+};
 
 
 #endif //SKUNKWORKS_VALUE_H
