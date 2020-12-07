@@ -3,8 +3,6 @@ workspace(name = "swiss_dasch_skunkworks")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
-
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
 rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
@@ -21,6 +19,8 @@ load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependen
 # custom toolchains.
 rules_foreign_cc_dependencies(register_default_tools = True)
 
+# used as default build file content in the download rules used in combination with rules_foreign_cc
+all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 
 # @zlib//:all
 http_archive(
