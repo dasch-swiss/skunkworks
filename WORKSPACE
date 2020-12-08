@@ -3,6 +3,25 @@ workspace(name = "swiss_dasch_skunkworks")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
+# get c++ clang+llvm official binaries
+# for macOS
+http_archive(
+    name = "clang_llvm_11.0.0_x86_64_apple_darwin",
+    build_file = "@swiss_dasch_skunkworks//toolchain:compiler.BUILD",
+    strip_prefix = "clang+llvm-11.0.0-x86_64-apple-darwin",
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-apple-darwin.tar.xz",
+    sha256 = "b93886ab0025cbbdbb08b46e5e403a462b0ce034811c929e96ed66c2b07fe63a",
+)
+
+# for ubuntu 20.04
+http_archive(
+    name = "clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04",
+    build_file = "@swiss_dasch_skunkworks//toolchain:compiler.BUILD",
+    strip_prefix = "clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04",
+    url = "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz",
+    sha256 = "829f5fb0ebda1d8716464394f97d5475d465ddc7bea2879c0601316b611ff6db",
+)
+
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
 rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
