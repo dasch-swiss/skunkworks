@@ -26,7 +26,7 @@ class AnyUri : public DataType {
  public:
   explicit AnyUri(const std::string &strval);
 
-  AnyUri(const std::string &protocol, const std::string &server, const std::string &path);
+  AnyUri(const std::string &protocol, const std::string &host, const std::string &path);
 
   explicit operator std::string() const override;
 
@@ -53,6 +53,7 @@ class AnyUri : public DataType {
   void parse_host_part(const std::string &rest, char user_passwd_separator = ':', char user_host_separator = '@');
 
   void parse(const std::string &str);
+
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
 };
 

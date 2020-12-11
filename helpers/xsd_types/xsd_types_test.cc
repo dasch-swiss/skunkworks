@@ -42,43 +42,68 @@ TEST(XsdString_Generic_Test, Restrictions) {
 }
 
 TEST(XsdAnyUri, Generic) {
+  std::cerr << "................................................................" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org")), "http://example.org");
+  std::cerr << "................................................................" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#")), "http://example.org#");
+  std::cerr << "................................................................" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#frag")), "http://example.org#frag");
 
+  std::cerr << "................................................................" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org/a/b#id")), "http://example.org/a/b#id");
+  std::cerr << "----------------------------------------------------------------" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org#frag?a=b")), "http://example.org#frag?a=b");
+  std::cerr << "================================================================" << std::endl;
 
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org:25/gaga/test")),
             "http://example.org:25/gaga/test");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri(u8"http://aé.org")), u8"http://aé.org");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri(u8"http://aé.org/цудовнымъ")), u8"http://aé.org/цудовнымъ");
+  std::cerr << "................................................................" << std::endl;
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org/wiki/Wikipedia/en")),
             "https://zh.wikipedia.org/wiki/Wikipedia/en");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/Wikipedia关于中文维基百科/en?gaga=gugu&x=y")),
-      "https://zh.wikipedia.org:42/wiki/Wikipedia关于中文维基百科/en?gaga=gugu&x=y");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus")), "/gaga/gugus");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("//gaga/gugus")), "//gaga/gugus");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus#frag")), "/gaga/gugus#frag");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga/gugus")), "gaga/gugus");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga//gugus")), "gaga//gugus");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga.xml")), "gaga.xml");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("doi:10.1000/182")), "doi:10.1000/182");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("git://github.com/user/project-name.git")), "git://github.com/user/project-name.git");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ark:/12025/654xz321/s3/f8.05v.tiff")), "ark:/12025/654xz321/s3/f8.05v.tiff");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("s3://mybucket/puppy.jpg")), "s3://mybucket/puppy.jpg");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("svn+ssh://svn.example.org/gaga")), "svn+ssh://svn.example.org/gaga");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("urn:oasis:names:specification:docbook:dtd:xml:4.1.2")), "urn:oasis:names:specification:docbook:dtd:xml:4.1.2");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ws://localhost:9998/echo")), "ws://localhost:9998/echo");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("wss://localhost:9998/echo")), "wss://localhost:9998/echo");
-  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)")), "xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)");
-  //EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html")), "xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y")),
+      "https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس،/en?gaga=gugu&x=y")),
+            "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس،/en?gaga=gugu&x=y");
 
-  try {
-    EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("file://gugus/gaga.xml")), "file://gugus/gaga.xml");
-  } catch (const xsd::Error &err) {
-    std::cerr << err;
-    throw 1;
-  }
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus")), "/gaga/gugus");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("//gaga/gugus")), "//gaga/gugus");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus#frag")), "/gaga/gugus#frag");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga/gugus")), "gaga/gugus");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga//gugus")), "gaga//gugus");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga.xml")), "gaga.xml");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("doi:10.1000/182")), "doi:10.1000/182");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("git://github.com/user/project-name.git")), "git://github.com/user/project-name.git");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ark:/12025/654xz321/s3/f8.05v.tiff")), "ark:/12025/654xz321/s3/f8.05v.tiff");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("s3://mybucket/puppy.jpg")), "s3://mybucket/puppy.jpg");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("svn+ssh://svn.example.org/gaga")), "svn+ssh://svn.example.org/gaga");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("urn:oasis:names:specification:docbook:dtd:xml:4.1.2")), "urn:oasis:names:specification:docbook:dtd:xml:4.1.2");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("ws://localhost:9998/echo")), "ws://localhost:9998/echo");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("wss://localhost:9998/echo")), "wss://localhost:9998/echo");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)")), "xri://broadview.library.example.com/(urn:isbn:0-395-36341-1)/(+hardcover)");
+  std::cerr << "................................................................" << std::endl;
+  //EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html")), "xri://@cordance*(urn:isbn:0-395-36341-1)/book-description.html");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https", "lukas:gaga@gugus.org:33", "aaa/bbb/ccc")), "https://lukas:gaga@gugus.org:33/aaa/bbb/ccc");
+  std::cerr << "................................................................" << std::endl;
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("file://gugus/gaga.xml")), "file://gugus/gaga.xml");
+  std::cerr << "................................................................" << std::endl;
   EXPECT_THROW(xsd::AnyUri("://gaga/gugus"), xsd::Error);
 }
 
