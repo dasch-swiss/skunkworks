@@ -23,12 +23,28 @@ namespace xsd {
 
 
 class AnyUri : public DataType {
+  /*!
+   * This class implements the [xsd:anyURI](https://www.w3.org/TR/xmlschema11-2/#anyURI) class
+   */
  public:
+  /*!
+   * Constructor which takes one std::string as parameter which is validated if the string corresponds to a
+   * valid URI (dependoing on the protocol).
+   * @param strval
+   */
   explicit AnyUri(const std::string &strval);
 
-  AnyUri(const std::string &protocol, const std::string &host, const std::string &path);
-
+  /*!
+   * Conversion to std::string
+   * @return
+   */
   explicit operator std::string() const override;
+
+  /*!
+   * Set a new value
+   * @param strval
+   */
+  void set(const std::string &strval) override;
 
  private:
   static std::unordered_map<std::string, std::string> protocol_schemes;
@@ -50,9 +66,9 @@ class AnyUri : public DataType {
   bool has_options_;
   std::vector<std::string> options_;
 
-  void parse_host_part(const std::string &rest, char user_passwd_separator = ':', char user_host_separator = '@');
-
   void parse(const std::string &str);
+
+  void validate();
 
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
 };

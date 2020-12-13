@@ -21,20 +21,6 @@ const int TZ_EAST_GMT = 1;
 
 // see https://www.w3.org/TR/xmlschema11-2/#dateTime
 class DateTime : public DataType {
- private:
-  int year_;
-  int month_;
-  int day_;
-  int hour_;
-  int min_;
-  float second_;
-  int tz_sign_;
-  int tz_hour_;
-  int tz_min_;
-
-  void parse(const std::string &str);
-  std::ostream &print_to_stream(std::ostream &out_stream) const override;
-  void validate_values() const;
  public:
   DateTime();
 
@@ -63,8 +49,24 @@ class DateTime : public DataType {
 
   operator std::string(void) const override;
 
+  void set(const std::string &strval) override;
+
   void debug();
 
+ private:
+  int year_;
+  int month_;
+  int day_;
+  int hour_;
+  int min_;
+  float second_;
+  int tz_sign_;
+  int tz_hour_;
+  int tz_min_;
+
+  void parse(const std::string &str);
+  std::ostream &print_to_stream(std::ostream &out_stream) const override;
+  void validate() const;
 };
 
 }

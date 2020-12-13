@@ -15,6 +15,8 @@ cc_test(
 cc_library(
     name = "xsd_types",
     srcs = [
+        "xsd_normalized_string.cc",
+        "xsd_token.cc",
         "xsd_any_uri.cc",
         "xsd_date_time.cc",
         "xsd_date_time_stamp.cc",
@@ -25,6 +27,8 @@ cc_library(
         "xsd.h",
         "xsd_data_type.h",
         "xsd_string.h",
+        "xsd_token.h",
+        "xsd_normalized_string.h",
         "xsd_any_uri.h",
         "xsd_date_time.h",
         "xsd_date_time_stamp.h",

@@ -7,6 +7,7 @@
 #include <tuple>
 #include <stdexcept>
 #include <regex>
+#include <sstream>
 
 #include "xsd_error.h"
 #include "xsd_any_uri.h"
@@ -16,20 +17,18 @@ static const char file_[] = __FILE__;
 namespace xsd {
 
 std::unordered_map<std::string, std::string> AnyUri::protocol_schemes = {
-    {"ark", "(ark:)/?([\\d]{5})/(.*)"},
-    {"doi", "(doi:)(\\d{2}.\\d{4})/(.*)"},
-    {"file", "(file://|file:)([^:]+:)?([^@]+@)?([^/]+)?(/.*)?"},
-    {"geo", "(geo:)([\\d]*\\.[\\d]*),([\\d]*\\.[\\d]*)(;u=[\\d]+)?"},
-    {"git", "(git://)([^:]+:)?([^@]+@)?([^/]+[/])?(.*)?"},
-    {"http", R"((http://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
-    {"https", R"((https://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
+    {"ark", R"((ark:)/?([\d]{5})/(.*))"},
+    {"doi", R"((doi:)(\d{2}.\d{4})/(.*))"},
+    {"file", R"((file://|file:)([\w]+:)?([\w]+@)?([\w\.]+)?([\w/\-\.]+)?)"},
+    {"geo", R"((geo:)([\d]*\.[\d]*),([\d]*\\.[\d]*)(;u=[\d]+)?)"},
+    {"git", R"((git://)([\w\.]+)([\w/\-\.]+)?)"},
+    {"http", R"((http://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
+    {"https", R"((https://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
     {"mailto", "(mailto:)([^@]+@)([^\?]+\?)(.*)?"},
-    {"s3", "(s3://)([^/]+/)(.*)"},
-    {"urn", "protocol||path:|\n"},
-    {"ws", "(ws://)([^:]+:)?([^@]+@)?([^/]+/)?(.*)?"},
-    {"wss", "(wss://)([^:]+:)?([^@]+@)?([^/]+/)?(.*)?"},
-    {"xri", "(xri://)([^/]+/)(.*)"},
-
+    {"s3", R"((s3://)([a-z0-9\-]{3,63})/([\w/\-\.\*\(\)!']+)?)"},
+    {"urn", R"((urn:)([\w]+):(.*))"},
+    {"ws", R"((ws://)([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(\?[\w&=]+)?(.*)?)"},
+    {"wss", R"((wss://)([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(\?[\w&=]+)?(.*)?)"},
 };
 
 typedef struct {
@@ -76,7 +75,6 @@ static SplitResult split_at(const std::string &strval, size_t pos, int len = 1) 
   return result;
 }
 
-
 static SplitResult split_first(const std::string &strval, char splitter) {
   size_t pos = strval.find(splitter);
   return split_at(strval, pos);
@@ -87,46 +85,11 @@ static SplitResult split_first(const std::string &strval, const std::string &spl
   return split_at(strval, pos, splitter.length());
 }
 
-
 static bool check_illegal_characters(const std::string  &strval, const std::string &illegal) {
   for (auto const c: illegal) {
     if (strval.find(c) != std::string ::npos) return true;
   }
   return false;
-}
-
-
-void AnyUri::parse_host_part(const std::string &rest, char user_passwd_separator, char user_host_separator) {
-  //
-  // let's see if there is some user info separated by a '@'
-  //
-  SplitResult tmp = split_first(rest, user_host_separator);
-  if (tmp.success) {
-    user_ = tmp.first;
-    has_user_ = true;
-    host_ = tmp.second;
-    has_host_ = true;
-    //
-    // let's see if the user has a password...
-    //
-    if (!user_.empty()) {
-      tmp = split_first(user_, user_passwd_separator);
-      if (tmp.success) {
-        user_ = tmp.first;
-        password_ = tmp.second;
-        if (!password_.empty()) has_password_ = true;
-      }
-    }
-  }
-  tmp = split_first(host_, ':');
-  if (tmp.success) {
-    host_ = tmp.first;
-    for (auto cc: tmp.second) {
-      if (cc < '0' || cc > '9') throw Error(file_, __LINE__, "Port number is not numeric!");
-    }
-    port_ = std::atoi(tmp.second.c_str());
-    has_port_ = true;
-  }
 }
 
 void dellast( std::string &str, char last) {
@@ -138,14 +101,18 @@ void dellast( std::string &str, char last) {
 }
 
 void AnyUri::parse(const std::string &strval) {
-  std::locale old;
-  std::locale::global(std::locale("en_US.UTF-8"));
+  std::locale old = std::locale::global(std::locale("en_US.UTF-8"));
 
   size_t pos = strval.find(':');
   if (pos != std::string::npos) {
     protocol_ = strval.substr(0, pos);
     has_protocol_ = true;
-    std::string pattern = protocol_schemes.at(protocol_);
+    std::string pattern;
+    try {
+      pattern = protocol_schemes.at(protocol_);
+    } catch (const std::out_of_range &err) {
+      throw Error(file_, __LINE__, "Unknown protocol!");
+    }
     std::regex re(pattern, std::regex::ECMAScript);
     std::cmatch match;
     if (std::regex_match(strval.c_str(), match, re)) {
@@ -162,35 +129,139 @@ void AnyUri::parse(const std::string &strval) {
           dellast(user_, '@');
           has_user_ = true;
         }
+
+        if (match[4].matched) {
+          has_host_ = true;
+          host_ = match[4].str();
+        }
+        if (match[5].matched) {
+          has_port_ = true;
+          std::string port = match[5].str();
+          port.erase(0, 1);
+          port_ = std::atoi(port.c_str());
+        }
+        if (match[6].matched) {
+          has_path_ = true;
+          std::string path = match[6].str();
+          path = path.erase(0, 1);
+          path_ = split(path, '/');
+          path_sep_ = '/';
+        }
+        if (match[7].matched) {
+          has_fragment_ = true;
+          fragment_ = match[7].str();
+          fragment_.erase(0, 1);
+        }
+        if (match[8].matched) {
+          has_options_ = true;
+          std::string options = match[8].str();
+          options.erase(0, 1);
+          options_ = split(options, '?');
+        }
+      } else if (protocol_ == "doi") {
+        if (match[2].matched) {
+          host_ = match[2].str();
+          has_host_ = true;
+        }
+        if (match[3].matched) {
+          path_.push_back(match[3].str());
+          has_path_ = true;
+          path_sep_ = '/';
+        }
+      } else if (protocol_ == "git") {
+        if (match[2].matched) {
+          host_ = match[2].str();
+          has_host_ = true;
+        }
+        if (match[3].matched) {
+          has_path_ = true;
+          std::string path = match[3].str();
+          path = path.erase(0, 1);
+          path_ = split(path, '/');
+          path_sep_ = '/';
+        }
+      } else if (protocol_ == "ark") {
+        if (match[2].matched) {
+          host_ = match[2].str();
+          has_host_ = true;
+        }
+        if (match[3].matched) {
+          path_.push_back(match[3].str());
+          has_path_ = true;
+          path_sep_ = '/';
+        }
+      } else if (protocol_ == "s3") {
+        if (match[2].matched) {
+          host_ = match[2].str();
+          has_host_ = true;
+        }
+        if (match[3].matched) {
+          path_.push_back(match[3].str());
+          has_path_ = true;
+          path_sep_ = '/';
+        }
+      } else if (protocol_ == "urn") {
+        if (match[2].matched) {
+          host_ = match[2].str();
+          has_host_ = true;
+        }
+        if (match[3].matched) {
+          path_.push_back(match[3].str());
+          has_path_ = true;
+          path_sep_ = ':';
+        }
+      } else if ((protocol_ == "ws") || (protocol_ == "wss")) {
+        if (match[2].matched) {
+          has_host_ = true;
+          host_ = match[2].str();
+        }
+        if (match[3].matched) {
+          has_port_ = true;
+          std::string port = match[3].str();
+          port.erase(0, 1);
+          port_ = std::atoi(port.c_str());
+        }
+        if (match[4].matched) {
+          has_path_ = true;
+          std::string path = match[4].str();
+          path = path.erase(0, 1);
+          path_ = split(path, '/');
+          path_sep_ = '/';
+        }
+        if (match[5].matched) {
+          has_options_ = true;
+          std::string options = match[5].str();
+          options.erase(0, 1);
+          options_ = split(options, '?');
+        }
+      } else if (protocol_ == "file") {
+        if (match[2].matched && match[3].matched) {
+          user_ = match[2].str();
+          dellast(user_, ':');
+          has_user_ = true;
+          password_ = match[2].str();
+          dellast(password_, '@');
+          has_password_ = true;
+        } else if (match[3].matched) {
+          user_ = match[2].str();
+          dellast(user_, '@');
+          has_user_ = true;
+        }
+
+        if (match[4].matched) {
+          has_host_ = true;
+          host_ = match[4].str();
+        }
+        if (match[5].matched) {
+          has_path_ = true;
+          std::string path = match[5].str();
+          path = path.erase(0, 1);
+          path_ = split(path, '/');
+          path_sep_ = '/';
+        }
       }
-      if (match[4].matched) {
-        has_host_ = true;
-        host_ = match[4].str();
-      }
-      if (match[5].matched) {
-        has_port_ = true;
-        std::string port = match[5].str();
-        port.erase(0, 1);
-        port_ = std::atoi(port.c_str());
-      }
-      if (match[6].matched) {
-        has_path_ = true;
-        std::string path = match[6].str();
-        path = path.erase(0, 1);
-        path_ = split(path, '/');
-        path_sep_ = '/';
-      }
-      if (match[7].matched) {
-        has_fragment_ = true;
-        fragment_ = match[7].str();
-        fragment_.erase(0, 1);
-      }
-      if (match[8].matched) {
-        has_options_ = true;
-        std::string options = match[8].str();
-        options.erase(0, 1);
-        options_ = split(options, '?');
-      }
+    } else {
+      throw Error(file_, __LINE__, "anyIR does not match any pattern!");
     }
   } else {
     protocol_ = "";
@@ -199,29 +270,36 @@ void AnyUri::parse(const std::string &strval) {
     has_path_ = true;
     path_sep_ = '/';
   }
+
   std::locale::global(old);
 }
 
-std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
-  if (has_protocol_) std::cerr << "protocol=\"" << protocol_ << "\"" << std::endl;
-  if (has_user_) std::cerr << "user=\"" << user_ << "\"" << std::endl;
-  if (has_password_) std::cerr << "password=\"" << password_ << "\"" << std::endl;
-  if (has_host_) std::cerr << "host=\"" << host_ << "\"" << std::endl;
-  if (has_port_) std::cerr << "port=\"" << port_ << "\"" << std::endl;
+void AnyUri::validate() {
+  if (has_host_ && check_illegal_characters(host_, " ,;?^+*%&/()=!$<>")) {
+    throw Error(file_, __LINE__, "Illegal character in hostname: " + host_ + "!");
+  }
   if (has_path_) {
-    std::cerr << "path:" << std::endl;
-    for (auto p: path_) std::cerr << "  " << p << std::endl;
-  }
-  if (has_fragment_) std::cerr << "fragment=\"" << fragment_ << "\"" << std::endl;
-  if (has_options_) {
-    std::cerr << "options:" << std::endl;
-    for (auto o: options_) std::cerr << "  " << o << std::endl;
+    for (auto p: path_) {
+      if (check_illegal_characters(p, " <>?")) {
+        throw Error(file_, __LINE__, "Illegal character in path component: " + p + "!");
+      }
+    }
   }
 
+}
 
+std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
   if (has_protocol_) {
     if (protocol_ == "http") out_stream << "http://";
     if (protocol_ == "https") out_stream << "https://";
+    if (protocol_ == "doi") out_stream << "doi:";
+    if (protocol_ == "git") out_stream << "git://";
+    if (protocol_ == "ark") out_stream << "ark:/";
+    if (protocol_ == "s3") out_stream << "s3://";
+    if (protocol_ == "urn") out_stream << "urn:";
+    if (protocol_ == "ws") out_stream << "ws://";
+    if (protocol_ == "wss") out_stream << "wss://";
+    if (protocol_ == "file") out_stream << ((has_host_) ? "file://" : "file:");
   }
   if (has_user_) out_stream << user_;
   if (has_password_) out_stream << ':' << password_;
@@ -232,7 +310,7 @@ std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
     int i = 0;
     for (const auto &p: path_) {
       if (i == 0) {
-        if (has_host_) out_stream << "/";
+        if (has_host_) out_stream << path_sep_;
         out_stream << p;
       } else {
         out_stream << path_sep_ << p;
@@ -265,26 +343,7 @@ AnyUri::AnyUri(const std::string &strval) {
   has_options_ = false;
   port_ = -1;
   parse(strval);
-  if (has_host_ && check_illegal_characters(host_, " ,;?^+*%&/()=!$<>")) {
-    std::cerr << "Illegal character in hostname: " + host_ + "!" << std::endl;
-    throw Error(file_, __LINE__, "Illegal character in hostname: " + host_ + "!");
-  }
-  if (has_path_) {
-    for (auto p: path_) {
-      if (check_illegal_characters(p, " <>?")) {
-        std::cerr << "Illegal character in path component: " + p + "!" << std::endl;
-        throw Error(file_, __LINE__, "Illegal character in path component: " + p + "!");
-      }
-    }
-  }
-}
-
-AnyUri::AnyUri(const std::string &protocol, const std::string &host, const std::string &path) : protocol_(protocol) {
-  has_protocol_ = true;
-  parse_host_part(host, ':', '@');
-  path_ = split(path, '/');
-  has_path_ = true;
-  path_sep_ = "/";
+  validate();
 }
 
 AnyUri::operator std::string() const {
@@ -292,5 +351,11 @@ AnyUri::operator std::string() const {
   ss << *this;
   return ss.str();
 }
+
+void AnyUri::set(const std::string &strval) {
+  parse(strval);
+  validate();
+}
+
 
 }

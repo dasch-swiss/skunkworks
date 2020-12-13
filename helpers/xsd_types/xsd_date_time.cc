@@ -4,6 +4,7 @@
 
 #include <ctime>
 #include <cmath>
+#include <locale>
 
 #include "xsd_date_time.h"
 
@@ -26,7 +27,7 @@ namespace xsd {
 // m[12] : sign of timezone or empty
 // m[13] : if set, "14:00" without signed
 // m[14] : hours of timezone-offset
-// m[15] : mintues of timezone offset
+// m[15] : minutes of timezone offset
 
 const static std::regex re("^-?([1-9][0-9]{3,}|0[0-9]{3})"
                            "-(0[1-9]|1[0-2])"
@@ -73,18 +74,22 @@ void DateTime::parse(const std::string &str) {
         tz_hour_ = 14;
         tz_min_ = 0;
       } else {
-        tz_hour_ = std::stoi(m[14]);
-        tz_min_ = std::stoi(m[15]);
+        if (m[14].matched && m[15].matched) {
+          tz_hour_ = std::stoi(m[14]);
+          tz_min_ = std::stoi(m[15]);
+        }
       }
     }
   } else {
     throw Error(file_, __LINE__, "Invalid xsd:dateTime string!");
   }
+  std::cerr << "#" << __LINE__ << std::endl;
+
 }
 //=====================================================================
 
 //---------------------------------------------------------------------
-void DateTime::validate_values() const {
+void DateTime::validate() const {
   //...................................................................
   if (tz_sign_ != TZ_WEST_GMT && tz_sign_ != TZ_EAST_GMT) {
     throw Error(file_, __LINE__, "Invalid xsd:dateTime");
@@ -153,7 +158,6 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
 }
 //=====================================================================
 
-
 DateTime::DateTime() {
   year_ = 0;
   month_ = 0;
@@ -185,7 +189,7 @@ DateTime::DateTime(const std::string &value) {
   tz_hour_ = 0;
   tz_min_ = 0;
   parse(value);
-  validate_values();
+  validate();
 }
 //=====================================================================
 
@@ -196,21 +200,23 @@ DateTime::DateTime(int year, int month, int day,
                    hour_(hour), min_(min), second_(second),
                    tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
   xsd_type_ = "dateTime";
-  validate_values();
+  validate();
 }
 //=====================================================================
 
 DateTime::operator std::string() const {
   std::stringstream ss;
+  ss.imbue(std::locale::classic());
   ss << *this;
   return ss.str();
 }
 //=====================================================================
 
-/*
-std::ostream &operator<<(std::ostream &out_stream, const DateTime &rhs) {
-  return out_stream;
+void DateTime::set(const std::string &strval) {
+  parse(strval);
+  validate();
 }
- */
 //=====================================================================
+
+
 }
