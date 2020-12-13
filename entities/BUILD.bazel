@@ -7,7 +7,7 @@ cc_test(
     srcs = ["entities_test.cc"],
     copts = ["-Iexternal/gtest/include"],
     deps = [
-        "//entities",
+        ":entities",
         "@gtest//:main"
     ],
 )

@@ -99,3 +99,14 @@ http_archive(
     urls = ["https://curl.haxx.se/download/curl-7.70.0.tar.gz"],
     sha256 = "ca2feeb8ef13368ce5d5e5849a5fd5e2dd4755fecf7d8f0cc94000a4206fb8e7",
 )
+
+# catch2
+catch2_tag = "2.13.3"
+catch2_sha256 = "1804feb72bc15c0856b4a43aa586c661af9c3685a75973b6a8fc0b950c7cfd13"
+http_archive(
+    name = "catch2",
+    strip_prefix = "Catch2-{}".format(catch2_tag),
+    type = "zip",
+    url = "https://github.com/catchorg/Catch2/archive/v{}.zip".format(catch2_tag),
+    sha256 = catch2_sha256,
+)
