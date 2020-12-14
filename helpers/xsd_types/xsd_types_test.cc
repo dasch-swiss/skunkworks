@@ -244,4 +244,5 @@ TEST(XsdInteger, Generic) {
   EXPECT_THROW(xsd::Integer("99", std::make_shared<xsd::RestrictionMinInclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Integer("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Integer("3.14"), xsd::Error);
+  EXPECT_EQ(static_cast<std::string>(xsd::Integer(10000)), "10000");
 }

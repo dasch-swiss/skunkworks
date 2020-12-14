@@ -22,34 +22,74 @@ class Integer : public DataType{
    */
   inline Integer() { xsd_type_ = "int"; };
 
+  /*!
+   * Constructor with in64_t parameter
+   * @param val (int64_t)
+   */
   inline Integer(int64_t val) : val_(val) { xsd_type_ = "int"; };
 
+  /*!
+   * Constructor with int64_t parameter and one restriction
+   * @param val
+   * @param restriction
+   */
   inline Integer(int64_t val, const std::shared_ptr<Restriction> restriction) : Integer(val) {
     restrictions_.push_back(restriction);
     validate();
   };
 
+  /*!
+   * Constructor with int64_t parameter and vector of restrictions
+   * @param val
+   * @param restrictions
+   */
   inline Integer(int64_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
     restrictions_ = restrictions;
     validate();
   };
 
+  /*!
+   * Constructor with string parameter
+   * @param val
+   */
   Integer(const std::string &val);
 
+  /*!
+   * Constructor with string parameter and one restriction
+   * @param val
+   * @param restriction
+   */
   inline Integer(const std::string &val, const std::shared_ptr<Restriction> restriction) : Integer(val) {
     restrictions_.push_back(restriction);
     validate();
   }
 
+  /*!
+   * Constructor with string parameter and multiple restrictions given as vector
+   * @param val
+   * @param restrictions
+   */
   inline Integer(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
     restrictions_ = restrictions;
     validate();
   }
 
-  operator std::string() const override ;
+  /*!
+   * Conversion to string
+   * @return
+   */
+  operator std::string() const override;
 
+  /*!
+   * Conversion to int64_t
+   * @return
+   */
   inline operator int64_t () const { return val_; }
 
+  /*!
+   * Getter for value as int64_t
+   * @return
+   */
   inline int64_t get() { return val_; }
 
   inline void set(const std::string &strval) override;
