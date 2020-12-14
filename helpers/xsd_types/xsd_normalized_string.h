@@ -35,9 +35,9 @@ class NormalizedString : public String {
    * @param strval
    * @param restriction
    */
-  NormalizedString(const std::string &strval, const std::shared_ptr<StringRestriction> restriction);
+  NormalizedString(const std::string &strval, const std::shared_ptr<Restriction> restriction);
 
-  NormalizedString(const std::string &strval, const std::vector<std::shared_ptr<StringRestriction>> &restrictions);
+  NormalizedString(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions);
 
   void set(const std::string &strval) override ;
 

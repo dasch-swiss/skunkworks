@@ -8,10 +8,12 @@
 #include <string>
 
 #include "xsd_error.h"
+#include "xsd_data_type.h"
+#include "xsd_restriction.h"
 #include "xsd_string.h"
 #include "xsd_normalized_string.h"
 #include "xsd_token.h"
-#include "xsd_data_type.h"
+#include "xsd_integer.h"
 #include "xsd_date_time.h"
 #include "xsd_date_time_stamp.h"
 #include "xsd_any_uri.h"

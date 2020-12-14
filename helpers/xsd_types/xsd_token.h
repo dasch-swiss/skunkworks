@@ -15,7 +15,7 @@ class Token : public NormalizedString {
 
   Token(const std::string &strval);
 
-  inline Token(const std::string &strval, const std::vector<StringRestriction> &restrictions) : Token(strval) {
+  inline Token(const std::string &strval, const std::vector<Restriction> &restrictions) : Token(strval) {
     xsd_type_ = "token";
     for (int i = 0; i < restrictions.size(); i++) {
       if (!restrictions[i].validate(strval_)) throw Error(__FILE__, __LINE__, "xsd:string did not pass validation!");

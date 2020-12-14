@@ -22,48 +22,48 @@ TEST(XsdString, Generic) {
 
 TEST(XsdString_Generic_Test, Restrictions) {
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionLength>(4))), "gaga");
+      std::make_shared<xsd::RestrictionLength>(4))), "gaga");
   EXPECT_THROW(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionLength>(5)), xsd::Error);
+      std::make_shared<xsd::RestrictionLength>(5)), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionMinLength>(4))), "gaga");
+      std::make_shared<xsd::RestrictionMinLength>(4))), "gaga");
 
   EXPECT_THROW(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionMinLength>(5)), xsd::Error);
+      std::make_shared<xsd::RestrictionMinLength>(5)), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionMaxLength>(4))), "gaga");
+      std::make_shared<xsd::RestrictionMaxLength>(4))), "gaga");
 
   EXPECT_THROW(xsd::String("gaga",
-      std::make_shared<xsd::StringRestrictionMaxLength>(3)), xsd::Error);
+      std::make_shared<xsd::RestrictionMaxLength>(3)), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga@1234",
-      std::make_shared<xsd::StringRestrictionPattern>("\\w*@[0-9]*"))), "gaga@1234");
+      std::make_shared<xsd::RestrictionPattern>("\\w*@[0-9]*"))), "gaga@1234");
 
   EXPECT_THROW(xsd::String("gaga@1234X",
-      std::make_shared<xsd::StringRestrictionPattern>("\\w*@[0-9]*")), xsd::Error);
+      std::make_shared<xsd::RestrictionPattern>("\\w*@[0-9]*")), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("yes",
-      std::make_shared<xsd::StringRestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))),"yes");
+      std::make_shared<xsd::RestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))), "yes");
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("no",
-      std::make_shared<xsd::StringRestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))),"no");
+      std::make_shared<xsd::RestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))), "no");
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("maybe",
-      std::make_shared<xsd::StringRestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))),"maybe");
+      std::make_shared<xsd::RestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"})))), "maybe");
 
   EXPECT_THROW(xsd::String("omg",
-      std::make_shared<xsd::StringRestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"}))), xsd::Error);
+      std::make_shared<xsd::RestrictionEnumeration>(std::set<std::string>({"yes", "no", "maybe"}))), xsd::Error);
 
-  xsd::String tt("gaga@1234", std::make_shared<xsd::StringRestrictionPattern>("\\w*@[0-9]*"));
+  xsd::String tt("gaga@1234", std::make_shared<xsd::RestrictionPattern>("\\w*@[0-9]*"));
   tt.set("gugus@4123");
   EXPECT_EQ(tt.get(), "gugus@4123");
   EXPECT_THROW(tt.set("gaga@gugu"), xsd::Error);
 
-  std::vector<std::shared_ptr<xsd::StringRestriction>> restrictions = {
-      std::make_shared<xsd::StringRestrictionMinLength>(5),
-      std::make_shared<xsd::StringRestrictionMaxLength>(10)
+  std::vector<std::shared_ptr<xsd::Restriction>> restrictions = {
+      std::make_shared<xsd::RestrictionMinLength>(5),
+      std::make_shared<xsd::RestrictionMaxLength>(10)
   };
   EXPECT_NO_THROW(xsd::String tmp("abcdefg", restrictions));
   EXPECT_THROW(xsd::String tmp("abcd", restrictions), xsd::Error);
@@ -76,9 +76,9 @@ TEST(XsdNormalizedString, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::NormalizedString("gaga\tgugus\n newline")), "gaga gugus  newline");
   EXPECT_EQ(static_cast<std::string>(xsd::NormalizedString("gaga\tgugus\n newline\r")), "gaga gugus  newline ");
   EXPECT_EQ(static_cast<std::string>(xsd::NormalizedString("gaga\tgugus\n newline\r",
-      std::make_shared<xsd::StringRestrictionMinLength>(5))), "gaga gugus  newline ");
+      std::make_shared<xsd::RestrictionMinLength>(5))), "gaga gugus  newline ");
   EXPECT_THROW(xsd::NormalizedString("gaga\tgugus\n newline\r",
-                                     std::make_shared<xsd::StringRestrictionMaxLength>(5)), xsd::Error);
+                                     std::make_shared<xsd::RestrictionMaxLength>(5)), xsd::Error);
 
   xsd::NormalizedString tt("X");
   tt.set("aa\tbb");
@@ -229,4 +229,19 @@ TEST(XsdDateTimeStamp, Instantiation) {
   EXPECT_NO_THROW(xsd::DateTimeStamp("2001-10-26T24:00:00Z"));
   EXPECT_NO_THROW(xsd::DateTimeStamp("2001-10-26T19:32:52.3456+00:00"));
   EXPECT_THROW(xsd::DateTimeStamp("2001-10-26T24:00:00"), xsd::Error);
+}
+
+TEST(XsdInteger, Generic) {
+  EXPECT_NO_THROW(xsd::Integer(2));
+  EXPECT_EQ(static_cast<std::string>(xsd::Integer(99,
+      std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "99");
+  EXPECT_EQ(static_cast<std::string>(xsd::Integer(100,
+                                                  std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "100");
+  EXPECT_THROW(xsd::Integer("101", std::make_shared<xsd::RestrictionMaxInclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Integer("100", std::make_shared<xsd::RestrictionMaxExclusive>(100ll)), xsd::Error);
+  EXPECT_EQ(static_cast<std::string>(xsd::Integer(100,
+                                                  std::make_shared<xsd::RestrictionMinInclusive>(100ll))), "100");
+  EXPECT_THROW(xsd::Integer("99", std::make_shared<xsd::RestrictionMinInclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Integer("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Integer("3.14"), xsd::Error);
 }

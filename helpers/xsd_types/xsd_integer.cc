@@ -10,13 +10,23 @@ static const char file_[] = __FILE__;
 
 namespace xsd {
 
-Integer::Integer(const std::string &val) {
-  xsd_type_ = "int";
-  if (std::regex_match(val, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
-    val_ = std::atoi(val.c_str());
+int64_t Integer::parse(const std::string &strval) {
+  int64_t val = 0;
+  if (std::regex_match(strval, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
+    val = std::atoi(strval.c_str());
   } else{
-    throw Error(file_, __LINE__, "Not an integer!")
+    throw Error(file_, __LINE__, "Not an integer!");
   }
+  return val;
+}
+
+Integer::Integer(const std::string &strval) {
+  xsd_type_ = "int";
+  val_ = parse(strval);
+}
+
+void Integer::set(const std::string &strval) {
+  val_ = parse(strval);
 }
 
 std::ostream &Integer::print_to_stream(std::ostream &out_stream) const {
