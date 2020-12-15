@@ -13,15 +13,14 @@ namespace xsd {
 int64_t Integer::parse(const std::string &strval) {
   int64_t val = 0;
   if (std::regex_match(strval, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
-    val = std::atoi(strval.c_str());
-  } else{
+    return std::stoll(strval);
+  } else {
     throw Error(file_, __LINE__, "Not an integer!");
   }
-  return val;
 }
 
 Integer::Integer(const std::string &strval) {
-  xsd_type_ = "int";
+  xsd_type_ = "integer";
   val_ = parse(strval);
 }
 

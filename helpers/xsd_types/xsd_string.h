@@ -88,7 +88,6 @@ class String : public DataType {
 
  protected:
   std::string strval_;
-  std::vector<std::shared_ptr<Restriction>> restrictions_;
 
   inline void validate() {
     for (auto r: restrictions_) {

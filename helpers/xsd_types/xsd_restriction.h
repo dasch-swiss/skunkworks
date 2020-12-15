@@ -192,7 +192,7 @@ class RestrictionMaxInclusive final : public Restriction {
   inline ~RestrictionMaxInclusive() final {}
 
   inline bool validate(const std::string &strval) const final {
-    double dval = std::atof(strval.c_str());
+    double dval = std::stod(strval);
     return (dval <= dmaxval_);
   }
 };
@@ -203,7 +203,7 @@ class RestrictionMaxExclusive final : public Restriction {
  public:
   inline RestrictionMaxExclusive(const std::string &strval) {
     if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
-      dmaxval_ = std::atof(strval.c_str());
+      dmaxval_ = std::stod(strval);
     }
   }
 
@@ -214,7 +214,7 @@ class RestrictionMaxExclusive final : public Restriction {
   inline ~RestrictionMaxExclusive() final {}
 
   inline bool validate(const std::string &strval) const final {
-    double dval = std::atof(strval.c_str());
+    double dval = std::stod(strval);
     return (dval < dmaxval_);
   }
 };
@@ -225,7 +225,7 @@ class RestrictionMinInclusive final : public Restriction {
  public:
   inline RestrictionMinInclusive(const std::string &strval) {
     if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
-      dminval_ = std::atof(strval.c_str());
+      dminval_ = std::stod(strval);
     }
   }
 
@@ -236,7 +236,7 @@ class RestrictionMinInclusive final : public Restriction {
   inline ~RestrictionMinInclusive() final {}
 
   inline bool validate(const std::string &strval) const final {
-    double dval = std::atof(strval.c_str());
+    double dval = std::stod(strval);
     return (dval >= dminval_);
   }
 };
@@ -247,7 +247,7 @@ class RestrictionMinExclusive final : public Restriction {
  public:
   inline RestrictionMinExclusive(const std::string &strval) {
     if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
-      dminval_ = std::atof(strval.c_str());
+      dminval_ = std::stod(strval);
     }
   }
 
@@ -258,7 +258,7 @@ class RestrictionMinExclusive final : public Restriction {
   inline ~RestrictionMinExclusive() final {}
 
   inline bool validate(const std::string &strval) const final {
-    double dval = std::atof(strval.c_str());
+    double dval = std::stod(strval);
     return (dval > dminval_);
   }
 };

@@ -2,17 +2,20 @@
 // Created by Lukas Rosenthaler on 12.12.20.
 //
 
-#include <string>
 
-#include "xsd_data_type.h"
-#include "xsd.h"
 
 #ifndef SKUNKWORKS_HELPERS_XSD_TYPES_XSD_INT_H_
 #define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_INT_H_
 
+#include <string>
+
+#include "xsd_data_type.h"
+#include "xsd_restriction.h"
+#include "xsd_error.h"
+
 namespace xsd {
 
-class Integer : public DataType{
+class Integer : public DataType {
   /*!
    * This class implements the xsd:integer datatype
    */
@@ -20,7 +23,7 @@ class Integer : public DataType{
   /*!
    * Default constructor
    */
-  inline Integer() { xsd_type_ = "int"; };
+  inline Integer() { xsd_type_ = "integer"; };
 
   /*!
    * Constructor with in64_t parameter
@@ -92,11 +95,12 @@ class Integer : public DataType{
    */
   inline int64_t get() { return val_; }
 
-  inline void set(const std::string &strval) override;
+  void set(const std::string &strval) override;
 
  protected:
   int64_t val_;
-  std::vector<std::shared_ptr<Restriction>> restrictions_;
+
+  int64_t parse(const std::string &strval);
 
   inline void validate() {
     for (auto r: restrictions_) {
@@ -109,7 +113,6 @@ class Integer : public DataType{
 
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
 
-  int64_t parse(const std::string &strval);
 
 };
 

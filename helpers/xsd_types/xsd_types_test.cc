@@ -234,7 +234,7 @@ TEST(XsdDateTimeStamp, Instantiation) {
 TEST(XsdInteger, Generic) {
   EXPECT_NO_THROW(xsd::Integer(2));
   EXPECT_EQ(static_cast<std::string>(xsd::Integer(99,
-      std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "99");
+                                                  std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "99");
   EXPECT_EQ(static_cast<std::string>(xsd::Integer(100,
                                                   std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "100");
   EXPECT_THROW(xsd::Integer("101", std::make_shared<xsd::RestrictionMaxInclusive>(100ll)), xsd::Error);
@@ -245,4 +245,31 @@ TEST(XsdInteger, Generic) {
   EXPECT_THROW(xsd::Integer("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Integer("3.14"), xsd::Error);
   EXPECT_EQ(static_cast<std::string>(xsd::Integer(10000)), "10000");
+}
+
+TEST(XsdInt, Generic) {
+  EXPECT_NO_THROW(xsd::Int(2));
+  EXPECT_THROW(xsd::Int("2147483648"), xsd::Error);
+  EXPECT_EQ(static_cast<std::string>(xsd::Int(99,
+                                                  std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "99");
+  EXPECT_EQ(static_cast<std::string>(xsd::Int(100,
+                                                  std::make_shared<xsd::RestrictionMaxInclusive>(100ll))), "100");
+  EXPECT_THROW(xsd::Int("101", std::make_shared<xsd::RestrictionMaxInclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Int("100", std::make_shared<xsd::RestrictionMaxExclusive>(100ll)), xsd::Error);
+  EXPECT_EQ(static_cast<std::string>(xsd::Int(100,
+                                                  std::make_shared<xsd::RestrictionMinInclusive>(100ll))), "100");
+  EXPECT_THROW(xsd::Int("99", std::make_shared<xsd::RestrictionMinInclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Int("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
+  EXPECT_THROW(xsd::Int("3.14"), xsd::Error);
+  EXPECT_EQ(static_cast<std::string>(xsd::Integer(10000)), "10000");
+}
+
+TEST(XsdDecimal, Generic) {
+  EXPECT_NO_THROW(xsd::Decimal(3.1415));
+  EXPECT_EQ(static_cast<std::string>(xsd::Decimal(3.1415)), "3.1415");
+  EXPECT_EQ(static_cast<std::string>(xsd::Decimal(.1415E2)), "14.15");
+  EXPECT_EQ(static_cast<std::string>(xsd::Decimal(100.0,
+                                              std::make_shared<xsd::RestrictionMinInclusive>(100.0))), "100");
+  EXPECT_THROW(xsd::Decimal("99.99", std::make_shared<xsd::RestrictionMinExclusive>(100.0)), xsd::Error);
+
 }

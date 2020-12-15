@@ -9,7 +9,7 @@
 
 namespace xsd {
 
-class DateTimeStamp : DateTime {
+class DateTimeStamp : public DateTime {
  public:
 
   DateTimeStamp(std::string value);

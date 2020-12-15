@@ -83,8 +83,6 @@ void DateTime::parse(const std::string &str) {
   } else {
     throw Error(file_, __LINE__, "Invalid xsd:dateTime string!");
   }
-  std::cerr << "#" << __LINE__ << std::endl;
-
 }
 //=====================================================================
 
@@ -115,10 +113,8 @@ void DateTime::validate() const {
       }
     }
     if (leap_year && (day_ > 29)) {
-      std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
       throw Error(file_, __LINE__, "Invalid xsd:dateTime");
     } else if (!leap_year && (day_ > 28)) {
-      std::cerr << __LINE__ << "! year=" << year_ << " day=" << day_ << std::endl;
       throw Error(file_, __LINE__, "Invalid xsd:dateTime");
     }
   }

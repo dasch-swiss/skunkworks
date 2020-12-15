@@ -9,6 +9,8 @@
 #include <iomanip>
 #include <iostream>
 
+#include "xsd_restriction.h"
+
 namespace xsd {
 
 /*!
@@ -42,6 +44,8 @@ class DataType {
 
  protected:
   std::string xsd_type_;
+  std::vector<std::shared_ptr<Restriction>> restrictions_;
+
 
  private:
   /*!
