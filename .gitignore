@@ -36,3 +36,4 @@
 
 # Bazel
 bazel-*
+/True

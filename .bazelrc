@@ -5,22 +5,22 @@ build --verbose_explanations
 build --verbose_failures
 # build --experimental_enable_docker_sandbox
 # build --experimental_docker_verbose
+build --sandbox_debug
 
 # build stamping, i.e., get things from bazel-out/volatile-status.txt into the build
 build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=yes
-build --compilation_mode dbg
 
 # force using platforms for toolchain resolution (will become default at some point)
 build --incompatible_enable_cc_toolchain_resolution
 
 # add some compiler settings
-build --repo_env=CC=clang --cxxopt='-std=c++17' --cxxopt='-DSHTTPS_ENABLE_SSL'
+build --repo_env=CC=clang
+build --cxxopt='-std=c++17'
+# build --repo_env=CC=external/llvm_toolchain/bin/clang-11
+build --cxxopt='-DSHTTPS_ENABLE_SSL'
+build --compilation_mode dbg
 
-# Use our custom-configured c++ toolchain.
-build:clang_config --crosstool_top=//toolchain:clang_suite
 
-# Use --cpu as a differentiator.
-build:clang_config --cpu=k8
-
-# Use the default Bazel C++ toolchain to build the tools used during the build.
-build:clang_config --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
+# build --host_platform=@io_tweag_rules_nixpkgs//nixpkgs/platforms:host
+# build --extra_toolchains=@local_config_cc//:toolchain
+# build --crosstool_top=@local_config_cc//:toolchain
