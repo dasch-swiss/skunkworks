@@ -14,7 +14,7 @@ build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=y
 build --incompatible_enable_cc_toolchain_resolution
 
 # add some compiler settings
-build --repo_env=CC=clang
+# build --repo_env=CC=clang
 build --cxxopt='-std=c++17'
 # build --repo_env=CC=external/llvm_toolchain/bin/clang-11
 build --cxxopt='-DSHTTPS_ENABLE_SSL'
