@@ -31,6 +31,6 @@ jobs:
       - name: Install dependencies
         run: |
           npm install --global @bazel/bazelisk
-          sudo apt-get install libllvm11 llvm-11 llvm-11-dev
+          sudo apt-get install llvm-toolchain-11
       - name: run test
         run: bazel test --config=linux //...
