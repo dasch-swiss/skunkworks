@@ -15,8 +15,9 @@ build --incompatible_enable_cc_toolchain_resolution
 
 # add some compiler settings
 build --repo_env=CC=clang
-build --cxxopt='-std=c++17'
-build --cxxopt='-DSHTTPS_ENABLE_SSL'
+build --copt=-DSHTTPS_ENABLE_SSL
+build --cxxopt=-std=c++17
+build --cxxopt=-DSHTTPS_ENABLE_SSL
 build --compilation_mode dbg
 
 
