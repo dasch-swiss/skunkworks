@@ -31,6 +31,8 @@ jobs:
       - name: Install dependencies
         run: |
           npm install --global @bazel/bazelisk
+          sudo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
+          sudo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main
           sudo apt-get install libllvm-11-ocaml-dev libllvm11 llvm-11 llvm-11-dev llvm-11-doc llvm-11-examples llvm-11-runtime
           sudo apt-get install clang-11 clang-tools-11 clang-11-doc libclang-common-11-dev libclang-11-dev libclang1-11 clang-format-11 python-clang-11 clangd-11
           sudo apt-get install libfuzzer-11-dev
