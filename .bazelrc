@@ -1,11 +1,12 @@
 # flags used for debugging
-build --toolchain_resolution_debug
-build --explain True
-build --verbose_explanations
+# build --toolchain_resolution_debug
+# build --verbose_explanations
+# build --explain True
 build --verbose_failures
 # build --experimental_enable_docker_sandbox
 # build --experimental_docker_verbose
-build --sandbox_debug
+# build --sandbox_debug
+
 
 # build stamping, i.e., get things from bazel-out/volatile-status.txt into the build
 build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=yes
@@ -13,14 +14,22 @@ build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=y
 # force using platforms for toolchain resolution (will become default at some point)
 build --incompatible_enable_cc_toolchain_resolution
 
-# add some compiler settings
-# build --repo_env=CC=clang-10
-build --copt=-DSHTTPS_ENABLE_SSL
-build --cxxopt=-std=c++17
-build --cxxopt=-DSHTTPS_ENABLE_SSL
-build --compilation_mode dbg
+# linux compiler settings
+build:linux --repo_env=CC=clang-10
+build:linux --repo_env=CXX=clang-10++
+build:linux --cxxopt=-std=c++17
+build:linux --host_cxxopt=-std=c++17
+build:linux --config=default
 
+# macos compiler settings
+build:macos --cxxopt=-std=c++17
+build:macos --host_cxxopt=-std=c++17
+build:macos --config=default
 
-# build --host_platform=@io_tweag_rules_nixpkgs//nixpkgs/platforms:host
-# build --extra_toolchains=@local_config_cc//:toolchain
-# build --crosstool_top=@local_config_cc//:toolchain
+# default compiler settings
+build:default --copt=-DSHTTPS_ENABLE_SSL
+build:default --cxxopt=-DSHTTPS_ENABLE_SSL
+build:default --compilation_mode dbg
+
+# set macos as the default config
+build --config=macos
