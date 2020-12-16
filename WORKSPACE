@@ -12,30 +12,30 @@ http_archive(
     sha256 = rules_cc_sha256,
 )
 
-# Get rule that allows us to use official clang binaries.
-grail_tag = "0.5.7" # 5. November 2020
-grail_sha256 = "83f691deff0f131b6d40587f07361cb25dad4a66e5ed8988cbcee78ebfe3d5cd"
-http_archive(
-    name = "com_grail_bazel_toolchain",
-    strip_prefix = "bazel-toolchain-{}".format(grail_tag),
-    url = "https://github.com/grailbio/bazel-toolchain/archive/{}.zip".format(grail_tag),
-    sha256 = grail_sha256
-)
-
-load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
-
-bazel_toolchain_dependencies()
-
-load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
-
-llvm_toolchain(
-    name = "llvm_toolchain",
-    llvm_version = "11.0.0",
-)
-
-register_toolchains(
-    "@llvm_toolchain//:cc-toolchain-linux",
-)
+## Get rule that allows us to use official clang binaries.
+#grail_tag = "0.5.7" # 5. November 2020
+#grail_sha256 = "83f691deff0f131b6d40587f07361cb25dad4a66e5ed8988cbcee78ebfe3d5cd"
+#http_archive(
+#    name = "com_grail_bazel_toolchain",
+#    strip_prefix = "bazel-toolchain-{}".format(grail_tag),
+#    url = "https://github.com/grailbio/bazel-toolchain/archive/{}.zip".format(grail_tag),
+#    sha256 = grail_sha256
+#)
+#
+#load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+#
+#bazel_toolchain_dependencies()
+#
+#load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
+#
+#llvm_toolchain(
+#    name = "llvm_toolchain",
+#    llvm_version = "11.0.0",
+#)
+#
+#register_toolchains(
+#    "@llvm_toolchain//:cc-toolchain-linux",
+#)
 
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
