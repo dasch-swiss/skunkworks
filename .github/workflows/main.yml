@@ -31,12 +31,12 @@ jobs:
       - name: Install dependencies
         run: |
           npm install --global @bazel/bazelisk
-          apt-get install libllvm-11-ocaml-dev libllvm11 llvm-11 llvm-11-dev llvm-11-doc llvm-11-examples llvm-11-runtime
-          apt-get install clang-11 clang-tools-11 clang-11-doc libclang-common-11-dev libclang-11-dev libclang1-11 clang-format-11 python-clang-11 clangd-11
-          apt-get install libfuzzer-11-dev
-          apt-get install lldb-11
-          apt-get install lld-11
-          apt-get install libc++-11-dev libc++abi-11-dev
-          apt-get install libomp-11-dev
+          sudo apt-get install libllvm-11-ocaml-dev libllvm11 llvm-11 llvm-11-dev llvm-11-doc llvm-11-examples llvm-11-runtime
+          sudo apt-get install clang-11 clang-tools-11 clang-11-doc libclang-common-11-dev libclang-11-dev libclang1-11 clang-format-11 python-clang-11 clangd-11
+          sudo apt-get install libfuzzer-11-dev
+          sudo apt-get install lldb-11
+          sudo apt-get install lld-11
+          sudo apt-get install libc++-11-dev libc++abi-11-dev
+          sudo apt-get install libomp-11-dev
       - name: run test
         run: bazel test --config=linux //...
