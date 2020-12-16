@@ -33,4 +33,4 @@ jobs:
           npm install --global @bazel/bazelisk
           sudo apt-get install libpthread-stubs0-dev
       - name: run test
-        run: CC=clang-10 CXX=clang++-10 bazel test //...
+        run: bazel test //... --repo_env=CC=clang-10 --repo_env=CXX=clang-10++
