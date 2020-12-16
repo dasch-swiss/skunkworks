@@ -17,7 +17,7 @@ build --incompatible_enable_cc_toolchain_resolution
 # linux compiler settings
 build:linux --repo_env=CC=clang-10
 build:linux --repo_env=CXX=clang-10++
-build:linux --cxxopt=-stdlib=libc++
+build:linux --cxxopt=-stdlib=libstdc++-10-dev
 build:linux --host_cxxopt=-std=c++14
 
 # macos compiler settings
