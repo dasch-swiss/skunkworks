@@ -4,6 +4,7 @@
 
 #include <string>
 #include <regex>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <set>
@@ -24,14 +25,14 @@ class Restriction {
   /*!
    * Virtual destructor (is required!)
    */
-  virtual ~Restriction() {};
+  virtual ~Restriction() = default;;
 
   /*!
    * Check if the string given a parameter fullfills the restriction
    * @param strval String to be checked
    * @return "true" if restriction is fullfilled, "false" otherwise
    */
-  virtual bool validate(const std::string &strval) const = 0;
+  [[nodiscard]] virtual bool validate(const std::string &strval) const = 0;
 };
 
 /*!
@@ -43,19 +44,19 @@ class RestrictionLength final : public Restriction {
    * Constructor with the length a parameter
    * @param length Length restriction for string
    */
-  inline RestrictionLength(int length) : length_(length) {}
+  inline explicit RestrictionLength(int length) : length_(length) {}
 
   /*!
    *  Destructor (final)
    */
-  inline ~RestrictionLength() final {}
+  inline ~RestrictionLength() final = default;
 
   /*!
    * Validate exact length restriction
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  inline bool validate(const std::string &strval) const final { return strval.length() == length_; }
+  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() == length_; }
 
  private:
   int length_;
@@ -70,19 +71,19 @@ class RestrictionMinLength final : public Restriction {
    * Constructor with minimal lengt as parameter
    * @param min_length Minimal length of the string
    */
-  inline RestrictionMinLength(int min_length) : min_length_(min_length) {}
+  inline explicit RestrictionMinLength(int min_length) : min_length_(min_length) {}
 
   /*!
    * Destructor (final)
    */
-  inline ~RestrictionMinLength() final {}
+  inline ~RestrictionMinLength() final = default;
 
   /*!
    * Validates minimal length of string
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  inline bool validate(const std::string &strval) const final { return strval.length() >= min_length_; }
+  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() >= min_length_; }
 
  private:
   int min_length_;
@@ -97,19 +98,19 @@ class RestrictionMaxLength final : public Restriction {
    * Constructor for the minimal length restriction
    * @param min_length Minimal length required
    */
-  inline RestrictionMaxLength(int max_length) : max_length_(max_length) {}
+  inline explicit RestrictionMaxLength(int max_length) : max_length_(max_length) {}
 
   /*!
    * Destructor (final)
    */
-  inline ~RestrictionMaxLength() final {}
+  inline ~RestrictionMaxLength() final = default;
 
   /*!
    * Validates maximal length of destructor
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  inline bool validate(const std::string &strval) const final { return strval.length() <= max_length_; }
+  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() <= max_length_; }
 
  private:
   int max_length_;
@@ -124,19 +125,19 @@ class RestrictionPattern final : public Restriction {
    * Constructor for the pattern restriction
    * @param pattern A valid C++ regex pattern
    */
-  inline RestrictionPattern(const std::string &pattern) : pattern_(pattern) {}
+  inline explicit RestrictionPattern(std::string pattern) : pattern_(std::move(pattern)) {}
 
   /*!
    * Destructor (final)
    */
-  inline ~RestrictionPattern() final {}
+  inline ~RestrictionPattern() final = default;
 
   /*!
    * Validate the pattern using standard c++ regex
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
     return std::regex_match(strval, std::regex(pattern_));
   }
 
@@ -155,20 +156,20 @@ class RestrictionEnumeration final : public Restriction {
    * Constructor for the enumeration restriction
    * @param enums Set of strings that indicate the allowed values for the string
    */
-  inline RestrictionEnumeration(const std::set<std::string> &enums) : enums_(enums) {}
+  inline explicit RestrictionEnumeration(std::set<std::string> enums) : enums_(std::move(enums)) {}
 
   /*!
    * Destructor (final)
    */
-  inline ~RestrictionEnumeration() final {}
+  inline ~RestrictionEnumeration() final = default;
 
   /*!
    * Validate if string is in set
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  inline bool validate(const std::string &strval) const final {
-    for (auto s: enums_) {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+    for (const auto &s: enums_) {
       if (s == strval) return true;
     }
     return false;
@@ -179,19 +180,19 @@ class RestrictionMaxInclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline RestrictionMaxInclusive(const std::string &strval) {
-    if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
-      dmaxval_ = std::atof(strval.c_str());
+  inline explicit RestrictionMaxInclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
+      dmaxval_ = std::stof(strval);
     }
   }
 
-  inline RestrictionMaxInclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
+  inline explicit RestrictionMaxInclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
 
-  inline RestrictionMaxInclusive(double maxval) : dmaxval_(maxval) {}
+  inline explicit RestrictionMaxInclusive(double maxval) : dmaxval_(maxval) {}
 
-  inline ~RestrictionMaxInclusive() final {}
+  inline ~RestrictionMaxInclusive() final = default;
 
-  inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
     double dval = std::stod(strval);
     return (dval <= dmaxval_);
   }
@@ -201,19 +202,19 @@ class RestrictionMaxExclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline RestrictionMaxExclusive(const std::string &strval) {
-    if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
+  inline explicit RestrictionMaxExclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dmaxval_ = std::stod(strval);
     }
   }
 
-  inline RestrictionMaxExclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
+  inline explicit RestrictionMaxExclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
 
-  inline RestrictionMaxExclusive(double maxval) : dmaxval_(maxval) {}
+  inline explicit RestrictionMaxExclusive(double maxval) : dmaxval_(maxval) {}
 
-  inline ~RestrictionMaxExclusive() final {}
+  inline ~RestrictionMaxExclusive() final = default;
 
-  inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
     double dval = std::stod(strval);
     return (dval < dmaxval_);
   }
@@ -223,19 +224,19 @@ class RestrictionMinInclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline RestrictionMinInclusive(const std::string &strval) {
-    if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
+  inline explicit RestrictionMinInclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline RestrictionMinInclusive(int64_t maxval) { dminval_ = (double) maxval; }
+  inline explicit RestrictionMinInclusive(int64_t maxval) { dminval_ = (double) maxval; }
 
-  inline RestrictionMinInclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinInclusive(double maxval) : dminval_(maxval) {}
 
-  inline ~RestrictionMinInclusive() final {}
+  inline ~RestrictionMinInclusive() final = default;
 
-  inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
     double dval = std::stod(strval);
     return (dval >= dminval_);
   }
@@ -245,19 +246,19 @@ class RestrictionMinExclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline RestrictionMinExclusive(const std::string &strval) {
-    if (std::regex_match(strval.c_str(), std::regex("(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?"))) {
+  inline explicit RestrictionMinExclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline RestrictionMinExclusive(int64_t maxval) { dminval_ = (double) maxval; }
+  inline explicit RestrictionMinExclusive(int64_t maxval) { dminval_ = (double) maxval; }
 
-  inline RestrictionMinExclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinExclusive(double maxval) : dminval_(maxval) {}
 
-  inline ~RestrictionMinExclusive() final {}
+  inline ~RestrictionMinExclusive() final = default;
 
-  inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline bool validate(const std::string &strval) const final {
     double dval = std::stod(strval);
     return (dval > dminval_);
   }

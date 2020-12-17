@@ -24,21 +24,19 @@ NormalizedString::NormalizedString(const std::string &strval) : String(strval) {
   strval_ = normalize(strval);
 }
 
-NormalizedString::NormalizedString(const std::string &strval, const std::shared_ptr<Restriction> restriction) : NormalizedString(strval) {
+NormalizedString::NormalizedString(const std::string &strval, const std::shared_ptr<Restriction> &restriction) : NormalizedString(strval) {
   restrictions_.push_back(restriction);
-  validate();
+  enforce_restrictions();
 }
 
 NormalizedString::NormalizedString(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : NormalizedString(strval) {
-  xsd_type_ = "normalizedString";
   restrictions_ = restrictions;
-  validate();
+  enforce_restrictions();
 }
-
 
 void NormalizedString::set(const std::string &strval) {
   strval_ = normalize(strval);
-  validate();
+  enforce_restrictions();
 }
 
 }

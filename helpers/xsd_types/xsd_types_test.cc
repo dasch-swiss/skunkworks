@@ -18,6 +18,9 @@ TEST(XsdString, Generic) {
   EXPECT_EQ(ss.str(), "Waseliwas");
   teststr.set("So is das");
   EXPECT_EQ(teststr.get(), "So is das");
+  xsd::String gaga;
+  EXPECT_NO_THROW(gaga = "That's it...");
+  EXPECT_EQ(static_cast<std::string>(gaga), "That's it...");
 }
 
 TEST(XsdString_Generic_Test, Restrictions) {
@@ -83,12 +86,22 @@ TEST(XsdNormalizedString, Generic) {
   xsd::NormalizedString tt("X");
   tt.set("aa\tbb");
   EXPECT_EQ(tt.get(), "aa bb");
+  xsd::NormalizedString ns;
+  EXPECT_NO_THROW(ns = "This\nis\tit");
+  EXPECT_EQ(static_cast<std::string>(ns), "This is it");
+  std::string gaga;
+  EXPECT_NO_THROW(gaga = ns);
+  EXPECT_EQ(gaga, "This is it");
 }
 
 TEST(XsdToken, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::Token("gaga")), "gaga");
   EXPECT_EQ(static_cast<std::string>(xsd::Token("gaga\tgugus\n newline")), "gaga gugus newline");
   EXPECT_EQ(static_cast<std::string>(xsd::Token("  gaga\tgugus\n newline\r")), "gaga gugus newline");
+  xsd::Token ttt;
+  EXPECT_NO_THROW(ttt = "  gaga\tgugus\n newline\r");
+  std::string stt = ttt;
+  EXPECT_EQ(stt, "gaga gugus newline");
 }
 
 
@@ -136,6 +149,11 @@ TEST(XsdAnyUri, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("file://gugus/gaga.xml")),
       "file://gugus/gaga.xml");
   EXPECT_THROW(xsd::AnyUri("://gaga/gugus"), xsd::Error);
+
+  xsd::AnyUri any_uri;
+  EXPECT_NO_THROW(any_uri = "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
+  std::string tmpstr = any_uri;
+  EXPECT_EQ(tmpstr, "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
 }
 
 TEST(XsdDateTime, Parsing) {
@@ -171,6 +189,13 @@ TEST(XsdDateTime, Parsing) {
             ), "2001-10-26T19:32:52.3456Z");
 
   EXPECT_THROW(xsd::DateTime("2001-10-26X19:32:52+00:00"), xsd::Error);
+
+  xsd::DateTime test;
+
+  EXPECT_NO_THROW(test = "1888-01-02T19:32:52.3Z");
+  EXPECT_EQ(static_cast<std::string>(test), "1888-01-02T19:32:52.3Z");
+  std::string gaga = test;
+  EXPECT_EQ(gaga, "1888-01-02T19:32:52.3Z");
 
 }
 
@@ -245,6 +270,10 @@ TEST(XsdInteger, Generic) {
   EXPECT_THROW(xsd::Integer("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Integer("3.14"), xsd::Error);
   EXPECT_EQ(static_cast<std::string>(xsd::Integer(10000)), "10000");
+
+  xsd::Integer ii;
+  EXPECT_NO_THROW(ii = 5017);
+  EXPECT_EQ(static_cast<std::string>(ii), "5017");
 }
 
 TEST(XsdInt, Generic) {
@@ -261,7 +290,12 @@ TEST(XsdInt, Generic) {
   EXPECT_THROW(xsd::Int("99", std::make_shared<xsd::RestrictionMinInclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Int("100", std::make_shared<xsd::RestrictionMinExclusive>(100ll)), xsd::Error);
   EXPECT_THROW(xsd::Int("3.14"), xsd::Error);
-  EXPECT_EQ(static_cast<std::string>(xsd::Integer(10000)), "10000");
+  EXPECT_EQ(static_cast<std::string>(xsd::Int(10000)), "10000");
+
+  xsd::Int ii;
+  EXPECT_NO_THROW(ii = 512);
+  EXPECT_EQ(static_cast<std::string>(ii), "512");
+  EXPECT_THROW(ii = "2147483648", xsd::Error);
 }
 
 TEST(XsdDecimal, Generic) {

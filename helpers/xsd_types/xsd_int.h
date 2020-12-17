@@ -13,27 +13,77 @@ namespace xsd {
 
 class Int : public Integer {
  public:
-  inline Int() : Integer() { xsd_type_ = "int"; }
-
-  Int(int32_t val);
-
-  Int(int32_t val, const std::shared_ptr<Restriction> restriction);
-
-  Int(int32_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
-
-  Int(const std::string &val);
-
-  Int(const std::string &val, const std::shared_ptr<Restriction> restriction);
-
-  Int(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
+  /*!
+   * Default constructor
+   */
+  Int();
 
   /*!
- * Getter for value as int64_t
- * @return
- */
-  inline int32_t get() { return (int32_t) val_; }
+   * Constructor with just one restriction
+   * @param restriction
+   */
+  inline explicit Int(const std::shared_ptr<Restriction> &restriction) : Int() {
+    restrictions_.push_back(restriction);
+  }
 
-  void set(const std::string &strval) override;
+  inline explicit Int(const std::vector<std::shared_ptr<Restriction>> &restrictions) : Int() {
+    restrictions_.insert(restrictions_.end(), restrictions.begin(), restrictions.end());
+  }
+
+  /*!
+   * Constructor taking a int32_t (32-Bit) integer
+   * @param val
+   */
+  explicit Int(int32_t val);
+
+  /*!
+   * Constrctor taking a int32_t integer and one restriction (shared_ptr)
+   * @param val
+   * @param restriction
+   */
+  Int(int32_t val, const std::shared_ptr<Restriction> &restriction);
+
+  /*!
+   * Constructor taking a int32_t integer and a vector of restrictions (shared_ptr's)
+   * @param val
+   * @param restrictions
+   */
+  Int(int32_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
+
+  /*!
+   * Constructor taking a std::string value
+   * @param val
+   */
+  explicit Int(const std::string &strval);
+
+  /*!
+   * Constructor taking a std::string value and one restriction (shared_ptr)
+   * @param val
+   * @param restriction
+   */
+  Int(const std::string &strval, const std::shared_ptr<Restriction> &restriction);
+
+  /*!
+   * Constructor taking a std::string and a vector of restrictions (shared_ptr's)
+   * @param val
+   * @param restrictions
+   */
+  Int(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions);
+
+
+  /*!
+   * Assignment operator taking a string
+   * @param strval
+   * @return
+   */
+  Int &operator=(const std::string &strval) override;
+
+  /*!
+   * Assignment operator taking a int32_t value
+   * @param val
+   * @return
+   */
+  Int &operator=(int32_t val);
 
 };
 

@@ -19,9 +19,14 @@ namespace xsd {
 const int TZ_WEST_GMT = -1;
 const int TZ_EAST_GMT = 1;
 
-// see https://www.w3.org/TR/xmlschema11-2/#dateTime
 class DateTime : public DataType {
+  /*!
+   * This class implements the xsd:dateTime datatype (see https://www.w3.org/TR/xmlschema11-2/#dateTime)
+   */
  public:
+  /*!
+   * Default constructor. Uses the current system time to fill in the value
+   */
   DateTime();
 
   /**
@@ -30,7 +35,7 @@ class DateTime : public DataType {
    *
    * @param value String with correctly formated dateTime
    */
-  DateTime(const std::string &value);
+  explicit DateTime(const std::string &value);
 
   /**
    *
@@ -47,11 +52,9 @@ class DateTime : public DataType {
            int hour, int min, float second,
            int tz_sign = TZ_EAST_GMT, int tz_hour = 0, int tz_min = 0);
 
-  operator std::string(void) const override;
+  void set(const std::string &strval) override ;
 
-  void set(const std::string &strval) override;
-
-  void debug();
+  DateTime &operator=(const std::string &strval) override;
 
  private:
   int year_;

@@ -2,27 +2,18 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_library(
-    name = "agent",
-    srcs = [
-        "agent.cc",
-    ],
-    hdrs = [
-        "agent.h",
-    ],
-    deps = [
-    ],
-)
 
 cc_library(
-    name = "value",
+    name = "values",
     srcs = [
+        "agent.cc",
         "value.cc"
     ],
     hdrs = [
+        "agent.h",
         "value.h"
     ],
     deps = [
-        ":agent",
+        "//helpers/xsd_types:xsd_types",
     ],
 )

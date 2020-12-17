@@ -6,49 +6,55 @@
 
 namespace xsd {
 
+Int::Int() : Integer() {
+  xsd_type_ = "int";
+  val_ = 0ll;
+  restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
+  restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
+}
+
 Int::Int(int32_t val) : Integer((int64_t) val) {
   restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
   restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
-  validate();
+  enforce_restrictions();
 };
 
-Int::Int(int32_t val, const std::shared_ptr<Restriction> restriction) : Integer((int64_t) val) {
-  restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
-  restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
+Int::Int(int32_t val, const std::shared_ptr<Restriction> &restriction) : Int((int64_t) val) {
   restrictions_.push_back(restriction);
-  validate();
+  enforce_restrictions();
 }
 
-Int::Int(int32_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer((int64_t) val) {
-  restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
-  restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
+Int::Int(int32_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Int((int64_t) val) {
   restrictions_.insert(restrictions_.end(), restrictions.begin(), restrictions.end());
-  validate();
+  enforce_restrictions();
 }
 
 Int::Int(const std::string &strval) : Integer(strval) {
   restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
   restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
-  validate();
+  enforce_restrictions();
 }
 
-Int::Int(const std::string &strval, const std::shared_ptr<Restriction> restriction) : Integer(strval) {
-  restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
-  restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
+Int::Int(const std::string &strval, const std::shared_ptr<Restriction> &restriction) : Int(strval) {
   restrictions_.push_back(restriction);
-  validate();
+  enforce_restrictions();
 }
 
-Int::Int(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(strval) {
-  restrictions_.push_back(std::make_shared<RestrictionMaxInclusive>((int64_t) INT32_MAX));
-  restrictions_.push_back(std::make_shared<RestrictionMinInclusive>((int64_t) INT32_MIN));
+Int::Int(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Int(strval) {
   restrictions_.insert(restrictions_.end(), restrictions.begin(), restrictions.end());
-  validate();
+  enforce_restrictions();
 }
 
-void Int::set(const std::string &strval) {
-  val_ = parse(strval);
-  validate();
+Int &Int::operator=(const std::string &strval) {
+  set(strval);
+  return *this;
 }
+
+Int &Int::operator=(int32_t val) {
+  val_ = val;
+  enforce_restrictions();
+  return *this;
+}
+
 
 }

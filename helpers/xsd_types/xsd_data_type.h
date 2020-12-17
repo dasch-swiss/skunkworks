@@ -8,7 +8,9 @@
 #include <string>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 
+#include "xsd_error.h"
 #include "xsd_restriction.h"
 
 namespace xsd {
@@ -18,18 +20,42 @@ namespace xsd {
  */
 class DataType {
  public:
-  inline const std::string xsd_type(void) const { return xsd_type_; };
 
   /*!
-   * Convert the pure value to string (no xsd type modifiers)
+   * Default constructor; Usually has to be overridden!! It must set the "xsd_type_" variable
+   */
+  inline DataType() = default;
+
+
+  /*!
+   * Getter for the data type
+   *
+   * @return
+   */
+  [[nodiscard]] inline std::string xsd_type() const { return xsd_type_; };
+
+  /*!
+   * Convert the  value to string (no xsd type modifiers)
    *
    * @return C++ string with the value converted to a string
    */
-  virtual explicit operator std::string(void) const = 0;
+  operator std::string() const {
+    std::stringstream ss;
+    ss.imbue(std::locale::classic());
+    ss << *this;
+    return ss.str();
+  }
 
-  std::string get() { return static_cast<std::string>(*this); }
+  virtual DataType &operator=(const std::string &strval) = 0;
 
-  virtual void set(const std::string &strval) = 0;
+
+  /*!
+   * Getter for the string representation of the xsd:value
+   * @return
+   */
+  [[nodiscard]] std::string get() const { return static_cast<std::string>(*this); }
+
+  virtual void set(const std::string &strval) =  0;
 
   /*!
    * Friend method to use the "<<" operator for xsd:values
@@ -46,6 +72,16 @@ class DataType {
   std::string xsd_type_;
   std::vector<std::shared_ptr<Restriction>> restrictions_;
 
+
+  /*!
+   * This protected function validates all restrictions.
+   */
+  virtual void enforce_restrictions(void) const final {
+    for (auto r: restrictions_) {
+      if (!r->validate(static_cast<std::string>(*this))) throw Error(__FILE__, __LINE__,
+          "The type " + xsd_type_ + "did not pass validation of restrictions!");
+    }
+  }
 
  private:
   /*!

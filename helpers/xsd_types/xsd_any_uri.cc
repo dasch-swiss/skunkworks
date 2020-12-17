@@ -55,6 +55,8 @@ static std::vector<std::string> split(const std::string &strval, char splitter) 
   return result;
 }
 
+/* TODO: remove if certain that we don't use then....
+
 static std::vector<std::string> split(const std::string &strval, const std::string &splitter) {
   size_t old_pos = 0;
   size_t pos;
@@ -84,6 +86,7 @@ static SplitResult split_first(const std::string &strval, const std::string &spl
   size_t pos = strval.find(splitter);
   return split_at(strval, pos, splitter.length());
 }
+*/
 
 static bool check_illegal_characters(const std::string  &strval, const std::string &illegal) {
   for (auto const c: illegal) {
@@ -138,7 +141,7 @@ void AnyUri::parse(const std::string &strval) {
           has_port_ = true;
           std::string port = match[5].str();
           port.erase(0, 1);
-          port_ = std::atoi(port.c_str());
+          port_ = std::stoi(port);
         }
         if (match[6].matched) {
           has_path_ = true;
@@ -219,7 +222,7 @@ void AnyUri::parse(const std::string &strval) {
           has_port_ = true;
           std::string port = match[3].str();
           port.erase(0, 1);
-          port_ = std::atoi(port.c_str());
+          port_ = std::stoi(port);
         }
         if (match[4].matched) {
           has_path_ = true;
@@ -272,9 +275,7 @@ void AnyUri::parse(const std::string &strval) {
   }
 
   std::locale::global(old);
-}
 
-void AnyUri::validate() {
   if (has_host_ && check_illegal_characters(host_, " ,;?^+*%&/()=!$<>")) {
     throw Error(file_, __LINE__, "Illegal character in hostname: " + host_ + "!");
   }
@@ -331,7 +332,7 @@ std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
   return out_stream;
 }
 
-AnyUri::AnyUri(const std::string &strval) {
+AnyUri::AnyUri() : DataType() {
   xsd_type_ = "anyUri";
   has_protocol_ = false;
   has_password_ = false;
@@ -342,20 +343,38 @@ AnyUri::AnyUri(const std::string &strval) {
   has_fragment_ = false;
   has_options_ = false;
   port_ = -1;
-  parse(strval);
-  validate();
 }
 
-AnyUri::operator std::string() const {
-  std::stringstream ss;
-  ss << *this;
-  return ss.str();
+AnyUri::AnyUri(const std::shared_ptr<Restriction> &restriction) {
+  restrictions_.push_back(restriction);
+}
+
+AnyUri::AnyUri(const std::vector<std::shared_ptr<Restriction>> &restrictions) {
+  restrictions_ = restrictions;
+}
+
+AnyUri::AnyUri(const std::string &strval) : AnyUri() {
+  parse(strval);
+}
+
+AnyUri::AnyUri(const std::string &strval, const std::shared_ptr<Restriction> &restriction) : AnyUri(strval) {
+  restrictions_.push_back(restriction);
+  enforce_restrictions();
+}
+
+AnyUri::AnyUri(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : AnyUri(strval) {
+  restrictions_ = restrictions;
+  enforce_restrictions();
 }
 
 void AnyUri::set(const std::string &strval) {
   parse(strval);
-  validate();
+  enforce_restrictions();
 }
 
+AnyUri &AnyUri::operator=(const std::string &strval) {
+  set(strval);
+  return *this;
+}
 
 }

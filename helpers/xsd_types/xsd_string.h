@@ -7,6 +7,7 @@
 
 #include <string>
 #include <regex>
+#include <utility>
 #include <vector>
 #include <memory>
 #include <set>
@@ -29,13 +30,25 @@ class String : public DataType {
   /*!
    * Default constructor
    */
-  inline String() { xsd_type_ = "string"; };
+  inline String() { xsd_type_ = "string"; }
+
+  /*!
+   * Constructor taking one restriction (shared_ptr) as parameter
+   * @param restriction
+   */
+  inline explicit String(const std::shared_ptr<Restriction> &restriction) : String() {
+    restrictions_.push_back(restriction);
+  }
+
+  inline explicit String(const std::vector<std::shared_ptr<Restriction>> &restrictions) : String() {
+    restrictions_ = restrictions;
+  }
 
   /*!
    * Constructor which assigns a given c++ string to the state
    * @param strval c++ string value
    */
-  inline String(const std::string &strval) : strval_(strval) { xsd_type_ = "string"; }
+  inline explicit String(std::string strval) : strval_(std::move(strval)) { xsd_type_ = "string"; }
 
   /*!
    * Constructor which assigns a given c++ string to the state and adds a single restriction
@@ -48,9 +61,9 @@ class String : public DataType {
    * @param strval String to ba assigned
    * @param restriction Restriction to be applied
    */
-  inline String(const std::string &strval, const std::shared_ptr<Restriction> restriction) : String(strval) {
+  inline String(const std::string &strval, const std::shared_ptr<Restriction> &restriction) : String(strval) {
     restrictions_.push_back(restriction);
-    validate();
+    enforce_restrictions();
   }
 
   /*!
@@ -70,30 +83,23 @@ class String : public DataType {
    */
   inline String(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : String(strval) {
     restrictions_ = restrictions;
-    validate();
+    enforce_restrictions();
   }
 
   /*!
-   * type conversion to std::string
-   * @return A std::string containing the value
+   * Setter for string
+   * @param strval
    */
-  inline operator std::string(void) const override {
-    return strval_;
-  }
-
   inline void set(const std::string &strval) override {
     strval_ = strval;
-    validate();
+    enforce_restrictions();
   }
+
+
+  inline String &operator=(const std::string &strval) override { strval_ = strval; return *this; }
 
  protected:
   std::string strval_;
-
-  inline void validate() {
-    for (auto r: restrictions_) {
-      if (!r->validate(strval_)) throw Error(__FILE__, __LINE__, "xsd:string did not pass validation!");
-    }
-  }
 
  private:
   /*!

@@ -11,44 +11,55 @@ static const char file_[] = __FILE__;
 
 namespace xsd {
 
-double Decimal::parse(const std::string &strval) {
-  if (std::regex_match(strval.c_str(), std::regex("^(\\+|\\-)?([0-9]+)?(\\.[0-9]+)?([e|E][\\+\\-]?[0-9]+)?$"))) {
-    return std::stod(strval);
+void Decimal::parse(const std::string &strval) {
+  dval_ = 0.0;
+  if (std::regex_match(strval.c_str(), std::regex(R"(^(\+|\-)?([0-9]+)?(\.[0-9]+)?([e|E][\+\-]?[0-9]+)?$)"))) {
+    dval_ = std::stod(strval);
   } else {
     throw Error(file_, __LINE__, "Not an integer!");
   }
 }
 
-Decimal::Decimal(double dval, const std::shared_ptr<Restriction> restriction) : Decimal(dval) {
+Decimal::Decimal(double dval, const std::shared_ptr<Restriction> &restriction) : Decimal(dval) {
   restrictions_.push_back(restriction);
-  validate();
+  enforce_restrictions();
 }
 
 Decimal::Decimal(double dval, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Decimal(dval) {
   restrictions_ = restrictions;
-  validate();
+  enforce_restrictions();
 }
 
-Decimal::Decimal(const std::string strval, const std::shared_ptr<Restriction> restriction) : Decimal(strval) {
+Decimal::Decimal(const std::string &strval, const std::shared_ptr<Restriction> &restriction) : Decimal(strval) {
   restrictions_.push_back(restriction);
-  validate();
+  enforce_restrictions();
 }
 
-std::ostream &Decimal::print_to_stream(std::ostream &out_stream) const {
-  out_stream << dval_;
-  return out_stream;
-}
-
-Decimal::operator std::string() const {
-  std::ostringstream ss;
-  ss.imbue(std::locale::classic());
-  ss << *this;
-  return ss.str();
+Decimal::Decimal(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions) {
+  restrictions_ = restrictions;
+  enforce_restrictions();
 }
 
 void Decimal::set(const std::string &strval) {
-  dval_ = parse(strval);
-  validate();
+  parse(strval);
+  enforce_restrictions();
+}
+
+Decimal &Decimal::operator=(const std::string &strval) {
+  set(strval);
+  return *this;
+}
+
+Decimal &Decimal::operator=(double dval) {
+  dval_ = dval;
+  enforce_restrictions();
+  return *this;
+}
+
+std::ostream &Decimal::print_to_stream(std::ostream &out_stream) const {
+  out_stream.imbue(std::locale::classic());
+  out_stream << dval_;
+  return out_stream;
 }
 
 

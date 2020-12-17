@@ -12,11 +12,11 @@ namespace xsd {
 class DateTimeStamp : public DateTime {
  public:
 
-  DateTimeStamp(std::string value);
+  explicit DateTimeStamp(const std::string& value);
 
   DateTimeStamp(int year, int month, int day,
                 int hour, int min, float second,
-                int tz_hour, int tz_min);
+                int tz_sign, int tz_hour, int tz_min);
 
 };
 

@@ -10,34 +10,63 @@ static const char file_[] = __FILE__;
 
 namespace xsd {
 
-int64_t Integer::parse(const std::string &strval) {
-  int64_t val = 0;
+
+Integer::Integer(const std::string &strval) {
+  xsd_type_ = "integer";
+  val_ = 0;
+  parse(strval);
+}
+
+Integer::Integer(int64_t val, const std::shared_ptr<Restriction> &restriction) : Integer(val) {
+    restrictions_.push_back(restriction);
+    enforce_restrictions();
+};
+
+Integer::Integer(int64_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
+    restrictions_ = restrictions;
+    enforce_restrictions();
+};
+
+Integer::Integer(const std::string &val, const std::shared_ptr<Restriction> &restriction) : Integer(val) {
+  restrictions_.push_back(restriction);
+  enforce_restrictions();
+}
+
+Integer::Integer(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
+  restrictions_ = restrictions;
+  enforce_restrictions();
+}
+
+void Integer::set(const std::string &strval) {
+  parse(strval);
+  enforce_restrictions();
+}
+
+Integer &Integer::operator=(const std::string &strval) {
+  set(strval);
+  return *this;
+}
+
+Integer &Integer::operator=(int64_t val) {
+  val_ = val;
+  enforce_restrictions();
+  return *this;
+}
+
+void Integer::parse(const std::string &strval) {
+  val_ = 0;
   if (std::regex_match(strval, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
-    return std::stoll(strval);
+    val_ = std::stoll(strval);
   } else {
     throw Error(file_, __LINE__, "Not an integer!");
   }
 }
 
-Integer::Integer(const std::string &strval) {
-  xsd_type_ = "integer";
-  val_ = parse(strval);
-}
-
-void Integer::set(const std::string &strval) {
-  val_ = parse(strval);
-}
 
 std::ostream &Integer::print_to_stream(std::ostream &out_stream) const {
+  out_stream.imbue(std::locale::classic());
   out_stream << val_;
   return out_stream;
-}
-
-Integer::operator std::string() const {
-  std::ostringstream ss;
-  ss.imbue(std::locale::classic());
-  ss << *this;
-  return ss.str();
 }
 
 }

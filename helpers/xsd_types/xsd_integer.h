@@ -21,92 +21,89 @@ class Integer : public DataType {
    */
  public:
   /*!
-   * Default constructor
+   * Default constructor. Initializes the value to 0
    */
-  inline Integer() { xsd_type_ = "integer"; };
+  inline Integer() { xsd_type_ = "integer"; val_ = 0ll;};
+
+  /*!
+   * Constructor with just one restriction (shared_ptr) as parameter
+   * @param restriction
+   */
+  inline explicit Integer(const std::shared_ptr<Restriction> &restriction) : Integer() {
+    restrictions_.push_back(restriction);
+  }
+
+  /*!
+   * Constructor with a vector of restrictions (shared_ptr's) as parameter
+   * @param restrictions
+   */
+  inline explicit Integer(const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer() {
+    restrictions_ = restrictions;
+  }
+
+  /*!
+   * Constructor with string parameter
+   * @param val
+   */
+  explicit Integer(const std::string &val);
 
   /*!
    * Constructor with in64_t parameter
    * @param val (int64_t)
    */
-  inline Integer(int64_t val) : val_(val) { xsd_type_ = "int"; };
+  inline explicit Integer(int64_t val) : Integer() { val_ = val; };
 
   /*!
    * Constructor with int64_t parameter and one restriction
    * @param val
    * @param restriction
    */
-  inline Integer(int64_t val, const std::shared_ptr<Restriction> restriction) : Integer(val) {
-    restrictions_.push_back(restriction);
-    validate();
-  };
+  Integer(int64_t val, const std::shared_ptr<Restriction> &restriction);
 
   /*!
    * Constructor with int64_t parameter and vector of restrictions
    * @param val
    * @param restrictions
    */
-  inline Integer(int64_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
-    restrictions_ = restrictions;
-    validate();
-  };
-
-  /*!
-   * Constructor with string parameter
-   * @param val
-   */
-  Integer(const std::string &val);
+  Integer(int64_t val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
 
   /*!
    * Constructor with string parameter and one restriction
    * @param val
    * @param restriction
    */
-  inline Integer(const std::string &val, const std::shared_ptr<Restriction> restriction) : Integer(val) {
-    restrictions_.push_back(restriction);
-    validate();
-  }
+  Integer(const std::string &val, const std::shared_ptr<Restriction> &restriction);
 
   /*!
    * Constructor with string parameter and multiple restrictions given as vector
    * @param val
    * @param restrictions
    */
-  inline Integer(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions) : Integer(val) {
-    restrictions_ = restrictions;
-    validate();
-  }
-
-  /*!
-   * Conversion to string
-   * @return
-   */
-  operator std::string() const override;
+  inline Integer(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
 
   /*!
    * Conversion to int64_t
    * @return
    */
-  inline operator int64_t () const { return val_; }
+  inline explicit operator int64_t () const { return val_; }
+
+  Integer &operator=(const std::string &strval) override ;
+
+  Integer &operator=(int64_t val);
 
   /*!
    * Getter for value as int64_t
    * @return
    */
-  inline int64_t get() { return val_; }
+  inline virtual int64_t get() { return val_; }
 
-  void set(const std::string &strval) override;
+  void set(const std::string &strval) override ;
 
  protected:
   int64_t val_;
 
-  int64_t parse(const std::string &strval);
+  void parse(const std::string &strval);
 
-  inline void validate() {
-    for (auto r: restrictions_) {
-      if (!r->validate(std::to_string(val_))) throw Error(__FILE__, __LINE__, "xsd:string did not pass validation!");
-    }
-  }
 
  private:
 

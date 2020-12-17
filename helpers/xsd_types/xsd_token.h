@@ -10,17 +10,53 @@
 namespace xsd {
 
 class Token : public NormalizedString {
+  /*!
+   * Implements the xsd::token data type (see https://www.w3.org/TR/xmlschema-2/#token)
+   */
  public:
+  /*!
+   * Default constructor for xsd:token
+   */
   inline Token() { xsd_type_ = "token"; };
 
-  Token(const std::string &strval);
-
-  inline Token(const std::string &strval, const std::vector<Restriction> &restrictions) : Token(strval) {
-    xsd_type_ = "token";
-    for (int i = 0; i < restrictions.size(); i++) {
-      if (!restrictions[i].validate(strval_)) throw Error(__FILE__, __LINE__, "xsd:string did not pass validation!");
-    }
+  /*!
+   * Constructor taking one restriction (shared_ptr) as parameter
+   * @param restriction
+   */
+  inline explicit Token(const std::shared_ptr<Restriction> &restriction) : Token() {
+    restrictions_.push_back(restriction);
   }
+
+  inline explicit Token(const std::vector<std::shared_ptr<Restriction>> &restrictions) : Token() {
+    restrictions_ = restrictions;
+  }
+
+  /*!
+   * Constructor taking a std::string a parameter
+   * @param strval
+   */
+  explicit Token(const std::string &strval);
+
+  /*!
+   * Constructor taking a std::string and a restriction (shared_ptr) as parameter
+   * @param strval
+   * @param restriction
+   */
+  Token(const std::string &strval, const std::shared_ptr<Restriction> &restriction);
+
+  /*!
+   * Constructor taking a std::string and a vector of restrictions (shared_ptr's)
+   * @param strval
+   * @param restrictions
+   */
+  Token(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions);
+
+  void set(const std::string &strval) override;
+
+  Token &operator=(const std::string &strval) override;
+
+ protected:
+  void clean();
 
 };
 

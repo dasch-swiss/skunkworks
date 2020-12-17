@@ -6,6 +6,7 @@
 #define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_ANY_URI_H_
 
 #include <string>
+#include <memory>
 
 #include <regex>
 #include <iostream>
@@ -13,6 +14,7 @@
 #include <unordered_map>
 
 #include "xsd_data_type.h"
+#include "xsd_restriction.h"
 #include "xsd_string.h"
 
 namespace xsd {
@@ -28,6 +30,23 @@ class AnyUri : public DataType {
    */
  public:
   /*!
+   * Default constructor
+   */
+  AnyUri();
+
+  /*!
+   * Constructor taking a restriction a parameter (shared_ptr)
+   * @param restriction
+   */
+  explicit AnyUri(const std::shared_ptr<Restriction> &restriction);
+
+  /*!
+   * Constructor with vector of Restrictions (shared_ptr's)
+   * @param restrictions
+   */
+  explicit AnyUri(const std::vector<std::shared_ptr<Restriction>> &restrictions);
+
+  /*!
    * Constructor which takes one std::string as parameter which is validated if the string corresponds to a
    * valid URI (dependoing on the protocol).
    * @param strval
@@ -35,15 +54,26 @@ class AnyUri : public DataType {
   explicit AnyUri(const std::string &strval);
 
   /*!
-   * Conversion to std::string
-   * @return
+   * Constructor taking a std::string and a restriction (std::shared_ptr) as parameter
+   * @param strval
+   * @param restriction
    */
-  explicit operator std::string() const override;
+  AnyUri(const std::string &strval, const std::shared_ptr<Restriction> &restriction);
 
   /*!
-   * Set a new value
+   * Constructor taking a std::string and a vector of restriction (std::shared_ptr's)
    * @param strval
+   * @param restrictions
    */
+  AnyUri(const std::string &strval, const std::vector<std::shared_ptr<Restriction>> &restrictions);
+
+  /*!
+   * Assignment oprator for std::string
+   * @param strval
+   * @return
+   */
+  AnyUri &operator=(const std::string &strval) override;
+
   void set(const std::string &strval) override;
 
  private:
@@ -68,7 +98,6 @@ class AnyUri : public DataType {
 
   void parse(const std::string &str);
 
-  void validate();
 
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
 };

@@ -83,6 +83,7 @@ void DateTime::parse(const std::string &str) {
   } else {
     throw Error(file_, __LINE__, "Invalid xsd:dateTime string!");
   }
+  validate();
 }
 //=====================================================================
 
@@ -186,6 +187,7 @@ DateTime::DateTime(const std::string &value) {
   tz_min_ = 0;
   parse(value);
   validate();
+  enforce_restrictions();
 }
 //=====================================================================
 
@@ -197,22 +199,19 @@ DateTime::DateTime(int year, int month, int day,
                    tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
   xsd_type_ = "dateTime";
   validate();
-}
-//=====================================================================
-
-DateTime::operator std::string() const {
-  std::stringstream ss;
-  ss.imbue(std::locale::classic());
-  ss << *this;
-  return ss.str();
+  enforce_restrictions();
 }
 //=====================================================================
 
 void DateTime::set(const std::string &strval) {
   parse(strval);
-  validate();
+  enforce_restrictions();
 }
-//=====================================================================
 
+DateTime &DateTime::operator=(const std::string &strval) {
+  parse(strval);
+  enforce_restrictions();
+  return *this;
+}
 
 }
