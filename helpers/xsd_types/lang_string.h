@@ -25,7 +25,7 @@ class LangString {
 
   std::string operator[](Language lang);
 
-  void delete(Language lang);
+  void remove(Language lang);
 };
 }
 

@@ -9,22 +9,25 @@
 #include <string>
 #include <unordered_map>
 
-#include "property.h"
+#include "helpers/xsd_types/xsd.h"
+
 
 namespace dsp {
 
+class Property; // forward declaration
+
 class ResourceClass {
 
-  struct has_property {
+  typedef struct has_property {
     std::shared_ptr<Property> property_;
     int min_count_;
     int max_count_;
   } HasProperty;
 
  private:
-  std::string id_;
-  std::string class_label_;
-  std::string class_description_;
+  xsd::AnyUri id_;
+  xsd::String class_label_;
+  xsd::String class_description_;
   std::shared_ptr<ResourceClass> sub_class_of_;
   std::unordered_map<std::string, HasProperty> has_properties_;
 
@@ -35,11 +38,11 @@ class ResourceClass {
    * @param class_description
    * @param sub_class_of
    */
-  ResourceClass(const std::string class_label,
-                const std::string class_description,
+  ResourceClass(const xsd::String class_label,
+                const xsd::String class_description,
                 const std::shared_ptr<ResourceClass> sub_class_of);
 
-  inline std::string id() { return id_; }
+  inline xsd::AnyUri id() { return id_; }
 
   inline std::string class_label() { return class_label_; }
 
@@ -52,6 +55,7 @@ class ResourceClass {
     outStream << "ResourceClass:: " << std::endl <<
               "id=" << rhs.id_ << std::endl <<
               "class_label=" << rhs.class_label_ << std::endl;
+    return outStream;
   }
 
 };
