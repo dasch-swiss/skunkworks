@@ -44,5 +44,6 @@ jobs:
           sudo apt-get install lld-11
           sudo apt-get install libc++-11-dev libc++abi-11-dev
           sudo apt-get install libomp-11-dev
+          sudo apt-get install g++-10
       - name: run test
         run: bazel test --config=linux //...
