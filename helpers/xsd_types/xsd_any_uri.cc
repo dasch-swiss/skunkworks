@@ -11,6 +11,7 @@
 
 #include "xsd_error.h"
 #include "xsd_any_uri.h"
+#include "splitter.h"
 
 static const char file_[] = __FILE__;
 
@@ -31,17 +32,6 @@ std::unordered_map<std::string, std::string> AnyUri::protocol_schemes = {
     {"wss", R"((wss://)([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(\?[\w&=]+)?(.*)?)"},
 };
 
-typedef struct {
-  bool success;
-  std::string first;
-  std::string second;
-} SplitResult;
-
-typedef struct {
-  bool success;
-  std::string separator;
-  std::string left;
-} NextSeparator;
 
 static std::vector<std::string> split(const std::string &strval, char splitter) {
   size_t old_pos = 0;
@@ -57,35 +47,6 @@ static std::vector<std::string> split(const std::string &strval, char splitter) 
 
 /* TODO: remove if certain that we don't use then....
 
-static std::vector<std::string> split(const std::string &strval, const std::string &splitter) {
-  size_t old_pos = 0;
-  size_t pos;
-  int len = splitter.length();
-  std::vector<std::string> result;
-  while ((pos = strval.find(splitter, old_pos)) != std::string::npos) {
-    result.push_back(strval.substr(old_pos, pos - old_pos));
-    old_pos = pos + len;
-  }
-  result.push_back(strval.substr(old_pos, std::string::npos));
-  return result;
-}
-
-static SplitResult split_at(const std::string &strval, size_t pos, int len = 1) {
-  std::string s1 = strval.substr(0, pos);
-  std::string s2 = (pos == std::string::npos) ? "" : strval.substr(pos + len, std::string::npos);
-  SplitResult result = {(pos != std::string::npos), s1, s2};
-  return result;
-}
-
-static SplitResult split_first(const std::string &strval, char splitter) {
-  size_t pos = strval.find(splitter);
-  return split_at(strval, pos);
-}
-
-static SplitResult split_first(const std::string &strval, const std::string &splitter) {
-  size_t pos = strval.find(splitter);
-  return split_at(strval, pos, splitter.length());
-}
 */
 
 static bool check_illegal_characters(const std::string  &strval, const std::string &illegal) {

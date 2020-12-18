@@ -24,6 +24,8 @@ cc_library(
         "xsd_decimal.cc",
         "xsd_date_time.cc",
         "xsd_date_time_stamp.cc",
+        "xsd_q_name.cc",
+        "splitter.cc",
         "lang_string.cc",
         "xsd_error.cc",
     ],
@@ -41,6 +43,8 @@ cc_library(
         "xsd_decimal.h",
         "xsd_date_time.h",
         "xsd_date_time_stamp.h",
+        "xsd_q_name.h",
+        "splitter.h",
         "lang_string.h",
         "xsd_error.h",
         "others.h"

@@ -307,3 +307,10 @@ TEST(XsdDecimal, Generic) {
   EXPECT_THROW(xsd::Decimal("99.99", std::make_shared<xsd::RestrictionMinExclusive>(100.0)), xsd::Error);
 
 }
+
+TEST(XsdQName, Generic) {
+  EXPECT_EQ(static_cast<std::string>(xsd::QName("ab:cde")), "ab:cde");
+  EXPECT_EQ(static_cast<std::string>(xsd::QName("mySchema9")), "mySchema9");
+  EXPECT_THROW(xsd::QName("0ab:gaga"), xsd::Error);
+  EXPECT_THROW(xsd::QName("hy:hy:any"), xsd::Error);
+}

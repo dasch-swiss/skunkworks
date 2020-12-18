@@ -104,7 +104,6 @@ class Integer : public DataType {
 
   void parse(const std::string &strval);
 
-
  private:
 
 
