@@ -135,7 +135,7 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
   int precision = 0;
   float seconds = second_;
   for (int i = 0; i < 7; ++i) {
-    float intpart, fracpart = modf(seconds, &intpart);
+    float intpart, fracpart = modff(seconds, &intpart);
     if (fracpart == 0.0f) break;
     if (i == 0) ++width; // decimal point
       ++width;

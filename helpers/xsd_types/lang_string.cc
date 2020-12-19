@@ -13,8 +13,8 @@ LangString::LangString(const Language &lang, const xsd::String &text) {
   lang_string_[static_cast<std::string>(lang)] = text;
 }
 
-LangString::LangString(const std::string &lang, const xsd::String &text) {
-  lang_string_[lang] = text;
+LangString::LangString(const std::string &lang, const std::string &text) {
+  lang_string_[lang] = xsd::String(text);
 }
 
 xsd::String &LangString::operator[](const Language &lang) {
