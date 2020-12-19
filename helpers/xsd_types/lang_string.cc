@@ -2,29 +2,34 @@
 // Created by Lukas Rosenthaler on 27.11.20.
 //
 #include <stdexcept>
+#include <string>
+#include <memory>
 
 #include "lang_string.h"
 
 namespace xsd {
 
-    LangString::LangString(Language lang, const std::string text) {
-        lang_string_[lang] = text;
-    }
+LangString::LangString(const Language &lang, const xsd::String &text) {
+  lang_string_[static_cast<std::string>(lang)] = text;
+}
 
-    std::string LangString::operator[](Language lang) {
-        std::string result;
-        try {
-            result = lang_string_.at(lang);
-        } catch(const std::out_of_range &err) {
-            if (lang_string_.empty()) return result; //empty string!
-            for (auto s: lang_string_) { // return first available string...
-                return s.second;
-            }
-        }
-        return result;
-    }
+LangString::LangString(const std::string &lang, const xsd::String &text) {
+  lang_string_[lang] = text;
+}
 
-    void LangString::remove(Language lang) {
-        lang_string_.erase(lang);
-    }
+xsd::String &LangString::operator[](const Language &lang) {
+  return lang_string_[static_cast<std::string>(lang)];
+}
+
+xsd::String &LangString::operator[](const std::string &lang) {
+  return lang_string_[lang];
+}
+
+void LangString::add(const Language &lang, const xsd::String &text) {
+  lang_string_[static_cast<std::string>(lang)] = text;
+}
+
+void LangString::remove(const Language &lang) {
+  lang_string_.erase(static_cast<std::string>(lang));
+}
 }

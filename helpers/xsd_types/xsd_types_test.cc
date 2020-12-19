@@ -314,3 +314,20 @@ TEST(XsdQName, Generic) {
   EXPECT_THROW(xsd::QName("0ab:gaga"), xsd::Error);
   EXPECT_THROW(xsd::QName("hy:hy:any"), xsd::Error);
 }
+
+TEST(XsdLanguage, Generic) {
+  EXPECT_NO_THROW(xsd::Language language("en"));
+  EXPECT_THROW(xsd::Language("xx"), xsd::Error);
+}
+
+TEST(XsdLangString, Geberic) {
+  EXPECT_NO_THROW(xsd::LangString gaga("en", xsd::String("This is a test")));
+  xsd::LangString lang_string;
+  lang_string["en"] = xsd::String("What is this");
+  lang_string["de"] = xsd::String("Was ist das");
+  xsd::String res = lang_string["de"];
+  EXPECT_EQ(static_cast<std::string>(res), "Was ist das");
+  xsd::String res2 = lang_string["xx"];
+  EXPECT_EQ(static_cast<std::string>(res2), "");
+
+}
