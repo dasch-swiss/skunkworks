@@ -6,19 +6,19 @@
 #define SKUNKWORKS_VALUE_H
 
 #include <memory>
-
 #include "helpers/xsd_types/xsd.h"
-#include "helpers/xsd_types/lang_string.h
+#include "helpers/xsd_types/lang_string.h"
 
 #include "agent.h"
+#include "helpers/xsd_types/others.h"
 
 class Value {
 private:
     xsd::DateTimeStamp creation_date_;
-    std::shared_ptr<Agent> created_by_;
+    std::shared_ptr<dsp::Agent> created_by_;
     xsd::boolean is_deleted_;
     xsd::DateTimeStamp delete_date_;
-    std::shared_ptr<Agent> deleted_by_;
+    std::shared_ptr<dsp::Agent> deleted_by_;
     xsd::langstring delete_comment_;
     xsd::langstring comment_;
     xsd::string strval;
