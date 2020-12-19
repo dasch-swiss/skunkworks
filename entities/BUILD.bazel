@@ -25,7 +25,6 @@ cc_library(
         "value_class.h",
     ],
     deps = [
-        "//helpers/xsd_types:error",
-        "//helpers:uuid",
+        "//helpers:helpers",
     ],
 )

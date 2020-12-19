@@ -37,3 +37,5 @@
 # Bazel
 bazel-*
 /True
+/.idea
+/.DS_Store
