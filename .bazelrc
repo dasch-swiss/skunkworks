@@ -1,6 +1,6 @@
 # flags used for debugging
-# build --toolchain_resolution_debug
-# build --verbose_explanations
+build --toolchain_resolution_debug
+build --verbose_explanations
 # build --explain True
 build --verbose_failures
 # build --experimental_enable_docker_sandbox
@@ -16,9 +16,13 @@ build --incompatible_enable_cc_toolchain_resolution
 
 # linux compiler settings
 build:linux --repo_env=CC=clang-11
-build:linux --repo_env=CXX=clang-11++
-build:linux --cxxopt=-stdlib=libc++
+build:linux --repo_env=CXX=clang++-11
+build:linux --cxxopt=-stdlib=libstdc++
 build:linux --host_cxxopt=-std=c++17
+
+# linux compiler settings for debugging include paths
+# build:linux --cxxopt='-E'
+# build:linux --cxxopt='-v'
 
 # macos compiler settings
 build:macos --cxxopt=-std=c++17

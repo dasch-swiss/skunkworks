@@ -5,6 +5,7 @@
 #ifndef SKUNKWORKS_RESOURCE_CLASS_H
 #define SKUNKWORKS_RESOURCE_CLASS_H
 
+#include <memory>         // required for shared_ptr under linux
 #include <iostream>
 #include <string>
 #include <unordered_map>
