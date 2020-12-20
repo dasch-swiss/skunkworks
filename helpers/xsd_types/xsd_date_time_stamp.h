@@ -5,19 +5,18 @@
 #ifndef SKUNKWORKS_DATE_TIME_STAMP_H
 #define SKUNKWORKS_DATE_TIME_STAMP_H
 
-#include "date_time.h"
+#include "xsd_date_time.h"
 
 namespace xsd {
 
-class DateTimeStamp : DateTime {
+class DateTimeStamp : public DateTime {
  public:
-  inline DateTimeStamp() : DateTime() {}
 
-  DateTimeStamp(std::string value);
+  explicit DateTimeStamp(const std::string& value);
 
   DateTimeStamp(int year, int month, int day,
                 int hour, int min, float second,
-                int tz_hour, int tz_min);
+                int tz_sign, int tz_hour, int tz_min);
 
 };
 

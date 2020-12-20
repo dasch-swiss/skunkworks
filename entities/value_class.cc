@@ -11,12 +11,8 @@
 
 namespace entities {
 
-ValueClass::ValueClass(
-    std::string class_label,
-    std::string class_description
-) :
-    class_label_(std::move(class_label)),
-    class_description_(std::move(class_description)) {
+ValueClass::ValueClass(const xsd::String &class_label, const xsd::String &class_description) :
+    class_label_(class_label), class_description_(class_description) {
   id_ = uuid::generate_uuid_v4();
 }
 

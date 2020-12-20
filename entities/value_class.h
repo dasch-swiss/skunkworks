@@ -6,6 +6,7 @@
 #define SKUNKWORKS_VALUE_CLASS_H
 
 #include <string>
+#include "helpers/xsd_types/xsd.h"
 
 namespace entities {
 

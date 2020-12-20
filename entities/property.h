@@ -29,6 +29,7 @@ class Property {
   std::shared_ptr<ValueClass> value_class_;
   std::shared_ptr<Property> sub_class_of_;
 };
+
 }
 
 #endif //SKUNKWORKS_PROPERTY_H

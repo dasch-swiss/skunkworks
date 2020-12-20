@@ -1,13 +1,42 @@
-build --strategy=Javac=worker --worker_sandboxing --worker_max_instances=2
+# flags used for debugging
+# build --toolchain_resolution_debug
+# build --verbose_explanations
+# build --explain True
+build --verbose_failures
+# build --experimental_enable_docker_sandbox
+# build --experimental_docker_verbose
+# build --sandbox_debug
 
+
+# build stamping, i.e., get things from bazel-out/volatile-status.txt into the build
 build --workspace_status_command=tools/buildstamp/get_workspace_status --stamp=yes
-build --compilation_mode dbg
 
 # force using platforms for toolchain resolution (will become default at some point)
 build --incompatible_enable_cc_toolchain_resolution
 
-# add some compiler settings
-build --repo_env=CC=clang --cxxopt="-std=c++17" --cxxopt="-DSHTTPS_ENABLE_SSL"
+# linux compiler settings
+build:linux --repo_env=CC=clang-11
+build:linux --repo_env=CXX=clang++-11
+build:linux --cxxopt=-stdlib=libstdc++
+build:linux --host_cxxopt=-std=c++17
 
-# set to "errors" (less output) or "all" (more output)
-test --test_output=errors
+# linux compiler settings for debugging include paths
+# build:linux --cxxopt='-E'
+# build:linux --cxxopt='-v'
+
+# macos compiler settings
+build:macos --cxxopt=-std=c++17
+build:macos --host_cxxopt=-std=c++17
+
+# docker-sandobx settings
+build:docker-sandbox --experimental_docker_image=daschswiss/sipi-base:latest
+build:docker-sandbox --spawn_strategy=docker --strategy=Javac=docker --genrule_strategy=docker
+build:docker-sandbox --define=EXECUTOR=remote
+build:docker-sandbox --experimental_docker_verbose
+build:docker-sandbox --experimental_enable_docker_sandbox
+
+# default compiler settings
+build --cxxopt=-std=c++17
+build --copt=-DSHTTPS_ENABLE_SSL
+build --cxxopt=-DSHTTPS_ENABLE_SSL
+build --compilation_mode dbg

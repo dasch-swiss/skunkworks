@@ -2,45 +2,52 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_library(
-    name = "date_time",
-    srcs = ["date_time.cc"],
-    hdrs = ["date_time.h"],
+cc_test(
+    name = "xsd_types_test",
+    srcs = ["xsd_types_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
     deps = [
-        ":error"
+        ":xsd_types",
+        "@gtest//:main"
     ],
 )
 
 cc_library(
-    name = "date_time_stamp",
-    srcs = ["date_time_stamp.cc"],
-    hdrs = ["date_time_stamp.h"],
-    deps = [":date_time"],
-)
-
-cc_library(
-    name = "error",
-    srcs = ["error.cc"],
-    hdrs = ["error.h"],
-)
-
-cc_library(
-    name = "lang_string",
-    srcs = ["lang_string.cc"],
-    hdrs = ["lang_string.h"],
-)
-
-cc_library(
-    name = "others",
-    srcs = ["others.h"],
-    hdrs = ["others.h"],
-)
-
-cc_binary(
-    name = "types.spec",
-    srcs = ["types.spec.cc"],
-    deps = [
-        ":date_time",
-        ":error"
+    name = "xsd_types",
+    srcs = [
+        "xsd_boolean.cc",
+        "xsd_normalized_string.cc",
+        "xsd_token.cc",
+        "xsd_any_uri.cc",
+        "xsd_integer.cc",
+        "xsd_int.cc",
+        "xsd_decimal.cc",
+        "xsd_date_time.cc",
+        "xsd_date_time_stamp.cc",
+        "xsd_q_name.cc",
+        "splitter.cc",
+        "lang_string.cc",
+        "xsd_error.cc",
+    ],
+    hdrs = [
+        "xsd.h",
+        "xsd_data_type.h",
+        "xsd_restriction.h",
+        "xsd_boolean.h",
+        "xsd_string.h",
+        "xsd_token.h",
+        "xsd_normalized_string.h",
+        "xsd_any_uri.h",
+        "xsd_integer.h",
+        "xsd_int.h",
+        "xsd_decimal.h",
+        "xsd_date_time.h",
+        "xsd_date_time_stamp.h",
+        "xsd_q_name.h",
+        "splitter.h",
+        "lang_string.h",
+        "xsd_error.h",
+        "others.h"
     ],
 )
+

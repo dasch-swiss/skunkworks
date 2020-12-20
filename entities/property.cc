@@ -6,6 +6,8 @@
 
 #include "helpers/uuid.h"
 
+class ResourceClass;
+
 #include "property.h"
 
 namespace entities {

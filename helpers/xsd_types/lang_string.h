@@ -21,12 +21,9 @@ class LangString {
  public:
   LangString(Language lang, const std::string text);
 
-//  std::string operator[](Language lang);
+  std::string operator[](Language lang);
 
   void remove(Language lang);
-
- private:
-  std::unordered_map<Language, std::string> lang_string_;
 };
 }
 
