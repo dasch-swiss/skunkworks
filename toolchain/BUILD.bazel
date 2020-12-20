@@ -1,0 +1,96 @@
+#package(default_visibility = ["//visibility:public"])
+#
+#cc_toolchain_suite(
+#    name = "toolchain",
+#    toolchains = {
+#        "k8|clang": ":cc_clang_linux",
+#        "darwin|clang": ":cc_clang_darwin",
+#        "k8": ":cc_clang_linux",
+#        "darwin": ":cc_clang_darwin",
+#    },
+#)
+#
+#
+## This is C++-specific overhead required for all C++ toolchains. See
+## cc_toolchain_config.bzl for details.
+#load(":cc_toolchain_config.bzl", "cc_toolchain_config")
+#
+#cc_toolchain_config(
+#    name = "local_linux",
+#    cpu = "k8",
+#)
+#
+#cc_toolchain_config(
+#    name = "local_darwin",
+#    cpu = "darwin",
+#)
+#
+## Define our cc_toolchain
+## (https://docs.bazel.build/versions/master/be/c-cpp.html#cc_toolchain).
+## The cc_toolchain rule is pre-defined by the C++ rule owners. It uses these
+## parameters to construct a ToolchainInfo provider, as required by Bazel's
+## platform/toolchain APIs.
+#cc_toolchain(
+#    name = "cc_clang_linux",
+#    # toolchain_identifier = "k8-toolchain",
+#    toolchain_config = ":local_linux",
+#    all_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:all_components",
+#    compiler_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:compiler_components",
+#    dwp_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:empty",
+#    linker_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:linker_components",
+#    objcopy_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:objcopy",
+#    strip_files = "@clang_llvm_11.0.0_x86_64_linux_gnu_ubuntu_20.04//:empty",
+#    supports_param_files = 1,
+#)
+#
+#cc_toolchain(
+#    name = "cc_clang_darwin",
+#    # toolchain_identifier = "k8-toolchain",
+#    toolchain_config = ":local_darwin",
+#    all_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:all_components",
+#    compiler_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:compiler_components",
+#    dwp_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:empty",
+#    linker_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:linker_components",
+#    objcopy_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:objcopy",
+#    strip_files = "@clang_llvm_11.0.0_x86_64_apple_darwin//:empty",
+#    supports_param_files = 0,
+#)
+#
+#
+## Bazel's platform/toolchain APIs require this wrapper around the actual
+## toolchain defined above. It serves two purposes: declare which
+## constraint_values it supports (which can be matched to appropriate platforms)
+## and tell Bazel what language this toolchain is for.
+##
+## So when you're building a cc_binary, Bazel has all the info it needs to give
+## that cc_binary the right toolchain: it knows cc_binary requires a "C++-type
+## toolchain" (this is encoded in the cc_binary rule definition) and needs to
+## use a toolchain that matches whatever you set --platforms to at the command
+## line.
+#toolchain(
+#    name = "cc-toolchain-darwin",
+#    exec_compatible_with = [
+#        "@platforms//cpu:x86_64",
+#        "@platforms//os:osx",
+#    ],
+#    target_compatible_with = [
+#        "@platforms//cpu:x86_64",
+#        "@platforms//os:osx",
+#    ],
+#    toolchain = ":cc_clang_darwin",
+#    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+#)
+#
+#toolchain(
+#    name = "cc-toolchain-linux",
+#    exec_compatible_with = [
+#        "@platforms//cpu:x86_64",
+#        "@platforms//os:linux",
+#    ],
+#    target_compatible_with = [
+#        "@platforms//cpu:x86_64",
+#        "@platforms//os:linux",
+#    ],
+#    toolchain = ":cc_clang_linux",
+#    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+#)

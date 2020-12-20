@@ -186,8 +186,6 @@ class RestrictionMaxInclusive final : public Restriction {
     }
   }
 
-  inline explicit RestrictionMaxInclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
-
   inline explicit RestrictionMaxInclusive(double maxval) : dmaxval_(maxval) {}
 
   inline ~RestrictionMaxInclusive() final = default;
@@ -207,8 +205,6 @@ class RestrictionMaxExclusive final : public Restriction {
       dmaxval_ = std::stod(strval);
     }
   }
-
-  inline explicit RestrictionMaxExclusive(int64_t maxval) { dmaxval_ = (double) maxval; }
 
   inline explicit RestrictionMaxExclusive(double maxval) : dmaxval_(maxval) {}
 
@@ -230,8 +226,6 @@ class RestrictionMinInclusive final : public Restriction {
     }
   }
 
-  inline explicit RestrictionMinInclusive(int64_t maxval) { dminval_ = (double) maxval; }
-
   inline explicit RestrictionMinInclusive(double maxval) : dminval_(maxval) {}
 
   inline ~RestrictionMinInclusive() final = default;
@@ -251,8 +245,6 @@ class RestrictionMinExclusive final : public Restriction {
       dminval_ = std::stod(strval);
     }
   }
-
-  inline explicit RestrictionMinExclusive(int64_t maxval) { dminval_ = (double) maxval; }
 
   inline explicit RestrictionMinExclusive(double maxval) : dminval_(maxval) {}
 

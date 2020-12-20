@@ -1,9 +1,41 @@
 workspace(name = "swiss_dasch_skunkworks")
-
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
+# Get rules_cc. Although the cc rules are built into Bazel, they will be moved
+# out in the future, into their own rules. Using this now, will save migration work later.
+rules_cc_tag = "b1c40e1de81913a3c40e5948f78719c28152486d" # 11. November 2020
+rules_cc_sha256 = "d0c573b94a6ef20ef6ff20154a23d0efcb409fb0e1ff0979cec318dfe42f0cdd"
+http_archive(
+    name = "rules_cc",
+    strip_prefix = "rules_cc-{}".format(rules_cc_tag),
+    url = "https://github.com/bazelbuild/rules_cc/archive/{}.zip".format(rules_cc_tag),
+    sha256 = rules_cc_sha256,
+)
+
+## Get rule that allows us to use official clang binaries.
+#grail_tag = "0.5.7" # 5. November 2020
+#grail_sha256 = "83f691deff0f131b6d40587f07361cb25dad4a66e5ed8988cbcee78ebfe3d5cd"
+#http_archive(
+#    name = "com_grail_bazel_toolchain",
+#    strip_prefix = "bazel-toolchain-{}".format(grail_tag),
+#    url = "https://github.com/grailbio/bazel-toolchain/archive/{}.zip".format(grail_tag),
+#    sha256 = grail_sha256
+#)
+#
+#load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
+#
+#bazel_toolchain_dependencies()
+#
+#load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
+#
+#llvm_toolchain(
+#    name = "llvm_toolchain",
+#    llvm_version = "11.0.0",
+#)
+#
+#register_toolchains(
+#    "@llvm_toolchain//:cc-toolchain-linux",
+#)
 
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
@@ -14,13 +46,12 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_foreign_cc/archive/%s.zip" % rules_foreign_cc_version,
     sha256 = rules_foreign_cc_version_sha256,
 )
-
+# Recursively import Nixpkgs rules' dependencies and register default tools-toolchains (make, cmake, ninja).
 load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependencies")
-
-# Register default toolchain. It is also possible to register
-# custom toolchains.
 rules_foreign_cc_dependencies(register_default_tools = True)
 
+# used as default build file content in the download rules used in combination with rules_foreign_cc
+all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 
 # @zlib//:all
 http_archive(
