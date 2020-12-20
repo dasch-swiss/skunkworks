@@ -7,6 +7,7 @@
 
 namespace xsd {
 
+/*
     LangString::LangString(Language lang, const std::string text) {
         lang_string_[lang] = text;
     }
@@ -27,7 +28,7 @@ namespace xsd {
     void LangString::remove(Language lang) {
         lang_string_.erase(lang);
     }
-
+*/
 //    std::string LangString::operator[](Language lang) {
 //        std::string result;
 //        try {

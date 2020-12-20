@@ -9,8 +9,8 @@ cc_library(
     deps = [
         "//entities/user/values",
         "//entities:error",
-        "//entities/values:agent",
-        "//helpers:uuid"
+        "//helpers",
+        "//helpers/xsd_types"
     ],
 )
 

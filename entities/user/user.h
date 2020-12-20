@@ -5,10 +5,10 @@
 #ifndef SKUNKWORKS_ENTITIES_ADMIN_USER_USER_H_
 #define SKUNKWORKS_ENTITIES_ADMIN_USER_USER_H_
 
+#include <memory>
 #include <string>
 
 #include "entities/user/values/username.h"
-#include "entities/values/agent.h"
 
 namespace entities::user {
 
@@ -25,17 +25,17 @@ class User {
        std::string family_name,
        std::string status,
        std::string lang);
-  inline xsd::ID id() { return id_; };
+  inline std::string id() { return id_; };
   inline std::shared_ptr<Username> username() { return username_; };
-  inline xsd::string email() { return email_; };
-  inline xsd::string password() { return password_; };
-  inline xsd::string token() { return token_; };
-  inline xsd::string given_name() { return given_name_; };
-  inline xsd::string family_name() { return family_name_; };
-  inline xsd::string status() { return status_; };
-  inline xsd::string lang() { return lang_; };
+  inline std::string email() { return email_; };
+  inline std::string password() { return password_; };
+  inline std::string token() { return token_; };
+  inline std::string given_name() { return given_name_; };
+  inline std::string family_name() { return family_name_; };
+  inline std::string status() { return status_; };
+  inline std::string lang() { return lang_; };
  private:
-  xsd::ID id_;
+  std::string id_;
   std::shared_ptr<Username> username_;
   std::string email_;
   std::string password_;

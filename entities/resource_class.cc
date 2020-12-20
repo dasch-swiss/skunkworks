@@ -12,8 +12,8 @@ static const char __file__[] = __FILE__;
 
 namespace entities {
 
-ResourceClass::ResourceClass(const xsd::String class_label,
-                             const xsd::String class_description,
+ResourceClass::ResourceClass(const xsd::String &class_label,
+                             const xsd::String &class_description,
                              const std::shared_ptr<ResourceClass> sub_class_of) :
     class_label_(class_label),
     class_description_(class_description),
@@ -21,6 +21,7 @@ ResourceClass::ResourceClass(const xsd::String class_label,
   id_.set(uuid::generate_uuid_v4());
 }
 
+/*
 void ResourceClass::add_property(const std::shared_ptr<Property> property,
                                  int min_count,
                                  int max_count) {
@@ -34,5 +35,6 @@ void ResourceClass::add_property(const std::shared_ptr<Property> property,
   } // TODO: Use C++20 with contains ASAP!
   throw Error(__file__, __LINE__, "Property with same id already exists!");
 }
+*/
 
 }

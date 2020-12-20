@@ -39,8 +39,8 @@ class ResourceClass {
    * @param class_description
    * @param sub_class_of
    */
-  ResourceClass(const xsd::String class_label,
-                const xsd::String class_description,
+  ResourceClass(const xsd::String &class_label,
+                const xsd::String &class_description,
                 const std::shared_ptr<ResourceClass> sub_class_of);
 
   inline xsd::AnyUri id() { return id_; }
