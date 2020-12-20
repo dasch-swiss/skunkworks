@@ -8,7 +8,7 @@ on:
 jobs:
   test:
     name: Build and Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout source
         uses: actions/checkout@v1
@@ -28,9 +28,22 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12'
-      - name: Install dependencies
+      - name: Install Bazel
         run: |
           npm install --global @bazel/bazelisk
-          sudo apt-get install libpthread-stubs0-dev
+      - name: Install LLVM-11
+        run: |
+          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main" | sudo tee -a /etc/apt/sources.list
+          echo "deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main" | sudo tee -a /etc/apt/sources.list
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 15CF4D18AF4F7421
+          sudo apt-get update
+          sudo apt-get install libllvm-11-ocaml-dev libllvm11 llvm-11 llvm-11-dev llvm-11-doc llvm-11-examples llvm-11-runtime
+          sudo apt-get install clang-11 clang-tools-11 clang-11-doc libclang-common-11-dev libclang-11-dev libclang1-11 clang-format-11 clangd-11
+          sudo apt-get install libfuzzer-11-dev
+          sudo apt-get install lldb-11
+          sudo apt-get install lld-11
+          sudo apt-get install libc++-11-dev libc++abi-11-dev
+          sudo apt-get install libomp-11-dev
+          sudo apt-get install g++-10
       - name: run test
-        run: bazel test //...
+        run: bazel test --config=linux //...

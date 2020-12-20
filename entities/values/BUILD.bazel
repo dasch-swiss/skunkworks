@@ -25,6 +25,6 @@ cc_library(
         "value.h"
     ],
     deps = [
-        "//helpers/xsd_types:xsd_types",
+        "//helpers/xsd_types",
     ],
 )

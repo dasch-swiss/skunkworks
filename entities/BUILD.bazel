@@ -26,5 +26,6 @@ cc_library(
     ],
     deps = [
         "//helpers:helpers",
+        "//helpers/xsd_types"
     ],
 )

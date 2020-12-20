@@ -18,7 +18,7 @@ ResourceClass::ResourceClass(const xsd::String class_label,
     class_label_(class_label),
     class_description_(class_description),
     sub_class_of_(sub_class_of) {
-  id_.set() (uuid::generate_uuid_v4();
+  id_.set(uuid::generate_uuid_v4());
 }
 
 void ResourceClass::add_property(const std::shared_ptr<Property> property,

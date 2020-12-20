@@ -15,6 +15,8 @@ TEST(EntitiesTest, GetGreet) {
   //
   // init value classes (SYSTEM)
   //
+  //
+/*
   std::shared_ptr<dsp::ValueClass> text_value = std::make_shared<dsp::ValueClass>("TextValueClass", "bla bla");
   std::shared_ptr<dsp::ValueClass> integer_value = std::make_shared<dsp::ValueClass>("IntegerValueClass", "bla bla");
 
@@ -29,7 +31,7 @@ TEST(EntitiesTest, GetGreet) {
 
   EXPECT_EQ(my_resclass->class_label(), "myresclass");
   EXPECT_EQ(my_resclass->class_description(), "This is my resource class");
-
+*/
   // finished creating/reading ontologies
   //----------------------------
   //
