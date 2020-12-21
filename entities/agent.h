@@ -5,11 +5,20 @@
 #ifndef SKUNKWORKS_AGENT_H
 #define SKUNKWORKS_AGENT_H
 
+#include "helpers/xsd_types/xsd_any_uri.h"
+
 namespace dsp {
 
-    class Agent {
+class Agent {
+ public:
+  Agent();
 
-    };
+  xsd::AnyUri id() const { return id_; }
+
+ private:
+  xsd::AnyUri id_;
+
+};
 
 }
 

@@ -17,15 +17,14 @@ cc_library(
     srcs = [
         "property.cc",
         "resource_class.cc",
-        "value_class.cc",
     ],
     hdrs = [
         "property.h",
         "resource_class.h",
-        "value_class.h",
     ],
     deps = [
         "//helpers:helpers",
-        "//helpers/xsd_types"
+        "//helpers/xsd_types",
+        "//entities/values"
     ],
 )

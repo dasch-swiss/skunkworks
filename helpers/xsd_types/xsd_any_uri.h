@@ -74,6 +74,8 @@ class AnyUri : public DataType {
    */
   AnyUri &operator=(const std::string &strval) override;
 
+  bool operator==(const AnyUri &other) const ;
+
   void set(const std::string &strval) override;
 
  private:
@@ -100,6 +102,14 @@ class AnyUri : public DataType {
 
 
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
+};
+
+}
+
+namespace std {
+
+template<> struct hash<xsd::AnyUri> {
+  std::size_t  operator()(xsd::AnyUri const &any_uri) const noexcept;
 };
 
 }

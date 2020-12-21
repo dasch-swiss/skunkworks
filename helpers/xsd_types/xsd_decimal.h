@@ -80,7 +80,7 @@ class Decimal : public DataType {
    * Getter for native double value
    * @return
    */
-  inline double get() { return dval_; }
+  inline double getVal() const { return dval_; }
 
   /*!
    * Assignment operator with std::string right hand side
@@ -96,9 +96,10 @@ class Decimal : public DataType {
    */
   Decimal &operator=(double dval);
 
+  bool operator==(const Decimal &other) const ;
 
  protected:
-  double dval_{};
+  double dval_;
 
   void parse(const std::string &strval);
 
@@ -111,5 +112,12 @@ class Decimal : public DataType {
 
 }
 
+namespace std {
+
+template<> struct hash<xsd::Decimal> {
+  std::size_t  operator()(xsd::Decimal const &value) const noexcept;
+};
+
+}
 
 #endif //SKUNKWORKS_HELPERS_XSD_TYPES_XSD_DECIMAL_H_

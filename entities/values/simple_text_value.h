@@ -5,11 +5,11 @@
 #ifndef SKUNKWORKS_ENTITIES_VALUES_SIMPLE_TEXT_VALUE_CLASS_H_
 #define SKUNKWORKS_ENTITIES_VALUES_SIMPLE_TEXT_VALUE_CLASS_H_
 
-#include "base_value_class.h"
+#include "base_value.h"
 
 namespace dsp {
 
-class SimpleTextValueClass : public BaseValueClass {
+class SimpleTextValue : public BaseValue {
 
 };
 

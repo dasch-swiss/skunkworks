@@ -7,18 +7,21 @@
 
 #include "property.h"
 #include "resource_class.h"
+#include "agent.h"
+#include "project.h"
 
 static const char __file__[] = __FILE__;
 
 namespace dsp {
 
-ResourceClass::ResourceClass(const xsd::String class_label,
-                             const xsd::String class_description,
-                             const std::shared_ptr<ResourceClass> sub_class_of) :
-    class_label_(class_label),
-    class_description_(class_description),
-    sub_class_of_(sub_class_of) {
-  id_.set(uuid::generate_uuid_v4());
+ResourceClass::ResourceClass(
+    std::shared_ptr<Project> project,
+    std::shared_ptr<Agent> agent,
+    xsd::String class_label,
+    xsd::String class_description,
+    std::shared_ptr<ResourceClass> sub_class_of)
+    : ClassObj(project, agent, class_label, class_description), sub_class_of_(sub_class_of) {
+  Configuration *configuration = Configuration::init();
 }
 
 void ResourceClass::add_property(const std::shared_ptr<Property> property,

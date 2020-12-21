@@ -18,11 +18,13 @@ cc_library(
     name = "values",
     srcs = [
         "agent.cc",
-        "value.cc"
+        "base_value.cc",
+        "simple_text_value.cc",
     ],
     hdrs = [
         "agent.h",
-        "value.h"
+        "base_value.h",
+        "simple_text_value.h",
     ],
     deps = [
         "//helpers/xsd_types",
