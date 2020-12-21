@@ -48,6 +48,29 @@ configure_make(
     ],
 )
 
+# build ICU4C
+configure_make(
+    name = "icu4c",
+    configure_command = "runConfigureICU",
+    configure_options = select({
+        ":apple": [
+            "platform MacOSX",
+        ],
+        ":linux": [
+            "platform Linux",
+        ],
+    }),
+    lib_source = "@icu4c//:all",
+    configure_env_vars = {
+            "AR": "",
+    },
+    deps = [
+    ],
+    static_libraries = [
+    ],
+)
+
+
 # build jansson
 cmake_external(
     name = "jansson",
@@ -89,4 +112,15 @@ configure_make(
     ],
     lib_source = "@zlib//:all",
     static_libraries = ["libz.a"],
+)
+
+# used for platform specific configurations (see :icu4c)
+config_setting(
+    name = "apple",
+    values = {"cpu": "darwin"},
+)
+
+config_setting(
+    name = "linux",
+    values = {"cpu": "k8"},
 )

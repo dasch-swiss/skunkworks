@@ -8,6 +8,8 @@
 #include "resource_class.h"
 #include "value_class.h"
 
+#include "external/icu4c/common/unicode/unistr.h"
+
 TEST(EntitiesTest, GetGreet) {
 
   // EXPECT_EQ(get_greet("Bazel"), "Hello Bazel");

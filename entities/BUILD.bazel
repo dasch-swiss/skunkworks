@@ -8,7 +8,8 @@ cc_test(
     copts = ["-Iexternal/gtest/include"],
     deps = [
         ":entities",
-        "@gtest//:main"
+        "@gtest//:main",
+        "//third_party:icu4c",
     ],
 )
 
