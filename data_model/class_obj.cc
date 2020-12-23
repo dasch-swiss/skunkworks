@@ -9,24 +9,23 @@
 namespace dsp {
 
 ClassObj::ClassObj(
-    std::shared_ptr<Project> project,
+    std::shared_ptr<DataModel> in_data_model,
     std::shared_ptr<Agent> agent,
-    xsd::String class_label,
-    xsd::String class_description
-)  : attached_to_project_(project), created_by_(agent), class_label_(class_label), class_description_(class_description) {
+    xsd::LangString class_label,
+    xsd::LangString class_description
+)  : in_data_model_(in_data_model), created_by_(agent), class_label_(class_label), class_description_(class_description) {
   configuration_ = Configuration::init();
-  id_ = configuration_->resclass_prefix() + uuid::generate_uuid_v4();
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
 ClassObj::ClassObj(const xsd::AnyUri &id) : id_(id) {}
 
-void ClassObj::class_label(const xsd::String &class_label) {
+void ClassObj::class_label(const xsd::LangString &class_label) {
   class_label_ = class_label;
   changed_.insert("class_label");
 }
 
-void ClassObj::class_description(const xsd::String &class_description)  {
+void ClassObj::class_description(const xsd::LangString &class_description)  {
   class_description_ = class_description;
   changed_.insert("class_description");
 }

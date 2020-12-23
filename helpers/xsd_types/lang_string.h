@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include <vector>
+#include <iterator>
 
 #include "xsd_restriction.h"
 #include "xsd_string.h"
@@ -16,6 +17,9 @@
 namespace xsd {
 
 class LangString {
+ private:
+  typedef std::unordered_map<std::string, xsd::String> LangStringMap;
+
  public:
 
   LangString() = default;
@@ -34,8 +38,13 @@ class LangString {
 
   void remove(const Language &lang);
 
+  typedef LangStringMap::iterator iterator;
+  typedef LangStringMap::const_iterator const_iterator;
+  iterator begin() { return lang_string_.begin(); }
+  iterator end() { return lang_string_.end(); }
+
  private:
-  std::unordered_map<std::string, xsd::String> lang_string_;
+  LangStringMap lang_string_;
 
 };
 }

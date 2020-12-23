@@ -40,9 +40,6 @@ class BaseValue {
   virtual std::string to_string() = 0;
 
  protected:
-  virtual bool creation_allowed() = 0;
-  virtual bool modification_allowed() = 0;
-  virtual bool removing_allowed() = 0;
 
  private:
   xsd::AnyUri id_;

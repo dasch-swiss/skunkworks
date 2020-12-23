@@ -115,7 +115,9 @@ class Decimal : public DataType {
 namespace std {
 
 template<> struct hash<xsd::Decimal> {
-  std::size_t  operator()(xsd::Decimal const &value) const noexcept;
+  std::size_t  operator()(xsd::Decimal const &value) const noexcept {
+    return std::hash<double>{}(value.getVal());
+  }
 };
 
 }

@@ -108,10 +108,13 @@ class AnyUri : public DataType {
 
 namespace std {
 
-template<> struct hash<xsd::AnyUri> {
-  std::size_t  operator()(xsd::AnyUri const &any_uri) const noexcept;
+template<>
+struct hash<xsd::AnyUri> {
+  std::size_t operator()(xsd::AnyUri const &any_uri) const noexcept {
+    std::string strval = static_cast<std::string>(any_uri);
+    return std::hash<std::string>{}(strval);
+  }
 };
 
 }
-
 #endif //SKUNKWORKS_HELPERS_XSD_TYPES_XSD_ANY_URI_H_

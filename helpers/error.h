@@ -60,6 +60,10 @@ class Error : std::runtime_error {
    */
   std::string to_string(void) const;
 
+  inline operator std::string() const {
+    return to_string();
+  }
+
   /*!
   * The overloaded << operator which is used to write the error message to the output
   *

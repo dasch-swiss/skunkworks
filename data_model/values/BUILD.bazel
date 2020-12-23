@@ -3,26 +3,22 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_test(
-    name = "value_test",
-    srcs = ["value_test.cc"],
-    copts = ["-Iexternal/gtest/include"],
-    deps = [
-        ":values",
-        "//helpers/xsd_types:xsd_types",
-        "@gtest//:main"
-    ],
+  name = "value_test",
+  srcs = ["value_test.cc"],
+  deps = [
+      ":values",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
 )
-
 
 cc_library(
     name = "values",
     srcs = [
-        "agent.cc",
         "base_value.cc",
         "simple_text_value.cc",
     ],
     hdrs = [
-        "agent.h",
         "base_value.h",
         "simple_text_value.h",
     ],

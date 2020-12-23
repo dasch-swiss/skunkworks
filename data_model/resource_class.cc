@@ -15,13 +15,14 @@ static const char __file__[] = __FILE__;
 namespace dsp {
 
 ResourceClass::ResourceClass(
-    std::shared_ptr<Project> project,
+    std::shared_ptr<DataModel> in_data_model,
     std::shared_ptr<Agent> agent,
-    xsd::String class_label,
-    xsd::String class_description,
+    const xsd::LangString &class_label,
+    const xsd::LangString &class_description,
     std::shared_ptr<ResourceClass> sub_class_of)
-    : ClassObj(project, agent, class_label, class_description), sub_class_of_(sub_class_of) {
+    : ClassObj(in_data_model, agent, class_label, class_description), sub_class_of_(sub_class_of) {
   Configuration *configuration = Configuration::init();
+  id_ = prefix() + uuid::generate_uuid_v4();
 }
 
 void ResourceClass::add_property(const std::shared_ptr<Property> property,

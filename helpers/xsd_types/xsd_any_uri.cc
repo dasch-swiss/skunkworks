@@ -375,13 +375,3 @@ AnyUri &AnyUri::operator=(const std::string &strval) {
 
 }
 
-namespace std {
-
-template<> struct hash<xsd::AnyUri> {
-std::size_t  operator()(xsd::AnyUri const &any_uri) const noexcept {
-  std::string strval = static_cast<std::string>(any_uri);
-  return std::hash<std::string>{}(strval);
-}
-};
-
-}
