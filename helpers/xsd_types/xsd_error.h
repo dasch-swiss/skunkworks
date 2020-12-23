@@ -33,7 +33,7 @@
 namespace xsd {
 
 /*!
- * \brief Class used to thow errors from the web server implementation
+ * \brief Class used to throw errors from the web server implementation
  *
  * This class which inherits from \class std::runtime_error is used to throw catchable
  * errors from the web server. The error contains the cpp-file, line number, a user given
@@ -41,7 +41,7 @@ namespace xsd {
  */
 class Error : std::runtime_error {
  protected:
-  int line;            //!< Linenumber where the exception has been throwns
+  int line;            //!< Line number where the exception has been thrown
   std::string file;    //!< Name of source code file where the exception has been thrown
   std::string message; //!< Description of the problem
   int sysErrno;        //!< If there is a system error number
@@ -96,6 +96,7 @@ class Error : std::runtime_error {
   */
   friend std::ostream &operator<<(std::ostream &outStream, const Error &rhs);
 };
-}
+
+} // namespace xsd
 
 #endif

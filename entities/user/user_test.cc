@@ -6,7 +6,7 @@
 
 #include "entities/error.h"
 #include "user.h"
-#include "entities/user/values/username.h"
+#include "entities/user/username.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
   using namespace entities::user;

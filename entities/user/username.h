@@ -6,6 +6,7 @@
 #define SKUNKWORKS_ENTITIES_ADMIN_USER_VALUES_USERNAME_H_
 
 #include <string>
+#include "helpers/xsd_types/xsd.h"
 
 static const char __file__[] = __FILE__;
 
@@ -13,11 +14,11 @@ namespace entities::user {
 
 class Username {
  public:
-  Username(const std::string& value);
-  inline std::string value() {return value_; }
+  Username(const std::string &value);
+  inline std::string value() {return value_.get(); }
 
  private:
-  std::string value_;
+  xsd::String value_;
 };
 
 } // namespace entities::user

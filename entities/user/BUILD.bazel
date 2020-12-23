@@ -7,10 +7,10 @@ cc_library(
     srcs = ["user.cpp"],
     hdrs = ["user.h"],
     deps = [
-        "//entities/user/values",
+        ":username",
         "//entities:error",
         "//helpers",
-        "//helpers/xsd_types"
+        "//helpers/xsd_types",
     ],
 )
 
@@ -20,8 +20,32 @@ cc_test(
   size = "small",
   deps = [
       ":user",
-      "//entities/user/values",
+      ":username",
       "//entities:error",
+      "//helpers/xsd_types",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+cc_library(
+    name = "username",
+    srcs = ["username.cc"],
+    hdrs = ["username.h"],
+    deps = [
+        "//entities:error",
+        "//helpers/xsd_types"
+    ],
+)
+
+cc_test(
+  name = "username_test",
+  srcs = ["username_test.cc"],
+  size = "small",
+  deps = [
+      ":username",
+      "//entities:error",
+      "//helpers/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
   ],

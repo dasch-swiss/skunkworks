@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "entities/user/values/username.h"
+#include "entities/user/username.h"
 
 namespace entities::user {
 
@@ -17,7 +17,7 @@ namespace entities::user {
  */
 class User {
  public:
-  User(std::shared_ptr<Username> username,
+  User(const std::shared_ptr<Username> &username,
        std::string email,
        std::string password,
        std::string token,
