@@ -22,17 +22,21 @@ namespace xsd {
  */
 class Restriction {
  public:
+  struct Result {
+    bool success;
+    std::string msg;
+  };
   /*!
    * Virtual destructor (is required!)
    */
-  virtual ~Restriction() = default;;
+  virtual ~Restriction() = default;
 
   /*!
    * Check if the string given a parameter fullfills the restriction
    * @param strval String to be checked
    * @return "true" if restriction is fullfilled, "false" otherwise
    */
-  [[nodiscard]] virtual bool validate(const std::string &strval) const = 0;
+  [[nodiscard]] virtual Result validate(const std::string &strval) const = 0;
 };
 
 /*!
@@ -56,7 +60,8 @@ class RestrictionLength final : public Restriction {
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() == length_; }
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
+    return {strval.length() == length_, "Validation of RestrictionLength failed"}; }
 
  private:
   int length_;
@@ -83,7 +88,9 @@ class RestrictionMinLength final : public Restriction {
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() >= min_length_; }
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
+    return { strval.length() >= min_length_, "Validation of RestrictionMinLength failed"} ;
+  }
 
  private:
   int min_length_;
@@ -110,7 +117,9 @@ class RestrictionMaxLength final : public Restriction {
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  [[nodiscard]] inline bool validate(const std::string &strval) const final { return strval.length() <= max_length_; }
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
+    return { strval.length() <= max_length_, "Validation of RestrictionMaxLength failed"};
+  }
 
  private:
   int max_length_;
@@ -137,8 +146,8 @@ class RestrictionPattern final : public Restriction {
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
-    return std::regex_match(strval, std::regex(pattern_));
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
+    return { std::regex_match(strval, std::regex(pattern_)), "Validation of RestrictionPattern failed" };
   }
 
  private:
@@ -168,11 +177,11 @@ class RestrictionEnumeration final : public Restriction {
    * @param strval
    * @return true if validation passes, otherwise false
    */
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
     for (const auto &s: enums_) {
-      if (s == strval) return true;
+      if (s == strval) return {true, "Validation of RestrictionEnumeration ok"};
     }
-    return false;
+    return {false, "Validation of RestrictionEnumeration failed"};
   }
 };
 
@@ -190,9 +199,9 @@ class RestrictionMaxInclusive final : public Restriction {
 
   inline ~RestrictionMaxInclusive() final = default;
 
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return (dval <= dmaxval_);
+    return {dval <= dmaxval_, "Validation of RestrictionMaxInclusive failed"};
   }
 };
 
@@ -210,9 +219,9 @@ class RestrictionMaxExclusive final : public Restriction {
 
   inline ~RestrictionMaxExclusive() final = default;
 
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline  Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return (dval < dmaxval_);
+    return { dval < dmaxval_, "Validation of RestrictionMaxExclusive failed"};
   }
 };
 
@@ -230,9 +239,9 @@ class RestrictionMinInclusive final : public Restriction {
 
   inline ~RestrictionMinInclusive() final = default;
 
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return (dval >= dminval_);
+    return {dval >= dminval_, "Validation of RestrictionMinInclusive failed"};
   }
 };
 
@@ -250,9 +259,9 @@ class RestrictionMinExclusive final : public Restriction {
 
   inline ~RestrictionMinExclusive() final = default;
 
-  [[nodiscard]] inline bool validate(const std::string &strval) const final {
+  [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return (dval > dminval_);
+    return {dval > dminval_, "Validation of RestrictionMinExclusive failed"};
   }
 };
 

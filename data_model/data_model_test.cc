@@ -14,6 +14,8 @@
 
 
 TEST_CASE("Simple catch2 tests", "[catch2|") {
+  //CHECK_NOTHROW( throw xsd::Error("GAGA", __LINE__, "KEIN FEHLER!"));
+
   dsp::ProjectPtr my_project = std::make_shared<dsp::Project>("4123");
   dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
 
@@ -35,8 +37,9 @@ TEST_CASE("Simple catch2 tests", "[catch2|") {
   REQUIRE_THROWS_AS(my_project->add_data_model(my_data_model2),  dsp::Error);
   REQUIRE_THROWS_WITH(my_project->add_data_model(my_data_model2),  Catch::Contains("Data model"));
 
-  dsp::DataModelPtr pp = my_project->get_data_model(my_data_model->id());
-  REQUIRE(pp->id() == my_data_model->id());
+
+  std::optional<dsp::DataModelPtr> pp = my_project->get_data_model(my_data_model->id());
+  REQUIRE(pp.value()->id() == my_data_model->id());
 
   std::shared_ptr<dsp::ResourceClass> resource_class =
       std::make_shared<dsp::ResourceClass>(
