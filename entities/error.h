@@ -22,8 +22,8 @@
  *//*!
  * \brief Implements an error class for the http server.
  */
-#ifndef __defined_error_h
-#define __defined_error_h
+#ifndef __defined_entities_error_h
+#define __defined_entities_error_h
 
 #include <iostream>
 #include <string>
