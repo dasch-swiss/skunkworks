@@ -10,12 +10,12 @@
 #include "agent.h"
 #include "project.h"
 
-static const char __file__[] = __FILE__;
+static const char file_[] = __FILE__;
 
 namespace dsp {
 
 ResourceClass::ResourceClass(
-    std::shared_ptr<DataModel> in_data_model,
+    DataModelPtr in_data_model,
     std::shared_ptr<Agent> agent,
     const xsd::LangString &class_label,
     const xsd::LangString &class_description,
@@ -25,7 +25,7 @@ ResourceClass::ResourceClass(
   id_ = prefix() + uuid::generate_uuid_v4();
 }
 
-void ResourceClass::add_property(const std::shared_ptr<Property> property,
+void ResourceClass::add_property(const std::shared_ptr<Property> &property,
                                  int min_count,
                                  int max_count) {
   try {
@@ -36,7 +36,7 @@ void ResourceClass::add_property(const std::shared_ptr<Property> property,
     has_properties_[property->id()] = hp;
     return;
   } // TODO: Use C++20 with contains ASAP!
-  throw Error(__file__, __LINE__, "Property with same id already exists!");
+  throw Error(file_, __LINE__, "Property with same id already exists!");
 }
 
 }

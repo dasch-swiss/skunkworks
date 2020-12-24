@@ -13,7 +13,6 @@
 #include "helpers/xsd_types/xsd.h"
 #include "configuration.h"
 #include "agent.h"
-#include "data_model.h"
 #include "class_obj.h"
 
 namespace dsp {
@@ -37,15 +36,17 @@ class ResourceClass : public ClassObj {
    * @param sub_class_of
    */
   ResourceClass(
-      std::shared_ptr<DataModel> in_data_model,
-      std::shared_ptr<Agent> agent,
+      DataModelPtr in_data_model,
+      AgentPtr agent,
       const xsd::LangString &class_label,
       const xsd::LangString &class_description,
       std::shared_ptr<ResourceClass> sub_class_of = nullptr);
 
+  inline xsd::AnyUri data_model_id() { return data_model_id_; }
+
   inline std::string prefix() { return configuration_->resclass_prefix(in_data_model_); }
 
-  void add_property(const std::shared_ptr<Property> property, int min_count, int max_count);
+  void add_property(const std::shared_ptr<Property> &property, int min_count, int max_count);
 
   // usage: cout << resource_class_instance << ...;
   inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
@@ -57,12 +58,18 @@ class ResourceClass : public ClassObj {
     return outStream;
   }
 
+  friend DataModel; // allows access to data_model_id(...)
+
  private:
+  xsd::AnyUri data_model_id_;
   std::shared_ptr<ResourceClass> sub_class_of_;
   std::unordered_map<std::string, HasProperty> has_properties_;
 
+  inline void data_model_id(const xsd::AnyUri &data_model_id) { data_model_id_ = data_model_id_; }
 
 };
+
+using ResourceClassPtr = std::shared_ptr<ResourceClass>;
 
 }
 
