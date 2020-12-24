@@ -8,12 +8,14 @@
 
 #include "family_name.h"
 
-TEST_CASE("creating the family name value type", "[entities][user][family_name]") {
+TEST_CASE("family name value type", "[entities][user][family_name]") {
 
   using namespace entities::user;
 
   SECTION("create family name") {
     CHECK_NOTHROW(FamilyName("Duck"));
+    CHECK(FamilyName("Duck").value() == "Duck");
+    CHECK(FamilyName("Duck") == FamilyName("Duck"));
   }
 
 }
