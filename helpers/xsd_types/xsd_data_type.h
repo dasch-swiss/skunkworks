@@ -78,7 +78,7 @@ class DataType {
    */
   virtual void enforce_restrictions(void) const final {
     for (auto r: restrictions_) {
-      if (!r->validate(static_cast<std::string>(*this))) throw xsd::Error(__FILE__, __LINE__,
+      if (!r->validate(static_cast<std::string>(*this))) throw Error(__FILE__, __LINE__,
           "The type " + xsd_type_ + "did not pass validation of restrictions!");
     }
   }

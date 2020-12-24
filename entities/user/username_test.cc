@@ -14,6 +14,7 @@ TEST_CASE("creating the username value type", "[entities][user][username]") {
   using namespace entities::user;
 
   SECTION("create username") {
+    CHECK_NOTHROW(Username("dduck"));
     CHECK(Username("dduck").value()=="dduck");
   }
 

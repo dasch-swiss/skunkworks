@@ -48,7 +48,7 @@ class AnyUri : public DataType {
 
   /*!
    * Constructor which takes one std::string as parameter which is validated if the string corresponds to a
-   * valid URI (dependoing on the protocol).
+   * valid URI (depending on the protocol).
    * @param strval
    */
   explicit AnyUri(const std::string &strval);

@@ -20,15 +20,10 @@ Username::Username(const std::string &value) {
   std::vector<std::shared_ptr<xsd::Restriction>> restrictions = {
       std::make_shared<xsd::RestrictionMinLength>(4),
       std::make_shared<xsd::RestrictionMaxLength>(50),
-      std::make_shared<xsd::RestrictionPattern>("([a-zA-Z0-9])")
+      std::make_shared<xsd::RestrictionPattern>("([a-zA-Z0-9]*)")
   };
 
-  try {
-    value_ = xsd::String(value, restrictions);
-  } catch (const xsd::Error &e) {
-    std::cerr << e << std::endl;
-  }
-
+  value_ = xsd::String(value, restrictions);
 }
 
 } // namespace entities::user

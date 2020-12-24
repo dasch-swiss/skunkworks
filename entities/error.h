@@ -39,7 +39,7 @@ namespace entities {
  * errors. The error contains the cpp-file, line number, a user given description and,
  * if available, the system error message.
  */
-class Error : std::runtime_error {
+class Error : public std::runtime_error {
  public:
   inline int getLine(void) const { return line; }
   inline std::string getFile(void) const { return file; }
