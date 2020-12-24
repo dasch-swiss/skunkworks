@@ -162,6 +162,9 @@ TEST(XsdAnyUri, Generic) {
       "file://gugus/gaga.xml");
   EXPECT_THROW(xsd::AnyUri("://gaga/gugus"), xsd::Error);
 
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("mailto:lukas.rosenthaler@unibas.ch")),
+            "mailto:lukas.rosenthaler@unibas.ch");
+
 /*
   xsd::AnyUri any_uri;
   EXPECT_NO_THROW(any_uri = "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
