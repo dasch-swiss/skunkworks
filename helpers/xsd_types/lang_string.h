@@ -22,9 +22,9 @@ class LangString {
 
   LangString(const Language &lang, const xsd::String &text);
 
-  LangString(const std::string &lang, const xsd::String &text);
+  LangString(const std::string &lang, const std::string &text);
 
-  LangString(const LangString &ls) = default;
+  LangString(const LangString &lang_string) = default;
 
   xsd::String &operator[](const std::string  &lang);
 
