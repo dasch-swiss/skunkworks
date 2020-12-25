@@ -76,6 +76,8 @@ class AnyUri : public DataType {
 
   bool operator==(const AnyUri &other) const ;
 
+  inline bool operator!=(const AnyUri &other) const { return !(*this == other); }
+
   void set(const std::string &strval) override;
 
  private:
