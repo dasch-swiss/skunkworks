@@ -2,6 +2,17 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
+cc_test(
+    name = "value_test",
+    srcs = ["value_test.cc"],
+    copts = ["-Iexternal/gtest/include"],
+    deps = [
+        ":values",
+        "//helpers/xsd_types:xsd_types",
+        "@gtest//:main"
+    ],
+)
+
 
 cc_library(
     name = "values",

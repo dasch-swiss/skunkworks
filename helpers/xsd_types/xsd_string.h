@@ -86,6 +86,8 @@ class String : public DataType {
     enforce_restrictions();
   }
 
+  virtual ~String() {}
+
   /*!
    * Setter for string
    * @param strval

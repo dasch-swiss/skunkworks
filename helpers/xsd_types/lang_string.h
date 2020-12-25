@@ -7,25 +7,36 @@
 
 #include <unordered_map>
 #include <string>
+#include <vector>
+
+#include "xsd_restriction.h"
+#include "xsd_string.h"
+#include "xsd_language.h"
+
 namespace xsd {
 
-enum Language {
-  en,
-  de,
-  fr,
-  it,
-  rm
-};
-
 class LangString {
- private:
-  std::unordered_map<Language, std::string> lang_string_;
  public:
-  LangString(Language lang, const std::string text);
 
-  std::string operator[](Language lang);
+  LangString() = default;
 
-  void remove(Language lang);
+  LangString(const Language &lang, const xsd::String &text);
+
+  LangString(const std::string &lang, const xsd::String &text);
+
+  LangString(const LangString &ls) = default;
+
+  xsd::String &operator[](const std::string  &lang);
+
+  xsd::String &operator[](const Language &lang);
+
+  void add(const Language &language, const xsd::String &text);
+
+  void remove(const Language &lang);
+
+ private:
+  std::unordered_map<std::string, xsd::String> lang_string_;
+
 };
 }
 
