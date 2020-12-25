@@ -9,7 +9,7 @@
 #include "helpers/uuid.h"
 #include "helpers/error.h"
 
-static const char __file__[] = __FILE__;
+static const char file_[] = __FILE__;
 
 namespace dsp {
 
@@ -19,11 +19,14 @@ Project::Project() {
 }
 
 void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
+  if (data_model->project_id() != xsd::AnyUri()) {
+    throw Error(file_, __LINE__, "Data model has already project_id: " + static_cast<std::string>(data_model->project_id()));
+  }
   try {
     std::shared_ptr<DataModel> tmp = data_models_.at(data_model->id());
     std::ostringstream ss;
     ss << "Data model \"" << data_model->id() << "\" already exists in project \"" << id_ << "\"!";
-    throw (Error(__file__, __LINE__, ss.str()));
+    throw (Error(file_, __LINE__, ss.str()));
   }
   catch (const std::out_of_range &err) {
     data_models_[data_model->id()] = data_model;
@@ -47,7 +50,9 @@ std::optional<DataModelPtr> Project::remove_data_model(const xsd::AnyUri &data_m
     return {};
   } else {
     data_models_.erase(data_model_id);
-    return res->second;
+    DataModelPtr data_model_ptr = res->second;
+    data_model_ptr->project_id(xsd::AnyUri());
+    return data_model_ptr;
   }
 
 }
