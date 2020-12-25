@@ -46,7 +46,7 @@ std::unordered_map<std::string, std::string> AnyUri::protocol_schemes = {
     {"git", R"((git://)([\w\.]+)([\w/\-\.]+)?)"},
     {"http", R"((http://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
     {"https", R"((https://)([\w]+:)?([\w]+@)?([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(#[\w]*)?(\?[\w&=]+)?(.*)?)"}, // [user[:password]@]host[:port][/path][#fragment][?key=[val][&key[=val]]
-    {"mailto", "(mailto:)([^@]+@)([^\?]+\?)(.*)?"},
+    {"mailto", R"((mailto:)([\w\.]+)@([\w\.]+))"},
     {"s3", R"((s3://)([a-z0-9\-]{3,63})/([\w/\-\.\*\(\)!']+)?)"},
     {"urn", R"((urn:)([\w]+):(.*))"},
     {"ws", R"((ws://)([\w\.]+)(:[0-9]{1,6})?([\w/\-\.]+)?(\?[\w&=]+)?(.*)?)"},
@@ -220,6 +220,11 @@ void AnyUri::parse(const std::string &strval) {
           options.erase(0, 1);
           options_ = split(options, '?');
         }
+      } else if (protocol_ == "mailto") {
+        user_ = ws2s(match[2].str());
+        has_user_ = true;
+        host_ = ws2s(match[3].str());
+        has_host_ = true;
       } else if (protocol_ == "file") {
         if (match[2].matched && match[3].matched) {
           user_ = ws2s(match[2].str());
@@ -285,6 +290,7 @@ std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
     if (protocol_ == "ws") out_stream << "ws://";
     if (protocol_ == "wss") out_stream << "wss://";
     if (protocol_ == "file") out_stream << ((has_host_) ? "file://" : "file:");
+    if (protocol_ == "mailto") out_stream << "mailto:";
   }
   if (has_user_) out_stream << user_;
   if (has_password_) out_stream << ':' << password_;
