@@ -24,18 +24,17 @@ TEST_CASE("Simple catch2 tests", "[catch2|") {
   REQUIRE(my_data_model->project_id() == my_project->id());
 
   dsp::DataModelPtr my_data_model2 = std::make_shared<dsp::DataModel>("test-model2");
+
   CHECK_NOTHROW(my_project->add_data_model(my_data_model2));
   REQUIRE(my_data_model2->project_id() == my_project->id());
 
-  //CHECK_THROWS_WITH(my_project->add_data_model(my_data_model2), Catch::Matchers::Contains(std::string("Data model")));
-  try {
-    my_project->add_data_model(my_data_model2);
-  } catch (const dsp::Error &err) {
-    std::cerr << err;
-  }
+  CHECK_THROWS_WITH(my_project->add_data_model(my_data_model2), Catch::Matchers::Contains(std::string("Data model")));
 
   REQUIRE_THROWS_AS(my_project->add_data_model(my_data_model2),  dsp::Error);
   REQUIRE_THROWS_WITH(my_project->add_data_model(my_data_model2),  Catch::Contains("Data model"));
+
+  CHECK_NOTHROW(my_project->remove_data_model(my_data_model2->id()));
+  REQUIRE(my_data_model2->project_id() == xsd::AnyUri());
 
 
   std::optional<dsp::DataModelPtr> pp = my_project->get_data_model(my_data_model->id());

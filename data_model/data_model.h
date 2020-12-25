@@ -26,17 +26,19 @@ class DataModel {
   inline xsd::AnyUri id() { return id_; }
   inline std::string shortname() { return shortname_; }
   inline xsd::AnyUri project_id() { return project_id_; }
-  inline void project_id(const xsd::AnyUri &project_id) { project_id_ = project_id; }
 
   void add_resource_class(const std::shared_ptr<ResourceClass> &resource_class);
-
+  friend Project; // gets access to call project_id(...) to set the project id
  private:
 
   xsd::AnyUri id_;
   std::string shortname_;
   xsd::AnyUri project_id_;
-  std::unordered_map<xsd::AnyUri, std::shared_ptr<ResourceClass>> resources_;
+  std::unordered_map<xsd::AnyUri, std::shared_ptr<ResourceClass>> resource_classes_;
   std::unordered_map<std::string, std::shared_ptr<Property>> properties_;
+
+  inline void project_id(const xsd::AnyUri &project_id) { project_id_ = project_id; }
+
 };
 
 using DataModelPtr = std::shared_ptr<DataModel>;
