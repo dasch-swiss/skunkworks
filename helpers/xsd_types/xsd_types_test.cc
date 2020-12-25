@@ -33,7 +33,7 @@ TEST(XsdString_Generic_Test, Restrictions) {
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
       std::make_shared<xsd::RestrictionLength>(4))), "gaga");
   EXPECT_THROW(xsd::String("gaga",
-      std::make_shared<xsd::RestrictionLength>(5)), xsd::Error);
+      std::make_shared<xsd::RestrictionLength>(5, "This is gaga")), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
       std::make_shared<xsd::RestrictionMinLength>(4))), "gaga");

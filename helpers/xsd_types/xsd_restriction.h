@@ -37,6 +37,8 @@ class Restriction {
    * @return "true" if restriction is fullfilled, "false" otherwise
    */
   [[nodiscard]] virtual Result validate(const std::string &strval) const = 0;
+ protected:
+  std::string message_;
 };
 
 /*!
@@ -48,7 +50,7 @@ class RestrictionLength final : public Restriction {
    * Constructor with the length a parameter
    * @param length Length restriction for string
    */
-  inline explicit RestrictionLength(int length) : length_(length) {}
+  inline explicit RestrictionLength(int length, std::string message = "") : length_(length) { message_ = message; }
 
   /*!
    *  Destructor (final)
@@ -61,7 +63,7 @@ class RestrictionLength final : public Restriction {
    * @return true if validation passes, otherwise false
    */
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
-    return {strval.length() == length_, "Validation of RestrictionLength failed"}; }
+    return {strval.length() == length_, message_ + ": Validation of RestrictionLength failed"}; }
 
  private:
   int length_;
@@ -76,7 +78,7 @@ class RestrictionMinLength final : public Restriction {
    * Constructor with minimal lengt as parameter
    * @param min_length Minimal length of the string
    */
-  inline explicit RestrictionMinLength(int min_length) : min_length_(min_length) {}
+  inline explicit RestrictionMinLength(int min_length, std::string message = "") : min_length_(min_length) { message_ = message; }
 
   /*!
    * Destructor (final)
@@ -89,7 +91,7 @@ class RestrictionMinLength final : public Restriction {
    * @return true if validation passes, otherwise false
    */
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
-    return { strval.length() >= min_length_, "Validation of RestrictionMinLength failed"} ;
+    return { strval.length() >= min_length_, message_ + ": Validation of RestrictionMinLength failed"} ;
   }
 
  private:
@@ -105,7 +107,7 @@ class RestrictionMaxLength final : public Restriction {
    * Constructor for the minimal length restriction
    * @param min_length Minimal length required
    */
-  inline explicit RestrictionMaxLength(int max_length) : max_length_(max_length) {}
+  inline explicit RestrictionMaxLength(int max_length, std::string message = "") : max_length_(max_length) { message_ = message; }
 
   /*!
    * Destructor (final)
@@ -118,7 +120,7 @@ class RestrictionMaxLength final : public Restriction {
    * @return true if validation passes, otherwise false
    */
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
-    return { strval.length() <= max_length_, "Validation of RestrictionMaxLength failed"};
+    return { strval.length() <= max_length_, message_ + ": Validation of RestrictionMaxLength failed"};
   }
 
  private:
@@ -134,7 +136,7 @@ class RestrictionPattern final : public Restriction {
    * Constructor for the pattern restriction
    * @param pattern A valid C++ regex pattern
    */
-  inline explicit RestrictionPattern(std::string pattern) : pattern_(std::move(pattern)) {}
+  inline explicit RestrictionPattern(std::string pattern, std::string message = "") : pattern_(std::move(pattern)) { message_ = message_; }
 
   /*!
    * Destructor (final)
@@ -147,7 +149,7 @@ class RestrictionPattern final : public Restriction {
    * @return true if validation passes, otherwise false
    */
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
-    return { std::regex_match(strval, std::regex(pattern_)), "Validation of RestrictionPattern failed" };
+    return { std::regex_match(strval, std::regex(pattern_)), message_ + ": Validation of RestrictionPattern failed" };
   }
 
  private:
@@ -165,7 +167,7 @@ class RestrictionEnumeration final : public Restriction {
    * Constructor for the enumeration restriction
    * @param enums Set of strings that indicate the allowed values for the string
    */
-  inline explicit RestrictionEnumeration(std::set<std::string> enums) : enums_(std::move(enums)) {}
+  inline explicit RestrictionEnumeration(std::set<std::string> enums, std::string message = "") : enums_(std::move(enums)) { message_ = message; }
 
   /*!
    * Destructor (final)
@@ -181,7 +183,7 @@ class RestrictionEnumeration final : public Restriction {
     for (const auto &s: enums_) {
       if (s == strval) return {true, "Validation of RestrictionEnumeration ok"};
     }
-    return {false, "Validation of RestrictionEnumeration failed"};
+    return {false, message_ + ": Validation of RestrictionEnumeration failed"};
   }
 };
 
@@ -189,19 +191,20 @@ class RestrictionMaxInclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline explicit RestrictionMaxInclusive(const std::string &strval) {
+  inline explicit RestrictionMaxInclusive(const std::string &strval, std::string message = "") {
+    message_ = message;
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dmaxval_ = std::stof(strval);
     }
   }
 
-  inline explicit RestrictionMaxInclusive(double maxval) : dmaxval_(maxval) {}
+  inline explicit RestrictionMaxInclusive(double maxval, std::string message = "") : dmaxval_(maxval) { message_ = message; }
 
   inline ~RestrictionMaxInclusive() final = default;
 
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return {dval <= dmaxval_, "Validation of RestrictionMaxInclusive failed"};
+    return {dval <= dmaxval_, message_ + ": Validation of RestrictionMaxInclusive failed"};
   }
 };
 
@@ -209,19 +212,22 @@ class RestrictionMaxExclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline explicit RestrictionMaxExclusive(const std::string &strval) {
+  inline explicit RestrictionMaxExclusive(const std::string &strval, std::string message = "") {
+    message_ = message;
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dmaxval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMaxExclusive(double maxval) : dmaxval_(maxval) {}
+  inline explicit RestrictionMaxExclusive(double maxval, std::string message = "") : dmaxval_(maxval) {
+    message_ = message;
+  }
 
   inline ~RestrictionMaxExclusive() final = default;
 
   [[nodiscard]] inline  Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return { dval < dmaxval_, "Validation of RestrictionMaxExclusive failed"};
+    return { dval < dmaxval_, message_ + "Validation of RestrictionMaxExclusive failed"};
   }
 };
 
@@ -229,19 +235,22 @@ class RestrictionMinInclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline explicit RestrictionMinInclusive(const std::string &strval) {
+  inline explicit RestrictionMinInclusive(const std::string &strval, std::string message = "") {
+    message_ = message;
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMinInclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinInclusive(double maxval, std::string message = "") : dminval_(maxval) {
+    message_ = message;
+  }
 
   inline ~RestrictionMinInclusive() final = default;
 
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return {dval >= dminval_, "Validation of RestrictionMinInclusive failed"};
+    return {dval >= dminval_, message_ + ": Validation of RestrictionMinInclusive failed"};
   }
 };
 
@@ -249,19 +258,20 @@ class RestrictionMinExclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline explicit RestrictionMinExclusive(const std::string &strval) {
+  inline explicit RestrictionMinExclusive(const std::string &strval, std::string message = "") {
+    message_ = message;
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMinExclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinExclusive(double maxval, std::string message = "") : dminval_(maxval) {}
 
   inline ~RestrictionMinExclusive() final = default;
 
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
     double dval = std::stod(strval);
-    return {dval > dminval_, "Validation of RestrictionMinExclusive failed"};
+    return {dval > dminval_, message_ + ": Validation of RestrictionMinExclusive failed"};
   }
 };
 
