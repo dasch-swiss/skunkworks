@@ -31,16 +31,24 @@ void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
     return;
   } // TODO: Use C++20 with contains ASAP!
 }
-std::shared_ptr<DataModel> Project::get_data_model(const xsd::AnyUri &id) {
-    auto res = data_models_.find(id);
+
+std::optional<DataModelPtr> Project::get_data_model(const xsd::AnyUri &data_model_id) {
+    auto res = data_models_.find(data_model_id);
     if (res == data_models_.end()) {
-      return nullptr;
+      return {};
     } else {
       return res->second;
     }
 }
 
-std::shared_ptr<DataModel> Project::remove_data_model(const xsd::AnyUri &id) {
+std::optional<DataModelPtr> Project::remove_data_model(const xsd::AnyUri &data_model_id) {
+  auto res = data_models_.find(data_model_id);
+  if (res == data_models_.end()) {
+    return {};
+  } else {
+    data_models_.erase(data_model_id);
+    return res->second;
+  }
 
 }
 

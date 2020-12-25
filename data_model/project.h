@@ -28,9 +28,9 @@ class Project {
 
   void add_data_model(const std::shared_ptr<DataModel> &data_model);
 
-  std::shared_ptr<DataModel> get_data_model(const xsd::AnyUri &data_model_id);
+  std::optional<DataModelPtr> get_data_model(const xsd::AnyUri &data_model_id);
 
-  void remove_data_model(const xsd::AnyUri &data_model_id);
+  std::optional<DataModelPtr> remove_data_model(const xsd::AnyUri &data_model_id);
 
   inline xsd::AnyUri id() const { return id_; }
 

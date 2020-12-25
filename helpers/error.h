@@ -12,7 +12,7 @@
 
 namespace dsp {
 
-class Error : std::runtime_error {
+class Error : public std::runtime_error {
  protected:
   int line;            //!< Linenumber where the exception has been throwns
   std::string file;    //!< Name of source code file where the exception has been thrown
