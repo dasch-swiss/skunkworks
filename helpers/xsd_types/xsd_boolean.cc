@@ -18,6 +18,17 @@ void Boolean::set(const std::string &strval) {
   enforce_restrictions();
 }
 
+Boolean &Boolean::operator=(const std::string &strval) {
+  set(strval);
+  return *this;
+}
+
+Boolean &Boolean::operator=(bool val) {
+  val_ = val;
+  return *this;
+}
+
+
 void Boolean::parse(const std::string &strval) {
   if (strval == "true" || strval == "1") {
     val_ = true;

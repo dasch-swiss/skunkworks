@@ -320,7 +320,7 @@ TEST(XsdLanguage, Generic) {
   EXPECT_THROW(xsd::Language("xx"), xsd::Error);
 }
 
-TEST(XsdLangString, Geberic) {
+TEST(XsdLangString, Generic) {
   EXPECT_NO_THROW(xsd::LangString gaga("en", xsd::String("This is a test")));
   xsd::LangString lang_string;
   lang_string["en"] = xsd::String("What is this");
