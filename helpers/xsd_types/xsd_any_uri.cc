@@ -4,16 +4,37 @@
 
 #include <string>
 #include <sstream>
-#include <tuple>
 #include <stdexcept>
 #include <regex>
 #include <sstream>
+#include <string>
+#include <iostream>
+#include <locale>
+#include <codecvt>
+
 
 #include "xsd_error.h"
 #include "xsd_any_uri.h"
 #include "splitter.h"
 
 static const char file_[] = __FILE__;
+
+static std::wstring s2ws(const std::string& str)
+{
+  using convert_typeX = std::codecvt_utf8<wchar_t>;
+  std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+  return converterX.from_bytes(str);
+}
+
+static std::string ws2s(const std::wstring& wstr)
+{
+  using convert_typeX = std::codecvt_utf8<wchar_t>;
+  std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+  return converterX.to_bytes(wstr);
+}
+
 
 namespace xsd {
 
@@ -71,154 +92,155 @@ void AnyUri::parse(const std::string &strval) {
   if (pos != std::string::npos) {
     protocol_ = strval.substr(0, pos);
     has_protocol_ = true;
-    std::string pattern;
+    std::wstring pattern;
     try {
-      pattern = protocol_schemes.at(protocol_);
+      pattern = s2ws(protocol_schemes.at(protocol_));
     } catch (const std::out_of_range &err) {
       throw Error(file_, __LINE__, "Unknown protocol!");
     }
-    std::regex re(pattern, std::regex::ECMAScript);
-    std::cmatch match;
-    if (std::regex_match(strval.c_str(), match, re)) {
+    std::wregex re(pattern, std::regex::ECMAScript);
+    std::wsmatch match;
+    std::wstring  wstrval = s2ws(strval);
+    if (std::regex_match(wstrval, match, re)) {
       if ((protocol_ == "http") || (protocol_ == "https")) {
         if (match[2].matched && match[3].matched) {
-          user_ = match[2].str();
+          user_ = ws2s(match[2].str());
           dellast(user_, ':');
           has_user_ = true;
-          password_ = match[2].str();
+          password_ = ws2s(match[2].str());
           dellast(password_, '@');
           has_password_ = true;
         } else if (match[3].matched) {
-          user_ = match[2].str();
+          user_ = ws2s(match[2].str());
           dellast(user_, '@');
           has_user_ = true;
         }
 
         if (match[4].matched) {
           has_host_ = true;
-          host_ = match[4].str();
+          host_ = ws2s(match[4].str());
         }
         if (match[5].matched) {
           has_port_ = true;
-          std::string port = match[5].str();
+          std::string port = ws2s(match[5].str());
           port.erase(0, 1);
           port_ = std::stoi(port);
         }
         if (match[6].matched) {
           has_path_ = true;
-          std::string path = match[6].str();
+          std::string path = ws2s(match[6].str());
           path = path.erase(0, 1);
           path_ = split(path, '/');
           path_sep_ = '/';
         }
         if (match[7].matched) {
           has_fragment_ = true;
-          fragment_ = match[7].str();
+          fragment_ = ws2s(match[7].str());
           fragment_.erase(0, 1);
         }
         if (match[8].matched) {
           has_options_ = true;
-          std::string options = match[8].str();
+          std::string options = ws2s(match[8].str());
           options.erase(0, 1);
           options_ = split(options, '?');
         }
       } else if (protocol_ == "doi") {
         if (match[2].matched) {
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
           has_host_ = true;
         }
         if (match[3].matched) {
-          path_.push_back(match[3].str());
+          path_.push_back(ws2s(match[3].str()));
           has_path_ = true;
           path_sep_ = '/';
         }
       } else if (protocol_ == "git") {
         if (match[2].matched) {
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
           has_host_ = true;
         }
         if (match[3].matched) {
           has_path_ = true;
-          std::string path = match[3].str();
+          std::string path = ws2s(match[3].str());
           path = path.erase(0, 1);
           path_ = split(path, '/');
           path_sep_ = '/';
         }
       } else if (protocol_ == "ark") {
         if (match[2].matched) {
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
           has_host_ = true;
         }
         if (match[3].matched) {
-          path_.push_back(match[3].str());
+          path_.push_back(ws2s(match[3].str()));
           has_path_ = true;
           path_sep_ = '/';
         }
       } else if (protocol_ == "s3") {
         if (match[2].matched) {
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
           has_host_ = true;
         }
         if (match[3].matched) {
-          path_.push_back(match[3].str());
+          path_.push_back(ws2s(match[3].str()));
           has_path_ = true;
           path_sep_ = '/';
         }
       } else if (protocol_ == "urn") {
         if (match[2].matched) {
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
           has_host_ = true;
         }
         if (match[3].matched) {
-          path_.push_back(match[3].str());
+          path_.push_back(ws2s(match[3].str()));
           has_path_ = true;
           path_sep_ = ':';
         }
       } else if ((protocol_ == "ws") || (protocol_ == "wss")) {
         if (match[2].matched) {
           has_host_ = true;
-          host_ = match[2].str();
+          host_ = ws2s(match[2].str());
         }
         if (match[3].matched) {
           has_port_ = true;
-          std::string port = match[3].str();
+          std::string port = ws2s(match[3].str());
           port.erase(0, 1);
           port_ = std::stoi(port);
         }
         if (match[4].matched) {
           has_path_ = true;
-          std::string path = match[4].str();
+          std::string path = ws2s(match[4].str());
           path = path.erase(0, 1);
           path_ = split(path, '/');
           path_sep_ = '/';
         }
         if (match[5].matched) {
           has_options_ = true;
-          std::string options = match[5].str();
+          std::string options = ws2s(match[5].str());
           options.erase(0, 1);
           options_ = split(options, '?');
         }
       } else if (protocol_ == "file") {
         if (match[2].matched && match[3].matched) {
-          user_ = match[2].str();
+          user_ = ws2s(match[2].str());
           dellast(user_, ':');
           has_user_ = true;
-          password_ = match[2].str();
+          password_ = ws2s(match[2].str());
           dellast(password_, '@');
           has_password_ = true;
         } else if (match[3].matched) {
-          user_ = match[2].str();
+          user_ = ws2s(match[2].str());
           dellast(user_, '@');
           has_user_ = true;
         }
 
         if (match[4].matched) {
           has_host_ = true;
-          host_ = match[4].str();
+          host_ = ws2s(match[4].str());
         }
         if (match[5].matched) {
           has_path_ = true;
-          std::string path = match[5].str();
+          std::string path = ws2s(match[5].str());
           path = path.erase(0, 1);
           path_ = split(path, '/');
           path_sep_ = '/';
@@ -251,6 +273,7 @@ void AnyUri::parse(const std::string &strval) {
 }
 
 std::ostream &AnyUri::print_to_stream(std::ostream &out_stream) const {
+  out_stream.imbue(std::locale::classic());
   if (has_protocol_) {
     if (protocol_ == "http") out_stream << "http://";
     if (protocol_ == "https") out_stream << "https://";
