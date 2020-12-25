@@ -1,0 +1,21 @@
+#include <string>
+#include <regex>
+#include <iostream>
+#include <locale>
+#include <codecvt>
+
+int main() {
+  std::locale old = std::locale::global(std::locale("en_US.UTF-8"));
+  
+  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t> > converter;
+
+  std::wstring gaga = converter.from_bytes("ab:äöü");
+  std::cerr << "1) ---------------" << std::endl;
+  std::wstring pattern = converter.from_bytes("^(:|[\\w])+$");
+  std::cerr << "2) ---------------" << std::endl;
+  if (std::regex_match(gaga, std::wregex(pattern))) {
+    std::cerr << "match!" << std::endl;
+  } else {
+    std::cerr << "no match!" << std::endl;
+  }
+}

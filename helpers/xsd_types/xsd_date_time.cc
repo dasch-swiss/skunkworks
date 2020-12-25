@@ -332,13 +332,3 @@ bool DateTime::operator<=(const DateTime &other) const {
 
 }
 
-namespace std {
-
-template<> struct hash<xsd::DateTime> {
-  std::size_t  operator()(xsd::DateTime const &date_time) const noexcept {
-    std::string strval = static_cast<std::string>(date_time);
-    return std::hash<std::string>{}(strval);
-  }
-};
-
-}

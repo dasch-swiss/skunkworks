@@ -57,6 +57,8 @@ class DataType {
 
   virtual void set(const std::string &strval) =  0;
 
+  void add_restriction(const std::shared_ptr<Restriction> &restriction) { restrictions_.push_back(restriction); }
+
   /*!
    * Friend method to use the "<<" operator for xsd:values
    *

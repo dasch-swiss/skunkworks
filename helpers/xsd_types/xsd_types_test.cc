@@ -21,6 +21,12 @@ TEST(XsdString, Generic) {
   xsd::String gaga;
   EXPECT_NO_THROW(gaga = "That's it...");
   EXPECT_EQ(static_cast<std::string>(gaga), "That's it...");
+  xsd::String gugus(std::make_shared<xsd::RestrictionLength>(5));
+  try {
+    gugus = xsd::String("gaga", std::make_shared<xsd::RestrictionLength>(15));
+  } catch (const xsd::Error &err) {
+    std::cerr << "***********" << std::endl;
+   }
 }
 
 TEST(XsdString_Generic_Test, Restrictions) {

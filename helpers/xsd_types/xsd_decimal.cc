@@ -68,12 +68,3 @@ std::ostream &Decimal::print_to_stream(std::ostream &out_stream) const {
 
 }
 
-namespace std {
-
-template<> struct hash<xsd::Decimal> {
-  std::size_t  operator()(xsd::Decimal const &value) const noexcept {
-    return std::hash<double>{}(value.getVal());
-  }
-};
-
-}

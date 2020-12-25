@@ -96,8 +96,13 @@ class DateTime : public DataType {
 namespace std {
 
 template<> struct hash<xsd::DateTime> {
-  std::size_t  operator()(xsd::DateTime const &date_time) const noexcept;
+  std::size_t  operator()(xsd::DateTime const &date_time) const noexcept {
+    std::string strval = static_cast<std::string>(date_time);
+    return std::hash<std::string>{}(strval);
+  }
 };
 
 }
+
+
 #endif //SKUNKWORKS_DATE_TIME_H

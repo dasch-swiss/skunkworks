@@ -20,6 +20,8 @@ class Agent {
 
 };
 
+using AgentPtr = std::shared_ptr<Agent>;
+
 }
 
 

@@ -7,6 +7,9 @@
 
 #include <string>
 
+#include "data_model.h"
+#include "project.h"
+
 namespace dsp {
 
 class Configuration {
@@ -19,17 +22,20 @@ class Configuration {
    * Get the configuration instance
    * @return Configuration instance
    */
-  static Configuration *init();
+  static Configuration * init();
 
-  inline std::string resclass_prefix() const { return resclass_prefix_; }
-  inline std::string property_prefix() const { return property_prefix_; }
+  std::string resclass_prefix(const std::shared_ptr<DataModel> &in_data_model) const ;
+  std::string property_prefix(const std::shared_ptr<DataModel> &in_data_model) const ;
+  std::string value_prefix(const std::shared_ptr<Project> &project) const ;
 
  private:
   Configuration();
 
   static Configuration *config_ptr;
+  std::string data_model_prefix_;
   std::string resclass_prefix_;
-  std::string  property_prefix_;
+  std::string property_prefix_;
+  std::string value_prefix_;
 };
 
 }
