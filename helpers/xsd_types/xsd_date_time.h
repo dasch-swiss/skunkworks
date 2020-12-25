@@ -10,6 +10,7 @@
 #include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <tuple>
 
 #include "xsd_error.h"
 #include "xsd_data_type.h"
@@ -52,9 +53,25 @@ class DateTime : public DataType {
            int hour, int min, float second,
            int tz_sign = TZ_EAST_GMT, int tz_hour = 0, int tz_min = 0);
 
+  /*!
+   * Set a new value as std::string
+   * @param strval
+   */
   void set(const std::string &strval) override ;
 
   DateTime &operator=(const std::string &strval) override;
+
+  bool operator==(const DateTime &other) const ;
+
+  bool operator!=(const DateTime &other) const ;
+
+  bool operator>(const DateTime &other) const;
+
+  bool operator>=(const DateTime &other) const;
+
+  bool operator<(const DateTime &other) const;
+
+  bool operator<=(const DateTime &other) const;
 
  private:
   int year_;
@@ -70,8 +87,17 @@ class DateTime : public DataType {
   void parse(const std::string &str);
   std::ostream &print_to_stream(std::ostream &out_stream) const override;
   void validate() const;
+
+  std::tuple<int, int>rectify_time_zone(void) const ;
 };
 
 }
 
+namespace std {
+
+template<> struct hash<xsd::DateTime> {
+  std::size_t  operator()(xsd::DateTime const &date_time) const noexcept;
+};
+
+}
 #endif //SKUNKWORKS_DATE_TIME_H

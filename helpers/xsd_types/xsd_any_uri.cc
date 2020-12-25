@@ -351,6 +351,18 @@ AnyUri::AnyUri(const std::string &strval, const std::vector<std::shared_ptr<Rest
   enforce_restrictions();
 }
 
+bool AnyUri::operator==(const AnyUri &other) const {
+  if (protocol_ != other.protocol_) return false;
+  if (host_ != other.host_) return false;
+  if (user_ != other.user_) return false;
+  if (password_ != other.password_) return false;
+  if (port_ != other.port_) return false;
+  if (path_ != other.path_) return false;
+  if (fragment_ != other.fragment_) return false;
+  if (options_ != other.options_) return false;
+  return true;
+}
+
 void AnyUri::set(const std::string &strval) {
   parse(strval);
   enforce_restrictions();
@@ -360,5 +372,16 @@ AnyUri &AnyUri::operator=(const std::string &strval) {
   set(strval);
   return *this;
 }
+
+}
+
+namespace std {
+
+template<> struct hash<xsd::AnyUri> {
+std::size_t  operator()(xsd::AnyUri const &any_uri) const noexcept {
+  std::string strval = static_cast<std::string>(any_uri);
+  return std::hash<std::string>{}(strval);
+}
+};
 
 }

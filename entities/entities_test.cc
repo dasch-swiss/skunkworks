@@ -6,7 +6,7 @@
 
 #include "property.h"
 #include "resource_class.h"
-#include "value_class.h"
+//#include "value_class.h"
 
 TEST(EntitiesTest, GetGreet) {
 

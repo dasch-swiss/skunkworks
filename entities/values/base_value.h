@@ -9,16 +9,16 @@
 #include <string>
 
 #include "helpers/xsd_types/xsd.h"
-#include "agent.h"
+#include "entities/agent.h"
 
 namespace dsp {
 
-class Value {
+class BaseValue {
  public:
 
-  inline Value() { modified_ = false; }
+  inline BaseValue() { modified_ = false; }
 
-  Value(std::shared_ptr<Agent> created_by, const xsd::LangString &comment);
+  BaseValue(std::shared_ptr<Agent> created_by, const xsd::LangString &comment);
 
   /**
    * Getter for creation_date
@@ -54,7 +54,7 @@ class Value {
   xsd::LangString delete_comment_;
   xsd::LangString comment_;
   bool modified_;
-}
+};
 
 }
 

@@ -11,13 +11,17 @@
 #include <unordered_map>
 
 #include "helpers/xsd_types/xsd.h"
+#include "configuration.h"
+#include "agent.h"
+#include "project.h"
+#include "class_obj.h"
 
 
 namespace dsp {
 
 class Property; // forward declaration
 
-class ResourceClass {
+class ResourceClass : public ClassObj {
 
   typedef struct has_property {
     std::shared_ptr<Property> property_;
@@ -25,29 +29,21 @@ class ResourceClass {
     int max_count_;
   } HasProperty;
 
- private:
-  xsd::AnyUri id_;
-  xsd::String class_label_;
-  xsd::String class_description_;
-  std::shared_ptr<ResourceClass> sub_class_of_;
-  std::unordered_map<std::string, HasProperty> has_properties_;
-
  public:
+  ResourceClass() = default;
   /*!
    *
    * @param class_label
    * @param class_description
    * @param sub_class_of
    */
-  ResourceClass(const xsd::String class_label,
-                const xsd::String class_description,
-                const std::shared_ptr<ResourceClass> sub_class_of);
+  ResourceClass(
+      std::shared_ptr<Project> project,
+      std::shared_ptr<Agent> agent,
+      xsd::String class_label,
+      xsd::String class_description,
+      std::shared_ptr<ResourceClass> sub_class_of);
 
-  inline xsd::AnyUri id() { return id_; }
-
-  inline std::string class_label() { return class_label_; }
-
-  inline std::string class_description() { return class_description_; }
 
   void add_property(const std::shared_ptr<Property> property, int min_count, int max_count);
 
@@ -58,6 +54,11 @@ class ResourceClass {
               "class_label=" << rhs.class_label_ << std::endl;
     return outStream;
   }
+
+ private:
+  std::shared_ptr<ResourceClass> sub_class_of_;
+  std::unordered_map<std::string, HasProperty> has_properties_;
+
 
 };
 

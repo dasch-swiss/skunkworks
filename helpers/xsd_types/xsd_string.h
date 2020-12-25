@@ -100,6 +100,10 @@ class String : public DataType {
 
   inline String &operator=(const std::string &strval) override { strval_ = strval; return *this; }
 
+  bool operator==(const String &other) const {
+    return (strval_ == other.strval_);
+  }
+
  protected:
   std::string strval_;
 
@@ -127,4 +131,13 @@ class String : public DataType {
 
 }
 
+namespace std {
+
+template<> struct hash<xsd::String> {
+  std::size_t  operator()(xsd::String const &strval) const noexcept {
+    return std::hash<std::string>{}(strval.get());
+  }
+};
+
+}
 #endif //SKUNKWORKS_HELPERS_XSD_TYPES_XSD_STRING_H_

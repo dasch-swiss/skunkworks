@@ -91,11 +91,13 @@ class Integer : public DataType {
 
   Integer &operator=(int64_t val);
 
+  bool operator==(const Integer &other) const ;
+
   /*!
    * Getter for value as int64_t
    * @return
    */
-  inline virtual int64_t get() { return val_; }
+  inline int64_t getVal() const { return val_; }
 
   void set(const std::string &strval) override ;
 
@@ -111,6 +113,12 @@ class Integer : public DataType {
 
 
 };
+
+}
+
+namespace std {
+
+template<> struct hash<xsd::Integer>;
 
 }
 

@@ -53,6 +53,10 @@ Integer &Integer::operator=(int64_t val) {
   return *this;
 }
 
+bool Integer::operator==(const Integer &other) const  {
+  return val_ == other.val_;
+}
+
 void Integer::parse(const std::string &strval) {
   val_ = 0;
   if (std::regex_match(strval, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
@@ -68,5 +72,15 @@ std::ostream &Integer::print_to_stream(std::ostream &out_stream) const {
   out_stream << val_;
   return out_stream;
 }
+
+}
+
+namespace std {
+
+template<> struct hash<xsd::Integer> {
+  std::size_t  operator()(xsd::Integer const &value) const noexcept {
+    return std::hash<int64_t>{}(value.getVal());
+  }
+};
 
 }
