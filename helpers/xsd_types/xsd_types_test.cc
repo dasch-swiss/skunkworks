@@ -110,7 +110,6 @@ TEST(XsdToken, Generic) {
   EXPECT_EQ(stt, "gaga gugus newline");
 }
 
-
 TEST(XsdAnyUri, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org")),
       "http://example.org");
@@ -346,5 +345,6 @@ TEST(XsdLangString, Generic) {
   EXPECT_EQ(static_cast<std::string>(res), "Was ist das");
   xsd::String res2 = lang_string["xx"];
   EXPECT_EQ(static_cast<std::string>(res2), "");
-
+  //xsd::String res3 = lang_string.get(xsd::Language("fr"));
+  //EXPECT_EQ(static_cast<std::string>(res3), "Was ist das");
 }
