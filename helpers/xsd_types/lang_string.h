@@ -36,6 +36,8 @@ class LangString {
 
   const xsd::String get(const Language &lang);
 
+  const xsd::String get(const std::string &lang);
+
   void add(const Language &language, const xsd::String &text);
 
   void remove(const Language &lang);

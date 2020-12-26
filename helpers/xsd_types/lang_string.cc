@@ -36,6 +36,17 @@ const xsd::String LangString::get(const Language &lang) {
   return xsd::String();
 }
 
+const xsd::String LangString::get(const std::string &lang) {
+  try {
+    return lang_string_.at(lang);
+  } catch (const std::out_of_range &err) {
+    for (const auto &s: lang_string_) {
+      if (!s.second.empty()) return s.second;
+    }
+  }
+  return xsd::String();
+}
+
 void LangString::add(const Language &lang, const xsd::String &text) {
   lang_string_[static_cast<std::string>(lang)] = text;
 }
