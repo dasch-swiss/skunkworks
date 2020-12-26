@@ -29,9 +29,7 @@ const xsd::String LangString::get(const Language &lang) {
   try {
     return lang_string_.at(lang);
   } catch (const std::out_of_range &err) {
-    std::cerr << "+++++++++++" << std::endl;
     for (const auto &s: lang_string_) {
-      std::cerr << "---->" << s.first << "|" << s.second << std::endl;
       if (!s.second.empty()) return s.second;
     }
   }
