@@ -9,6 +9,7 @@
 #include <memory>
 #include <set>
 #include <regex>
+#include <iostream>
 
 #ifndef SKUNKWORKS_HELPERS_XSD_TYPES_XSD_RESTRICTION_H_
 #define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_RESTRICTION_H_
@@ -26,6 +27,11 @@ class Restriction {
     bool success;
     std::string msg;
   };
+
+  Restriction() = default;
+
+  inline explicit Restriction(const std::string &message) : message_(message) {};
+
   /*!
    * Virtual destructor (is required!)
    */
@@ -50,7 +56,8 @@ class RestrictionLength final : public Restriction {
    * Constructor with the length a parameter
    * @param length Length restriction for string
    */
-  inline explicit RestrictionLength(int length, std::string message = "") : length_(length) { message_ = message; }
+  inline explicit RestrictionLength(int length) : Restriction(), length_(length) {}
+  inline explicit RestrictionLength(int length, const std::string &message) : Restriction(message), length_(length) {}
 
   /*!
    *  Destructor (final)
@@ -78,7 +85,8 @@ class RestrictionMinLength final : public Restriction {
    * Constructor with minimal lengt as parameter
    * @param min_length Minimal length of the string
    */
-  inline explicit RestrictionMinLength(int min_length, std::string message = "") : min_length_(min_length) { message_ = message; }
+  inline explicit RestrictionMinLength(int min_length) : min_length_(min_length) {}
+  inline explicit RestrictionMinLength(int min_length, const std::string &message) : Restriction(message), min_length_(min_length) {}
 
   /*!
    * Destructor (final)
@@ -107,7 +115,8 @@ class RestrictionMaxLength final : public Restriction {
    * Constructor for the minimal length restriction
    * @param min_length Minimal length required
    */
-  inline explicit RestrictionMaxLength(int max_length, std::string message = "") : max_length_(max_length) { message_ = message; }
+  inline explicit RestrictionMaxLength(int max_length) : max_length_(max_length) {}
+  inline explicit RestrictionMaxLength(int max_length, const std::string &message) : Restriction(message), max_length_(max_length) {}
 
   /*!
    * Destructor (final)
@@ -136,7 +145,8 @@ class RestrictionPattern final : public Restriction {
    * Constructor for the pattern restriction
    * @param pattern A valid C++ regex pattern
    */
-  inline explicit RestrictionPattern(std::string pattern, std::string message = "") : pattern_(std::move(pattern)) { message_ = message_; }
+  inline explicit RestrictionPattern(std::string pattern) : pattern_(std::move(pattern))  {}
+  inline explicit RestrictionPattern(std::string pattern, const std::string &message) : Restriction(message), pattern_(std::move(pattern)) {}
 
   /*!
    * Destructor (final)
@@ -167,7 +177,8 @@ class RestrictionEnumeration final : public Restriction {
    * Constructor for the enumeration restriction
    * @param enums Set of strings that indicate the allowed values for the string
    */
-  inline explicit RestrictionEnumeration(std::set<std::string> enums, std::string message = "") : enums_(std::move(enums)) { message_ = message; }
+  inline explicit RestrictionEnumeration(const std::set<std::string> &enums) : enums_(enums) { }
+  inline explicit RestrictionEnumeration(const std::set<std::string> &enums, const std::string &message) : Restriction(message), enums_(enums) { }
 
   /*!
    * Destructor (final)
@@ -191,14 +202,20 @@ class RestrictionMaxInclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline explicit RestrictionMaxInclusive(const std::string &strval, std::string message = "") {
-    message_ = message;
+  inline explicit RestrictionMaxInclusive(const std::string &strval) {
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dmaxval_ = std::stof(strval);
     }
   }
 
-  inline explicit RestrictionMaxInclusive(double maxval, std::string message = "") : dmaxval_(maxval) { message_ = message; }
+  inline explicit RestrictionMaxInclusive(const std::string &strval, const std::string &message) : Restriction(message) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
+      dmaxval_ = std::stof(strval);
+    }
+  }
+
+  inline explicit RestrictionMaxInclusive(double maxval) : dmaxval_(maxval) {}
+  inline explicit RestrictionMaxInclusive(double maxval, const std::string &message) : Restriction(message), dmaxval_(maxval) {  }
 
   inline ~RestrictionMaxInclusive() final = default;
 
@@ -212,16 +229,19 @@ class RestrictionMaxExclusive final : public Restriction {
  private:
   double dmaxval_;
  public:
-  inline explicit RestrictionMaxExclusive(const std::string &strval, std::string message = "") {
-    message_ = message;
+  inline explicit RestrictionMaxExclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
+      dmaxval_ = std::stod(strval);
+    }
+  }
+  inline explicit RestrictionMaxExclusive(const std::string &strval, const std::string &message) : Restriction(message) {
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dmaxval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMaxExclusive(double maxval, std::string message = "") : dmaxval_(maxval) {
-    message_ = message;
-  }
+  inline explicit RestrictionMaxExclusive(double maxval) : dmaxval_(maxval) { }
+  inline explicit RestrictionMaxExclusive(double maxval, const std::string &message) : Restriction(message), dmaxval_(maxval) {}
 
   inline ~RestrictionMaxExclusive() final = default;
 
@@ -235,16 +255,19 @@ class RestrictionMinInclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline explicit RestrictionMinInclusive(const std::string &strval, std::string message = "") {
-    message_ = message;
+  inline explicit RestrictionMinInclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
+      dminval_ = std::stod(strval);
+    }
+  }
+  inline explicit RestrictionMinInclusive(const std::string &strval, const std::string message) : Restriction(message) {
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMinInclusive(double maxval, std::string message = "") : dminval_(maxval) {
-    message_ = message;
-  }
+  inline explicit RestrictionMinInclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinInclusive(double maxval, const std::string &message) : Restriction(message), dminval_(maxval) {}
 
   inline ~RestrictionMinInclusive() final = default;
 
@@ -258,14 +281,19 @@ class RestrictionMinExclusive final : public Restriction {
  private:
   double dminval_;
  public:
-  inline explicit RestrictionMinExclusive(const std::string &strval, std::string message = "") {
-    message_ = message;
+  inline explicit RestrictionMinExclusive(const std::string &strval) {
+    if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
+      dminval_ = std::stod(strval);
+    }
+  }
+  inline explicit RestrictionMinExclusive(const std::string &strval, const std::string &message) : Restriction(message) {
     if (std::regex_match(strval.c_str(), std::regex(R"((\+|\-)?([0-9]+)?(\.[0-9]+)?)"))) {
       dminval_ = std::stod(strval);
     }
   }
 
-  inline explicit RestrictionMinExclusive(double maxval, std::string message = "") : dminval_(maxval) {}
+  inline explicit RestrictionMinExclusive(double maxval) : dminval_(maxval) {}
+  inline explicit RestrictionMinExclusive(double maxval, const std::string &message) : Restriction(message), dminval_(maxval) {}
 
   inline ~RestrictionMinExclusive() final = default;
 

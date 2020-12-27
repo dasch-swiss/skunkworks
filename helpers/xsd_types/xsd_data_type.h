@@ -82,7 +82,7 @@ class DataType {
     for (auto r: restrictions_) {
       Restriction::Result result = r->validate(static_cast<std::string>(*this));
       if (!result.success) throw Error(__FILE__, __LINE__,
-          "The type " + xsd_type_ + "did not pass validation of restrictions: " + result.msg + "!");
+          "The type xsd::" + xsd_type_ + " did not pass validation of restrictions: " + result.msg + "!");
     }
   }
 
