@@ -15,22 +15,25 @@ namespace dsp {
 
 Project::Project() {
   id_ = uuid::generate_uuid_v4();
-  shortcode_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-fA-F0-9]{4})"));
+  shortcode_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-fA-F0-9]{4})", "Short code restriction"));
+  shortname_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-zA-Z_][\\w\\-]*)", "Short name restriction"));
+  shortname_.add_restriction(std::make_shared<xsd::RestrictionMaxLength>(64, "Short name max length=64"));
 }
 
 void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
-  if (data_model->project_id() != xsd::AnyUri()) {
-    throw Error(file_, __LINE__, "Data model has already project_id: " + static_cast<std::string>(data_model->project_id()));
+  if (data_model->project() != nullptr) { // data model
+    throw Error(file_, __LINE__, "Data model already assigned to project: " + static_cast<std::string>(data_model->project()->shortname()));
   }
   try {
     std::shared_ptr<DataModel> tmp = data_models_.at(data_model->id());
     std::ostringstream ss;
-    ss << "Data model \"" << data_model->id() << "\" already exists in project \"" << id_ << "\"!";
+    ss << "Data model \"" << data_model->shortname() << "\" (" << data_model->id() << ") already exists in project \"" <<
+    shortname_ << "\"(" << id_ << ")!";
     throw (Error(file_, __LINE__, ss.str()));
   }
   catch (const std::out_of_range &err) {
     data_models_[data_model->id()] = data_model;
-    data_model->project_id(id_);
+    data_model->project_ = shared_from_this();
     return;
   } // TODO: Use C++20 with contains ASAP!
 }
@@ -45,13 +48,16 @@ std::optional<DataModelPtr> Project::get_data_model(const xsd::AnyUri &data_mode
 }
 
 std::optional<DataModelPtr> Project::remove_data_model(const xsd::AnyUri &data_model_id) {
+  //
+  // ToDo: Check here if data model is in use!!!
+  //
   auto res = data_models_.find(data_model_id);
   if (res == data_models_.end()) {
     return {};
   } else {
     data_models_.erase(data_model_id);
     DataModelPtr data_model_ptr = res->second;
-    data_model_ptr->project_id(xsd::AnyUri());
+    data_model_ptr->project_ = std::weak_ptr<Project>();
     return data_model_ptr;
   }
 

@@ -7,10 +7,10 @@
 
 #include <string>
 
-#include "data_model.h"
-#include "project.h"
-
 namespace dsp {
+
+class DataModel;
+class Project;
 
 class Configuration {
   /*!
@@ -22,7 +22,7 @@ class Configuration {
    * Get the configuration instance
    * @return Configuration instance
    */
-  static Configuration * init();
+  static Configuration* init();
 
   std::string resclass_prefix(const std::shared_ptr<DataModel> &in_data_model) const ;
   std::string property_prefix(const std::shared_ptr<DataModel> &in_data_model) const ;

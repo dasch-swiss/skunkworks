@@ -3,6 +3,8 @@
 //
 
 #include "configuration.h"
+#include "data_model.h"
+#include "project.h"
 
 namespace dsp {
 
