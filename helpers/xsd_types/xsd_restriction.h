@@ -159,7 +159,8 @@ class RestrictionPattern final : public Restriction {
    * @return true if validation passes, otherwise false
    */
   [[nodiscard]] inline Result validate(const std::string &strval) const final {
-    return { std::regex_match(strval, std::regex(pattern_)), message_ + ": Validation of RestrictionPattern failed" };
+    return { std::regex_match(strval, std::regex(pattern_)),
+             message_ + ": Validation of RestrictionPattern failed: '" + strval + "' for pattern '" + pattern_ + "'"};
   }
 
  private:
