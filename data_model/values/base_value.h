@@ -9,7 +9,7 @@
 #include <string>
 
 #include "helpers/xsd_types/xsd.h"
-#include "entities/agent.h"
+#include "data_model/agent.h"
 
 namespace dsp {
 
