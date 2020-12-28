@@ -14,7 +14,7 @@ TEST_CASE("creating the email value type", "[entities][user][email]") {
 
   SECTION("create email") {
     CHECK_NOTHROW(Email("dduck@example.com"));
-    CHECK(Email("dduck@example.com").value() == "dduck@examle.com");
+    CHECK(Email("dduck@example.com").value() == "dduck@example.com");
   }
 
 }

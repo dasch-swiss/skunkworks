@@ -20,6 +20,8 @@
 
 namespace admin::user {
 
+User::User(){}
+
 User::User(
     const std::shared_ptr<Username> &username,
     const std::shared_ptr<Email> &email,

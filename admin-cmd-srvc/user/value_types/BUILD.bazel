@@ -176,7 +176,7 @@ cc_library(
     srcs = ["username.cc"],
     hdrs = ["username.h"],
     deps = [
-        "//entities:error",
+        "//helpers",
         "//helpers/xsd_types"
     ],
 )

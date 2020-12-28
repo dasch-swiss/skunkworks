@@ -25,6 +25,14 @@ namespace admin::user {
  */
 class User {
  public:
+  /*!
+   * Default constructor, creating an empty user.
+   */
+  User();
+
+  /*!
+   * Constructor for creating a fully populated user.
+   */
   User(const std::shared_ptr<Username> &username,
        const std::shared_ptr<Email> &email,
        const std::shared_ptr<Password> &password,
@@ -33,25 +41,26 @@ class User {
        const std::shared_ptr<FamilyName> &family_name,
        const std::shared_ptr<Status> &status,
        const std::shared_ptr<Lang> &lang);
-  inline std::shared_ptr<Identifier> id() { return id_; };
-  inline std::shared_ptr<Username> username() { return username_; };
-  inline std::shared_ptr<Email> email() { return email_; };
-  inline std::shared_ptr<Password> password() { return password_; };
-  inline std::shared_ptr<Token> token() { return token_; };
-  inline std::shared_ptr<GivenName> given_name() { return given_name_; };
-  inline std::shared_ptr<FamilyName> family_name() { return family_name_; };
-  inline std::shared_ptr<Status> status() { return status_; };
-  inline std::shared_ptr<Lang> lang() { return lang_; };
+  inline Identifier id() { return id_; };
+  inline Username username() { return username_; };
+  inline Email email() { return email_; };
+  inline Password password() { return password_; };
+  inline Token token() { return token_; };
+  inline GivenName given_name() { return given_name_; };
+  inline FamilyName family_name() { return family_name_; };
+  inline Status status() { return status_; };
+  inline Lang lang() { return lang_; };
+
  private:
-  std::shared_ptr<Identifier> id_;
-  std::shared_ptr<Username> username_;
-  std::shared_ptr<Email> email_;
-  std::shared_ptr<Password> password_;
-  std::shared_ptr<Token> token_;
-  std::shared_ptr<GivenName> given_name_;
-  std::shared_ptr<FamilyName> family_name_;
-  std::shared_ptr<Status> status_;
-  std::shared_ptr<Lang> lang_;
+  Identifier id_;
+  Username username_;
+  Email email_;
+  Password password_;
+  Token token_;
+  GivenName given_name_;
+  FamilyName family_name_;
+  Status status_;
+  Lang lang_;
 };
 
 } // namespace admin::user

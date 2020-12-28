@@ -13,7 +13,7 @@ namespace admin::user {
 class Email {
  public:
   Email(const std::string &value);
-  inline std::string value() { return static_cast<std::string>(value_); }
+  inline std::string value() { return static_cast<std::string>(value_).substr(7); }
 
  private:
   xsd::AnyUri value_;
