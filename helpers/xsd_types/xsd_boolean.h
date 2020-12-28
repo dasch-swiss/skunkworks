@@ -38,11 +38,9 @@ class Boolean : public DataType {
   void set(const std::string &strval) override;
 
 
-  Boolean &operator=(const std::string &strval) override {
-    parse(strval);
-    enforce_restrictions();
-    return *this;
-  }
+  Boolean &operator=(const std::string &strval) override ;
+
+  Boolean &operator=(bool bval);
 
  protected:
   void parse(const std::string &strval);

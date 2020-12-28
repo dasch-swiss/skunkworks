@@ -1,0 +1,29 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "value_test",
+  srcs = ["value_test.cc"],
+  deps = [
+      ":values",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+cc_library(
+    name = "values",
+    srcs = [
+        "base_value.cc",
+        "simple_text_value.cc",
+    ],
+    hdrs = [
+        "base_value.h",
+        "simple_text_value.h",
+    ],
+    deps = [
+        "//data_model",
+        "//helpers/xsd_types",
+    ],
+)

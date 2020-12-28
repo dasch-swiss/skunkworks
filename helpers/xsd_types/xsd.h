@@ -7,19 +7,22 @@
 
 #include <string>
 
-#include "xsd_error.h"
-#include "xsd_data_type.h"
-#include "xsd_restriction.h"
-#include "xsd_string.h"
-#include "xsd_normalized_string.h"
-#include "xsd_token.h"
-#include "xsd_integer.h"
-#include "xsd_int.h"
-#include "xsd_decimal.h"
-#include "xsd_date_time.h"
-#include "xsd_date_time_stamp.h"
-#include "xsd_any_uri.h"
-#include "xsd_q_name.h"
+#include "helpers/xsd_types/xsd_error.h"
+#include "helpers/xsd_types/xsd_data_type.h"
+#include "helpers/xsd_types/xsd_restriction.h"
+#include "helpers/xsd_types/xsd_string.h"
+#include "helpers/xsd_types/xsd_normalized_string.h"
+#include "helpers/xsd_types/xsd_token.h"
+#include "helpers/xsd_types/xsd_integer.h"
+#include "helpers/xsd_types/xsd_int.h"
+#include "helpers/xsd_types/xsd_decimal.h"
+#include "helpers/xsd_types/xsd_date_time.h"
+#include "helpers/xsd_types/xsd_date_time_stamp.h"
+#include "helpers/xsd_types/xsd_any_uri.h"
+#include "helpers/xsd_types/xsd_boolean.h"
+#include "helpers/xsd_types/xsd_q_name.h"
+#include "helpers/xsd_types/xsd_language.h"
+#include "helpers/xsd_types/lang_string.h"
 
 const std::string xmlSchemaPrefix = "xsd:";
 

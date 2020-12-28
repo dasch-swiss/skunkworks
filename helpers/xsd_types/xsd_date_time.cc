@@ -126,10 +126,10 @@ void DateTime::validate() const {
 std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
   //...................................................................
   out_stream << year_ << "-"
-  << std::setfill('0') << std::setw(2) << month_ << "-"
-  << std::setw(2) << day_
-  << "T" << std::setw(2) << hour_ << ":"
-  << std::setw(2) << min_ << ":";
+             << std::setfill('0') << std::setw(2) << month_ << "-"
+             << std::setw(2) << day_
+             << "T" << std::setw(2) << hour_ << ":"
+             << std::setw(2) << min_ << ":";
 
   int width = 2;
   int precision = 0;
@@ -138,9 +138,9 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
     float intpart, fracpart = modff(seconds, &intpart);
     if (fracpart == 0.0f) break;
     if (i == 0) ++width; // decimal point
-      ++width;
-      ++precision;
-      seconds *= 10.0f;
+    ++width;
+    ++precision;
+    seconds *= 10.0f;
   }
   out_stream << std::fixed << std::setw(width) << std::setprecision(precision) << second_;
 
@@ -148,12 +148,29 @@ std::ostream &DateTime::print_to_stream(std::ostream &out_stream) const {
     out_stream << "Z";
   } else {
     out_stream << ((tz_sign_ == TZ_WEST_GMT) ? "-" : "+") << std::setw(2)
-    << ((tz_hour_ < 0) ? -tz_hour_ : tz_hour_) << ":"
-    << std::setw(2) << tz_min_;
+               << ((tz_hour_ < 0) ? -tz_hour_ : tz_hour_) << ":"
+               << std::setw(2) << tz_min_;
   }
   return out_stream;
 }
 //=====================================================================
+
+std::tuple<int, int> DateTime::rectify_time_zone(void) const {
+  int min;
+  float hour;
+  if ((tz_hour_ != 0) || (tz_min_ != 0)) {
+    min = min_ - tz_min_;
+    hour = hour_ - tz_hour_;
+    if (min < 0) {
+      min += 60;
+      hour -= 1;
+    }
+  } else {
+    hour = hour_;
+    min = min_;
+  }
+  return std::make_tuple(hour, min);
+}
 
 DateTime::DateTime() {
   year_ = 0;
@@ -194,9 +211,9 @@ DateTime::DateTime(const std::string &value) {
 DateTime::DateTime(int year, int month, int day,
                    int hour, int min, float second,
                    int tz_sign, int tz_hour, int tz_min) :
-                   year_(year), month_(month), day_(day),
-                   hour_(hour), min_(min), second_(second),
-                   tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
+    year_(year), month_(month), day_(day),
+    hour_(hour), min_(min), second_(second),
+    tz_sign_(tz_sign), tz_hour_(tz_hour), tz_min_(tz_min) {
   xsd_type_ = "dateTime";
   validate();
   enforce_restrictions();
@@ -214,4 +231,104 @@ DateTime &DateTime::operator=(const std::string &strval) {
   return *this;
 }
 
+bool DateTime::operator==(const DateTime &other) const {
+  if (year_ != other.year_) return false;
+  if (month_ != other.month_) return false;
+  if (day_ != other.day_) return false;
+
+  int min, omin;
+  int hour, ohour;
+  auto tmp = rectify_time_zone();
+  hour = std::get<0>(tmp);
+  min = std::get<1>(tmp);
+  auto otmp = other.rectify_time_zone();
+  ohour = std::get<0>(otmp);
+  omin = std::get<1>(otmp);
+
+  if (hour != ohour) return false;
+  if (min != omin) return false;
+  return second_ == other.second_;
 }
+
+bool DateTime::operator!=(const DateTime &other) const {
+  return (!(*this == other));
+}
+
+bool DateTime::operator>(const DateTime &other) const {
+  if (year_ > other.year_) return true;
+  if (month_ > other.month_) return true;
+  if (day_ > other.day_) return true;
+
+  int min, omin;
+  int hour, ohour;
+  auto tmp = rectify_time_zone();
+  hour = std::get<0>(tmp);
+  min = std::get<1>(tmp);
+  auto otmp = other.rectify_time_zone();
+  ohour = std::get<0>(otmp);
+  omin = std::get<1>(otmp);
+
+  if (hour > ohour) return true;
+  if (min > omin) return true;
+  return second_ > other.second_;
+}
+
+bool DateTime::operator>=(const DateTime &other) const {
+  if (year_ >= other.year_) return true;
+  if (month_ >= other.month_) return true;
+  if (day_ >= other.day_) return true;
+
+  int min, omin;
+  int hour, ohour;
+  auto tmp = rectify_time_zone();
+  hour = std::get<0>(tmp);
+  min = std::get<1>(tmp);
+  auto otmp = other.rectify_time_zone();
+  ohour = std::get<0>(otmp);
+  omin = std::get<1>(otmp);
+
+  if (hour >= ohour) return true;
+  if (min >= omin) return true;
+  return second_ >= other.second_;
+}
+
+bool DateTime::operator<(const DateTime &other) const {
+  if (year_ < other.year_) return true;
+  if (month_ < other.month_) return true;
+  if (day_ < other.day_) return true;
+
+  int min, omin;
+  int hour, ohour;
+  auto tmp = rectify_time_zone();
+  hour = std::get<0>(tmp);
+  min = std::get<1>(tmp);
+  auto otmp = other.rectify_time_zone();
+  ohour = std::get<0>(otmp);
+  omin = std::get<1>(otmp);
+
+  if (hour < ohour) return true;
+  if (min < omin) return true;
+  return second_ < other.second_;
+}
+
+bool DateTime::operator<=(const DateTime &other) const {
+  if (year_ <= other.year_) return true;
+  if (month_ <= other.month_) return true;
+  if (day_ <= other.day_) return true;
+
+  int min, omin;
+  int hour, ohour;
+  auto tmp = rectify_time_zone();
+  hour = std::get<0>(tmp);
+  min = std::get<1>(tmp);
+  auto otmp = other.rectify_time_zone();
+  ohour = std::get<0>(otmp);
+  omin = std::get<1>(otmp);
+
+  if (hour <= ohour) return true;
+  if (min <= omin) return true;
+  return second_ <= other.second_;
+}
+
+}
+
