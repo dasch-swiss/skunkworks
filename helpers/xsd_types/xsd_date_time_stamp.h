@@ -12,6 +12,8 @@ namespace xsd {
 class DateTimeStamp : public DateTime {
  public:
 
+  DateTimeStamp() : DateTime() {}
+
   explicit DateTimeStamp(const std::string& value);
 
   DateTimeStamp(int year, int month, int day,

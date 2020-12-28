@@ -56,11 +56,15 @@ Decimal &Decimal::operator=(double dval) {
   return *this;
 }
 
+bool Decimal::operator==(const Decimal &other) const {
+  return dval_ == other.dval_;
+}
+
 std::ostream &Decimal::print_to_stream(std::ostream &out_stream) const {
   out_stream.imbue(std::locale::classic());
   out_stream << dval_;
   return out_stream;
 }
 
-
 }
+

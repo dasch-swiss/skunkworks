@@ -21,13 +21,19 @@ TEST(XsdString, Generic) {
   xsd::String gaga;
   EXPECT_NO_THROW(gaga = "That's it...");
   EXPECT_EQ(static_cast<std::string>(gaga), "That's it...");
+  xsd::String gugus(std::make_shared<xsd::RestrictionLength>(5));
+  try {
+    gugus = xsd::String("gaga", std::make_shared<xsd::RestrictionLength>(15));
+  } catch (const xsd::Error &err) {
+    std::cerr << "***********" << std::endl;
+   }
 }
 
 TEST(XsdString_Generic_Test, Restrictions) {
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
       std::make_shared<xsd::RestrictionLength>(4))), "gaga");
   EXPECT_THROW(xsd::String("gaga",
-      std::make_shared<xsd::RestrictionLength>(5)), xsd::Error);
+      std::make_shared<xsd::RestrictionLength>(5, "This is gaga")), xsd::Error);
 
   EXPECT_EQ(static_cast<std::string>(xsd::String("gaga",
       std::make_shared<xsd::RestrictionMinLength>(4))), "gaga");
@@ -119,15 +125,21 @@ TEST(XsdAnyUri, Generic) {
 
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("http://example.org:25000/gaga/test")),
             "http://example.org:25000/gaga/test");
-  // EXPECT_EQ(static_cast<std::string>(xsd::AnyUri(u8"http://aé.org/цудовнымъ")),
-  //    u8"http://aé.org/цудовнымъ");
+
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri(u8"http://aé.org/цудовнымъ")),
+      u8"http://aé.org/цудовнымъ");
+
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org/wiki/Wikipedia/en")),
             "https://zh.wikipedia.org/wiki/Wikipedia/en");
-  // EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y")),
-  //    "https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y");
-  // EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس،/en?gaga=gugu&x=y")),
-  //          "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس،/en?gaga=gugu&x=y");
+
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y")),
+      "https://zh.wikipedia.org:42/wiki/WikipediaПóйдзьце/en?gaga=gugu&x=y");
+
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("https://zh.wikipedia.org:42/wiki/Wikipedia/γιατι-εμασ/τιμεσ-προσφορεσ/en?gaga=gugu&x=y")),
+            "https://zh.wikipedia.org:42/wiki/Wikipedia/γιατι-εμασ/τιμεσ-προσφορεσ/en?gaga=gugu&x=y");
+
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus")), "/gaga/gugus");
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gagä/gugus")), "/gagä/gugus");
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("//gaga/gugus")), "//gaga/gugus");
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("/gaga/gugus#frag")), "/gaga/gugus#frag");
   EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("gaga/gugus")), "gaga/gugus");
@@ -150,10 +162,15 @@ TEST(XsdAnyUri, Generic) {
       "file://gugus/gaga.xml");
   EXPECT_THROW(xsd::AnyUri("://gaga/gugus"), xsd::Error);
 
+  EXPECT_EQ(static_cast<std::string>(xsd::AnyUri("mailto:lukas.rosenthaler@unibas.ch")),
+            "mailto:lukas.rosenthaler@unibas.ch");
+
+/*
   xsd::AnyUri any_uri;
-  // EXPECT_NO_THROW(any_uri = "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
+  EXPECT_NO_THROW(any_uri = "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
   std::string tmpstr = any_uri;
-  // EXPECT_EQ(tmpstr, "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
+  EXPECT_EQ(tmpstr, "https://zh.wikipedia.org:42/wiki/Wikipedia/مَايِنْتْس");
+*/
 }
 
 TEST(XsdDateTime, Parsing) {
@@ -313,4 +330,21 @@ TEST(XsdQName, Generic) {
   EXPECT_EQ(static_cast<std::string>(xsd::QName("mySchema9")), "mySchema9");
   EXPECT_THROW(xsd::QName("0ab:gaga"), xsd::Error);
   EXPECT_THROW(xsd::QName("hy:hy:any"), xsd::Error);
+}
+
+TEST(XsdLanguage, Generic) {
+  EXPECT_NO_THROW(xsd::Language language("en"));
+  EXPECT_THROW(xsd::Language("xx"), xsd::Error);
+}
+
+TEST(XsdLangString, Generic) {
+  EXPECT_NO_THROW(xsd::LangString gaga("en", xsd::String("This is a test")));
+  xsd::LangString lang_string;
+  lang_string["en"] = xsd::String("What is this");
+  lang_string["de"] = xsd::String("Was ist das");
+  xsd::String res = lang_string["de"];
+  EXPECT_EQ(static_cast<std::string>(res), "Was ist das");
+  xsd::String res2 = lang_string["xx"];
+  EXPECT_EQ(static_cast<std::string>(res2), "");
+
 }
