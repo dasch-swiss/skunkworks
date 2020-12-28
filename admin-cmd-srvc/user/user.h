@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "entities/user/username.h"
+#include "username.h"
 
 namespace entities::user {
 

@@ -4,7 +4,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "helpers/xsd_types/xsd.h"
+#include "../../helpers/xsd_types/xsd.h"
 
 #include "email.h"
 

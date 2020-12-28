@@ -4,9 +4,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "entities/error.h"
+#include "../../entities/error.h"
 #include "user.h"
-#include "entities/user/username.h"
+#include "username.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
   using namespace entities::user;

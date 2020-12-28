@@ -4,9 +4,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "helpers/xsd_types/xsd.h"
+#include "../../helpers/xsd_types/xsd.h"
 
-#include "entities/error.h"
+#include "../../entities/error.h"
 #include "username.h"
 
 TEST_CASE("creating the username value type", "[entities][user][username]") {

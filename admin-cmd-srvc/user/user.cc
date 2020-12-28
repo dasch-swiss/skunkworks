@@ -2,8 +2,8 @@
 // Created by Ivan Subotic on 27/11/2020.
 //
 
-#include "helpers/uuid.h"
-#include "entities/error.h"
+#include "../../helpers/uuid.h"
+#include "../../entities/error.h"
 #include "user.h"
 
 #include <utility>
