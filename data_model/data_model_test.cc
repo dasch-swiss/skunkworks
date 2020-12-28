@@ -14,15 +14,15 @@
 
 
 TEST_CASE("Data model tests", "[catch2|") {
+  dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
 
   INFO("Project tests...")
-  dsp::ProjectPtr my_project = std::make_shared<dsp::Project>("4123", "testproject");
+  dsp::ProjectPtr my_project = std::make_shared<dsp::Project>(my_agent, "4123", "testproject");
   REQUIRE(static_cast<std::string>(my_project->shortcode()) == "4123");
   REQUIRE(static_cast<std::string>(my_project->shortname()) == "testproject");
 
-  REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>("412X", "gaga"), Catch::Matchers::Contains(std::string("Short code restriction"))) ;
-  REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>("4122", "2gaga"), Catch::Matchers::Contains(std::string("Short name restriction"))) ;
-  dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
+  REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>(my_agent, "412X", "gaga"), Catch::Matchers::Contains(std::string("Short code restriction"))) ;
+  REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>(my_agent, "4122", "2gaga"), Catch::Matchers::Contains(std::string("Short name restriction"))) ;
 
   INFO("Data model tests...");
   dsp::DataModelPtr my_data_model = std::make_shared<dsp::DataModel>("test-model");

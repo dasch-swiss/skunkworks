@@ -30,7 +30,8 @@ class Project : public std::enable_shared_from_this<Project> {
    * @param shortcode A xsd::String instance
    * @param shortname A xsd::String instance
    */
-  inline Project(const xsd::String &shortcode, const xsd::String &shortname) : Project() {
+  inline Project(const std::shared_ptr<Agent> &created_by,  xsd::String &shortcode, const xsd::String &shortname) : Project() {
+    created_by_ = created_by;
     shortcode_ = shortcode;
     shortname_ = shortname;
   }
@@ -41,7 +42,11 @@ class Project : public std::enable_shared_from_this<Project> {
    * @param shortcode A std::string instance
    * @param shortname A std::string instance
    */
-  inline Project(const std::string &shortcode, const std::string &shortname) : Project(xsd::String(shortcode), xsd::String(shortname)) { }
+  inline Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname) : Project() {
+    created_by_ = created_by;
+    shortcode_ = shortcode;
+    shortname_ = shortname;
+  }
 
   /*!
    * Getter for shortcode
@@ -89,6 +94,10 @@ class Project : public std::enable_shared_from_this<Project> {
 
  private:
   xsd::AnyUri id_;
+  xsd::DateTimeStamp creation_date_;
+  std::weak_ptr<Agent> created_by_;
+  xsd::DateTimeStamp last_modification_date_;
+  std::weak_ptr<Agent> modified_by_;
   xsd::String shortcode_;
   xsd::String shortname_;
   std::unordered_map<xsd::AnyUri, std::shared_ptr<DataModel>> data_models_;

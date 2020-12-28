@@ -18,6 +18,7 @@ Project::Project() {
   shortcode_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-fA-F0-9]{4})", "Short code restriction"));
   shortname_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-zA-Z_][\\w\\-]*)", "Short name restriction"));
   shortname_.add_restriction(std::make_shared<xsd::RestrictionMaxLength>(64, "Short name max length=64"));
+  creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
 void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
