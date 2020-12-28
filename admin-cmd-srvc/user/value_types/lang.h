@@ -13,6 +13,14 @@ namespace admin::user {
 class Lang {
 
  public:
+  Lang();
+  Lang(const std::string &value);
+  inline std::string value() { return value_.get(); }
+  bool operator==(const Lang &rhs) const;
+  bool operator!=(const Lang &rhs) const;
+
+ private:
+  xsd::String value_;
 
 };
 
