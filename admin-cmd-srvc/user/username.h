@@ -6,11 +6,11 @@
 #define SKUNKWORKS_ENTITIES_ADMIN_USER_VALUES_USERNAME_H_
 
 #include <string>
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
 static const char __file__[] = __FILE__;
 
-namespace entities::user {
+namespace admin::user {
 
 class Username {
  public:

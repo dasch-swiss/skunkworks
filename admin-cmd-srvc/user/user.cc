@@ -2,13 +2,13 @@
 // Created by Ivan Subotic on 27/11/2020.
 //
 
-#include "../../helpers/uuid.h"
-#include "../../entities/error.h"
+#include "helpers/uuid.h"
+#include "helpers/error.h"
 #include "user.h"
 
 #include <utility>
 
-namespace entities::user {
+namespace admin::user {
 
 User::User(
     const std::shared_ptr<Username> &username,

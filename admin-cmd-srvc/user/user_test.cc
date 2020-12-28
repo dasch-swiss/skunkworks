@@ -4,12 +4,12 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../entities/error.h"
+#include "helpers/error.h"
 #include "user.h"
 #include "username.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
-  using namespace entities::user;
+  using namespace admin::user;
   User user = User(std::make_shared<Username>("dduck"),
                    "dduck@example.com",
                    "1234",

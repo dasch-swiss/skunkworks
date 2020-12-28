@@ -10,7 +10,7 @@
 
 TEST_CASE("creating the email value type", "[entities][user][email]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create email") {
     CHECK_NOTHROW(Email("dduck@example.com"));

@@ -5,7 +5,7 @@
 #include "family_name.h"
 #include "../../helpers/xsd_types/xsd.h"
 
-namespace entities::user {
+namespace admin::user {
 
 FamilyName::FamilyName(const std::string &value) {
   value_ = value;

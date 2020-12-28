@@ -4,7 +4,7 @@
 
 #include "email.h"
 
-namespace entities::user {
+namespace admin::user {
 
 Email::Email(const std::string &value) {
   value_ = "mailto:" + value;

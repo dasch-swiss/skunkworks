@@ -6,9 +6,9 @@
 #define SKUNKWORKS_ENTITIES_USER_LANG_H_
 
 #include <string>
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
-namespace entities::user {
+namespace admin::user {
 
 class Lang {
 

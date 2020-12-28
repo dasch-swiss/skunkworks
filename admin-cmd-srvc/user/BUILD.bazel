@@ -155,7 +155,6 @@ cc_library(
     hdrs = ["user.h"],
     deps = [
         ":username",
-        "//entities:error",
         "//helpers",
         "//helpers/xsd_types",
     ],
@@ -168,7 +167,7 @@ cc_test(
   deps = [
       ":user",
       ":username",
-      "//entities:error",
+      "//helpers",
       "//helpers/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -191,7 +190,7 @@ cc_test(
   size = "small",
   deps = [
       ":username",
-      "//entities:error",
+      "//helpers",
       "//helpers/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",

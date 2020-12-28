@@ -4,4 +4,4 @@
 
 #include "lang.h"
 
-namespace entities::user {}
+namespace admin::user {}

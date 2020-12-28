@@ -8,7 +8,7 @@
 #include <string>
 #include "../../helpers/xsd_types/xsd.h"
 
-namespace entities::user {
+namespace admin::user {
 
 class Email {
  public:

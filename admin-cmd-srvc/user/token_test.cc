@@ -4,13 +4,13 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
 #include "token.h"
 
 TEST_CASE("creating the token value type", "[entities][user][token]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create password") {
     CHECK_NOTHROW(Token());

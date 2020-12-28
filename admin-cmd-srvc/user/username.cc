@@ -1,9 +1,9 @@
 // Copyright
 
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 #include "username.h"
 
-namespace entities::user {
+namespace admin::user {
 
 Username::Username(const std::string &value) {
 

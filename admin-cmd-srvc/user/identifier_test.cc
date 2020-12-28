@@ -10,7 +10,7 @@
 
 TEST_CASE("creating the identifier value type", "[entities][user][identifier]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create identifier") {
     CHECK_NOTHROW(Identifier());

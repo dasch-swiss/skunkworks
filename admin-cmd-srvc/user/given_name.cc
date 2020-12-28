@@ -4,4 +4,4 @@
 
 #include "given_name.h"
 
-namespace entities::user {}
+namespace admin::user {}

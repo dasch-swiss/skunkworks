@@ -10,7 +10,7 @@
 
 TEST_CASE("family name value type", "[entities][user][family_name]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create family name") {
     CHECK_NOTHROW(FamilyName("Duck"));

@@ -10,7 +10,7 @@
 
 #include "username.h"
 
-namespace entities::user {
+namespace admin::user {
 
 /*!
  * The class represents a user in the system.

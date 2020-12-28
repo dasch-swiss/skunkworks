@@ -5,4 +5,4 @@
 #include "identifier.h"
 
 
-namespace entities::user {}
+namespace admin::user {}

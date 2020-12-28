@@ -4,7 +4,7 @@
 
 #include "token.h"
 
-namespace entities::user {
+namespace admin::user {
 
 
 }

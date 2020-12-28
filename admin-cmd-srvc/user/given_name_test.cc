@@ -10,7 +10,7 @@
 
 TEST_CASE("creating the given name value type", "[entities][user][given_name]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create given name") {
     CHECK_NOTHROW(GivenName("Donald"));

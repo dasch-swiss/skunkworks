@@ -5,4 +5,4 @@
 #include "password.h"
 
 
-namespace entities::user {}
+namespace admin::user {}

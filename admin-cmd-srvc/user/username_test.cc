@@ -4,14 +4,14 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
-#include "../../entities/error.h"
+#include "helpers/error.h"
 #include "username.h"
 
 TEST_CASE("creating the username value type", "[entities][user][username]") {
 
-  using namespace entities::user;
+  using namespace admin::user;
 
   SECTION("create username") {
     CHECK_NOTHROW(Username("dduck"));

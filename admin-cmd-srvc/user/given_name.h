@@ -5,7 +5,7 @@
 #ifndef SKUNKWORKS_ENTITIES_USER_GIVEN_NAME_H_
 #define SKUNKWORKS_ENTITIES_USER_GIVEN_NAME_H_
 
-namespace entities::user {
+namespace admin::user {
 
 class GivenName {
 
