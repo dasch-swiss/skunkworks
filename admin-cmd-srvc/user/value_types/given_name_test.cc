@@ -4,16 +4,18 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
 #include "given_name.h"
 
-TEST_CASE("creating the given name value type", "[entities][user][given_name]") {
+TEST_CASE("given name value type", "[entities][user][given_name]") {
 
   using namespace admin::user;
 
   SECTION("create given name") {
     CHECK_NOTHROW(GivenName("Donald"));
+    CHECK(GivenName("Donald").value() == "Donald");
+    CHECK(GivenName("Donald") == GivenName("Donald"));
   }
 
 }

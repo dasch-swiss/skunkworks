@@ -6,14 +6,14 @@
 
 #include "helpers/xsd_types/xsd.h"
 
-#include "token.h"
+#include "lang.h"
 
-TEST_CASE("creating the token value type", "[entities][user][token]") {
+TEST_CASE("lang value type", "[admin][user][lang]") {
 
   using namespace admin::user;
 
-  SECTION("create password") {
-    CHECK_NOTHROW(Token());
+  SECTION("create lang") {
+    CHECK_NOTHROW(Lang("en"));
   }
 
 }

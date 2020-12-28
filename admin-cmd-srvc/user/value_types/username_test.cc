@@ -4,9 +4,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "helpers/xsd_types/xsd.h"
+#include "../../../helpers/xsd_types/xsd.h"
 
-#include "helpers/error.h"
+#include "../../../helpers/error.h"
 #include "username.h"
 
 TEST_CASE("creating the username value type", "[entities][user][username]") {
@@ -37,7 +37,7 @@ TEST_CASE("creating the username value type", "[entities][user][username]") {
   // Only contains alphanumeric characters
   SECTION("allowed characters") {
     // username has not allowed characters
-    CHECK_THROWS_AS(entities::user::Username("abc123._"), xsd::Error);
+    CHECK_THROWS_AS(admin::user::Username("abc123._"), xsd::Error);
   }
 
 }

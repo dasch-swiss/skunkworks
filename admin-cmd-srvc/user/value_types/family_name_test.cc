@@ -4,11 +4,9 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../helpers/xsd_types/xsd.h"
-
 #include "family_name.h"
 
-TEST_CASE("family name value type", "[entities][user][family_name]") {
+TEST_CASE("family name value type", "[admin][user][family_name]") {
 
   using namespace admin::user;
 

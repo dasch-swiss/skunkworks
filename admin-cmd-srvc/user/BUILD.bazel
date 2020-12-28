@@ -3,158 +3,19 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "email",
-    srcs = ["email.cc"],
-    hdrs = ["email.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "email_test",
-    srcs = ["email_test.cc"],
-    size = "small",
-    deps = [
-      ":email",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "family_name",
-    srcs = ["family_name.cc"],
-    hdrs = ["family_name.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "family_name_test",
-    srcs = ["family_name_test.cc"],
-    size = "small",
-    deps = [
-      ":family_name",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "given_name",
-    srcs = ["given_name.cc"],
-    hdrs = ["given_name.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "given_name_test",
-    srcs = ["given_name_test.cc"],
-    size = "small",
-    deps = [
-      ":given_name",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "identifier",
-    srcs = ["identifier.cc"],
-    hdrs = ["identifier.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "identifier_test",
-    srcs = ["identifier_test.cc"],
-    size = "small",
-    deps = [
-      ":identifier",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "lang",
-    srcs = ["lang.cc"],
-    hdrs = ["lang.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "lang_test",
-    srcs = ["lang_test.cc"],
-    size = "small",
-    deps = [
-      ":lang",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "password",
-    srcs = ["password.cc"],
-    hdrs = ["password.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "password_test",
-    srcs = ["password_test.cc"],
-    size = "small",
-    deps = [
-      ":password",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
-    name = "token",
-    srcs = ["token.cc"],
-    hdrs = ["token.h"],
-    deps = [
-        "//helpers/xsd_types",
-    ],
-)
-
-cc_test(
-    name = "token_test",
-    srcs = ["token_test.cc"],
-    size = "small",
-    deps = [
-      ":token",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-    ],
-)
-
-cc_library(
     name = "user",
     srcs = ["user.cc"],
     hdrs = ["user.h"],
     deps = [
-        ":username",
+        "//admin-cmd-srvc/user/value_types:email",
+        "//admin-cmd-srvc/user/value_types:family_name",
+        "//admin-cmd-srvc/user/value_types:given_name",
+        "//admin-cmd-srvc/user/value_types:identifier",
+        "//admin-cmd-srvc/user/value_types:lang",
+        "//admin-cmd-srvc/user/value_types:password",
+        "//admin-cmd-srvc/user/value_types:status",
+        "//admin-cmd-srvc/user/value_types:token",
+        "//admin-cmd-srvc/user/value_types:username",
         "//helpers",
         "//helpers/xsd_types",
     ],
@@ -166,30 +27,15 @@ cc_test(
   size = "small",
   deps = [
       ":user",
-      ":username",
-      "//helpers",
-      "//helpers/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
-  ],
-)
-
-cc_library(
-    name = "username",
-    srcs = ["username.cc"],
-    hdrs = ["username.h"],
-    deps = [
-        "//entities:error",
-        "//helpers/xsd_types"
-    ],
-)
-
-cc_test(
-  name = "username_test",
-  srcs = ["username_test.cc"],
-  size = "small",
-  deps = [
-      ":username",
+      "//admin-cmd-srvc/user/value_types:email",
+      "//admin-cmd-srvc/user/value_types:family_name",
+      "//admin-cmd-srvc/user/value_types:given_name",
+      "//admin-cmd-srvc/user/value_types:identifier",
+      "//admin-cmd-srvc/user/value_types:lang",
+      "//admin-cmd-srvc/user/value_types:password",
+      "//admin-cmd-srvc/user/value_types:status",
+      "//admin-cmd-srvc/user/value_types:token",
+      "//admin-cmd-srvc/user/value_types:username",
       "//helpers",
       "//helpers/xsd_types",
       "//tests:test_main",

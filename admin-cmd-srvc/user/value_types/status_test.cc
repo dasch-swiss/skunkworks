@@ -6,14 +6,14 @@
 
 #include "helpers/xsd_types/xsd.h"
 
-#include "lang.h"
+#include "status.h"
 
-TEST_CASE("creating the lang value type", "[entities][user][lang]") {
+TEST_CASE("status value type", "[entities][user][status]") {
 
   using namespace admin::user;
 
-  SECTION("create lang") {
-    CHECK_NOTHROW(Lang("en"));
+  SECTION("create status") {
+    CHECK_NOTHROW(Status());
   }
 
 }

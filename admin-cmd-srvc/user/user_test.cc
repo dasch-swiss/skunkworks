@@ -6,7 +6,7 @@
 
 #include "helpers/error.h"
 #include "user.h"
-#include "username.h"
+#include "value_types/username.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
   using namespace admin::user;
