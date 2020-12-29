@@ -8,8 +8,10 @@
 #include <string>
 #include <unordered_map>
 
-#include "shared/xsd_types/xsd_any_uri.h"
-#include "shared/xsd_types/xsd_restriction.h"
+#include "helpers/xsd_types/xsd_any_uri.h"
+#include "helpers/xsd_types/xsd_restriction.h"
+#include "helpers/dsp_types/shortcode.h"
+#include "helpers/dsp_types/shortname.h"
 
 #include "data_model.h"
 
@@ -20,47 +22,47 @@ class Project : public std::enable_shared_from_this<Project> {
  public:
   /*!
    * Default constructor. Assignes a unique ID (based on a uuid) and initializes restrictions for the
-   * shortcode and shortname.
+   * Shortcode and shortname.
    */
   Project();
 
   /*!
-   * Constructor taking a shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
+   * Constructor taking an Agent, a Shortcode and Shortname as parameter
+   * @param created_by
+   * @param shortcode
+   * @param shortname
+   */
+  Project(const std::shared_ptr<Agent> &created_by,  dsp::Shortcode &shortcode, const dsp::Shortname &shortname);
+
+  /*!
+   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
    *
    * @param shortcode A xsd::String instance
    * @param shortname A xsd::String instance
    */
-  inline Project(const std::shared_ptr<Agent> &created_by,  xsd::String &shortcode, const xsd::String &shortname) : Project() {
-    created_by_ = created_by;
-    shortcode_ = shortcode;
-    shortname_ = shortname;
-  }
+  Project(const std::shared_ptr<Agent> &created_by,  xsd::String &shortcode, const xsd::String &shortname);
 
   /*!
-   * Constructor taking a shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
+   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
    *
    * @param shortcode A std::string instance
    * @param shortname A std::string instance
    */
-  inline Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname) : Project() {
-    created_by_ = created_by;
-    shortcode_ = shortcode;
-    shortname_ = shortname;
-  }
+  Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
 
   /*!
-   * Getter for shortcode
+   * Getter for Shortcode
    *
    * @return
    */
-  [[gnu::pure]] inline xsd::String shortcode() { return shortcode_; }
+  [[gnu::pure]] inline dsp::Shortcode shortcode() { return shortcode_; }
 
   /*!
    * Getter for shortname
    *
    * @return
    */
-  [[gnu::pure]] inline xsd::String shortname() const { return shortname_; }
+  [[gnu::pure]] inline dsp::Shortname shortname() const { return shortname_; }
 
   /*!
    * Getter for the ID
@@ -98,8 +100,8 @@ class Project : public std::enable_shared_from_this<Project> {
   std::weak_ptr<Agent> created_by_;
   xsd::DateTimeStamp last_modification_date_;
   std::weak_ptr<Agent> modified_by_;
-  xsd::String shortcode_;
-  xsd::String shortname_;
+  dsp::Shortcode shortcode_;
+  dsp::Shortname shortname_;
   std::unordered_map<xsd::AnyUri, std::shared_ptr<DataModel>> data_models_;
 };
 

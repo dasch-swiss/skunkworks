@@ -1,3 +1,33 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "dsp_types_test",
+  srcs = ["dsp_types_test.cc"],
+  deps = [
+      ":dsp_types",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+
+cc_library(
+    name = "dsp_types",
+    srcs = [
+        "shortcode.cc",
+        "shortname.cc",
+        "id.cc"
+    ],
+    hdrs = [
+        "uuid.h",
+        "shortcode.h",
+        "shortname.h",
+        "id.h",
+    ],
+    deps = [
+        "//helpers:helpers",
+        "//helpers/xsd_types"
+    ],
+)

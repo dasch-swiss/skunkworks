@@ -15,11 +15,27 @@ namespace dsp {
 
 Project::Project() {
   id_ = uuid::generate_uuid_v4();
-  shortcode_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-fA-F0-9]{4})", "Short code restriction"));
-  shortname_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-zA-Z_][\\w\\-]*)", "Short name restriction"));
-  shortname_.add_restriction(std::make_shared<xsd::RestrictionMaxLength>(64, "Short name max length=64"));
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
+
+Project::Project(const std::shared_ptr<Agent> &created_by,  dsp::Shortcode &shortcode, const dsp::Shortname &shortname) : Project() {
+  created_by_ = created_by;
+  shortcode_ = shortcode;
+  shortname_ = shortname;
+}
+
+Project::Project(const std::shared_ptr<Agent> &created_by,  xsd::String &shortcode, const xsd::String &shortname) : Project() {
+  created_by_ = created_by;
+  shortcode_ = shortcode;
+  shortname_ = shortname;
+}
+
+Project::Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname) : Project() {
+  created_by_ = created_by;
+  shortcode_ = shortcode;
+  shortname_ = shortname;
+}
+
 
 void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
   if (data_model->project() != nullptr) { // data model
