@@ -2,7 +2,7 @@
 // Created by Lukas Rosenthaler on 21.12.20.
 //
 
-#include "helpers/uuid.h"
+#include "../shared/uuid.h"
 #include "configuration.h"
 #include "class_obj.h"
 

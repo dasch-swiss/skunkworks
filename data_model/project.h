@@ -8,8 +8,8 @@
 #include <string>
 #include <unordered_map>
 
-#include "helpers/xsd_types/xsd_any_uri.h"
-#include "helpers/xsd_types/xsd_restriction.h"
+#include "shared/xsd_types/xsd_any_uri.h"
+#include "shared/xsd_types/xsd_restriction.h"
 
 #include "data_model.h"
 

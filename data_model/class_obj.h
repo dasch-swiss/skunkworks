@@ -8,7 +8,7 @@
 #include <set>
 #include <memory>
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 #include "configuration.h"
 #include "agent.h"
 //#include "data_model.h"

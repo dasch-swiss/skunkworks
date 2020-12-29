@@ -4,7 +4,7 @@
 
 #include <string>
 
-#include "helpers/uuid.h"
+#include "../shared/uuid.h"
 
 #include "property.h"
 

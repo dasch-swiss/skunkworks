@@ -23,6 +23,7 @@ cc_library(
         "simple_text_value.h",
     ],
     deps = [
-        "//helpers/xsd_types",
+        "//data_model",
+        "//shared/xsd_types",
     ],
 )
