@@ -41,15 +41,16 @@ class User {
        const std::shared_ptr<FamilyName> &family_name,
        const std::shared_ptr<Status> &status,
        const std::shared_ptr<Lang> &lang);
-  inline Identifier id() { return id_; };
-  inline Username username() { return username_; };
-  inline Email email() { return email_; };
-  inline Password password() { return password_; };
-  inline Token token() { return token_; };
-  inline GivenName given_name() { return given_name_; };
-  inline FamilyName family_name() { return family_name_; };
-  inline Status status() { return status_; };
-  inline Lang lang() { return lang_; };
+
+  inline std::string id() { return id_.value(); };
+  inline std::string username() { return username_.value(); };
+  inline std::string email() { return email_.value(); };
+  inline std::string password() { return password_.value(); };
+  inline std::string token() { return token_.value(); };
+  inline std::string given_name() { return given_name_.value(); };
+  inline std::string family_name() { return family_name_.value(); };
+  inline bool status() { return status_.value(); };
+  inline std::string lang() { return lang_.value(); };
 
  private:
   Identifier id_;

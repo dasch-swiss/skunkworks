@@ -4,11 +4,11 @@
 
 #include "catch2/catch.hpp"
 
-#include "../../../helpers/xsd_types/xsd.h"
+#include "helpers/xsd_types/xsd.h"
 
 #include "email.h"
 
-TEST_CASE("creating the email value type", "[entities][user][email]") {
+TEST_CASE("email value type", "[entities][user][email]") {
 
   using namespace admin::user;
 

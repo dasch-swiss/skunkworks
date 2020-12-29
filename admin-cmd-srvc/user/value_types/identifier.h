@@ -36,17 +36,19 @@ class Identifier {
   inline explicit Identifier(const Identifier &value) : Identifier() { value_ = value.value_ ;};
 
   /*!
-   * Accessor returning the value as std::string.
-   * @return std::string
-   */
-  inline std::string value() {return value_.get(); }
-
-  /*!
    * Direct assignment operator. Allows assigning a std::string directly as a value.
    * @param value of type std::string which is being directly assigned.
    * @return
    */
   inline Identifier &operator=(const std::string &value) { value_ = value; return *this; }
+
+  /*!
+   * Accessor returning the value as std::string.
+   * @return std::string
+   */
+  inline std::string value() {return value_.get(); }
+
+
 
   /*!
    * Equality comparison operator.
