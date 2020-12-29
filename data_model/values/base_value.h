@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 #include "data_model/agent.h"
 
 namespace dsp {

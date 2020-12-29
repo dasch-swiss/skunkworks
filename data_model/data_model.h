@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 
 
 namespace dsp {

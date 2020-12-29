@@ -24,6 +24,6 @@ cc_library(
     ],
     deps = [
         "//data_model",
-        "//helpers/xsd_types",
+        "//shared/xsd_types",
     ],
 )
