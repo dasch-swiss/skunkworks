@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "helpers/xsd_types/lang_string.h"
-#include "helpers/xsd_types/xsd_error.h"
-#include "helpers/error.h"
+#include "shared/xsd_types/lang_string.h"
+#include "shared/xsd_types/xsd_error.h"
+#include "shared/error/error.h"
 
 #include "project.h"
 #include "agent.h"

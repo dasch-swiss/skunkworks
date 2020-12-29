@@ -6,8 +6,8 @@
 
 #include "project.h"
 
-#include "helpers/uuid.h"
-#include "helpers/error.h"
+#include "shared/uuid.h"
+#include "shared/error/error.h"
 
 static const char file_[] = __FILE__;
 

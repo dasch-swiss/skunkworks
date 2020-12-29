@@ -6,8 +6,8 @@
 #define SKUNKWORKS_HELPERS_XSD_TYPES_XSD_LANGUAGE_H_
 
 #include <string>
-#include "helpers/xsd_types/xsd_restriction.h"
-#include "helpers/xsd_types/xsd_string.h"
+#include "shared/xsd_types/xsd_restriction.h"
+#include "shared/xsd_types/xsd_string.h"
 
 
 namespace xsd {
