@@ -30,7 +30,7 @@ class FamilyName {
   inline explicit FamilyName(const xsd::String &value) : FamilyName() { value_ = value; };
 
   /*!
-   * Copy constructor taking a dsp::Identifier as parameter.
+   * Copy constructor taking a dsp::FamilyName as parameter.
    * @param value
    */
   inline explicit FamilyName(const FamilyName &value) : FamilyName() { value_ = value.value_ ;};
@@ -55,6 +55,14 @@ class FamilyName {
    */
   inline bool operator==(const FamilyName &rhs) const {
     return static_cast<std::string>(value_) == static_cast<std::string>(rhs.value_);
+  }
+
+  /*!
+   * Check for empty value.
+   * @return
+   */
+  inline bool empty() {
+    return static_cast<std::string>(value_).empty();
   }
 
  private:

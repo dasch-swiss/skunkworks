@@ -8,7 +8,7 @@
 namespace admin::user {
 
 FamilyName::FamilyName() {
-  value_ = "";
+  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(2, "The minimum family name length is 2."));
 }
 
 }

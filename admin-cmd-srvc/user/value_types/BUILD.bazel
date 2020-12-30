@@ -38,6 +38,7 @@ cc_test(
     size = "small",
     deps = [
       ":family_name",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
