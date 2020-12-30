@@ -2,8 +2,8 @@
 // Created by Lukas Rosenthaler on 21.12.20.
 //
 
-#include "helpers/uuid.h"
-#include "helpers/error.h"
+#include "shared/uuid.h"
+#include "shared/error/error.h"
 
 #include "data_model.h"
 #include "resource_class.h"

@@ -12,31 +12,6 @@ http_archive(
     sha256 = rules_cc_sha256,
 )
 
-## Get rule that allows us to use official clang binaries.
-#grail_tag = "0.5.7" # 5. November 2020
-#grail_sha256 = "83f691deff0f131b6d40587f07361cb25dad4a66e5ed8988cbcee78ebfe3d5cd"
-#http_archive(
-#    name = "com_grail_bazel_toolchain",
-#    strip_prefix = "bazel-toolchain-{}".format(grail_tag),
-#    url = "https://github.com/grailbio/bazel-toolchain/archive/{}.zip".format(grail_tag),
-#    sha256 = grail_sha256
-#)
-#
-#load("@com_grail_bazel_toolchain//toolchain:deps.bzl", "bazel_toolchain_dependencies")
-#
-#bazel_toolchain_dependencies()
-#
-#load("@com_grail_bazel_toolchain//toolchain:rules.bzl", "llvm_toolchain")
-#
-#llvm_toolchain(
-#    name = "llvm_toolchain",
-#    llvm_version = "11.0.0",
-#)
-#
-#register_toolchains(
-#    "@llvm_toolchain//:cc-toolchain-linux",
-#)
-
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
 rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
@@ -46,7 +21,7 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_foreign_cc/archive/%s.zip" % rules_foreign_cc_version,
     sha256 = rules_foreign_cc_version_sha256,
 )
-# Recursively import Nixpkgs rules' dependencies and register default tools-toolchains (make, cmake, ninja).
+# Recursively import foreign_cc rules' dependencies and register default tools-toolchains (make, cmake, ninja).
 load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependencies")
 rules_foreign_cc_dependencies(register_default_tools = True)
 
@@ -125,7 +100,7 @@ http_archive(
 # curl
 http_archive(
     name = "curl",
-    build_file_content = all_and_magic_files,
+    build_file_content = all_content,
     strip_prefix = "curl-7.70.0",
     urls = ["https://curl.haxx.se/download/curl-7.70.0.tar.gz"],
     sha256 = "ca2feeb8ef13368ce5d5e5849a5fd5e2dd4755fecf7d8f0cc94000a4206fb8e7",
@@ -140,4 +115,16 @@ http_archive(
     type = "zip",
     url = "https://github.com/catchorg/Catch2/archive/v{}.zip".format(catch2_tag),
     sha256 = catch2_sha256,
+)
+
+# stduuid
+stduuid_tag = "5890c94bfac2f00f22a1c1481e5839c51d6a6f3f"
+stduuid_sha256 = "eb1b83aecb19019c6d67536ec42598c2f3c05c4e34bbc7e24714f8a65bdd63ad"
+http_archive(
+    name = "stduuid",
+    build_file = "@//third_party:stduuid.BUILD",
+    strip_prefix = "stduuid-{}".format(stduuid_tag),
+    type = "zip",
+    url = "https://github.com/mariusbancila/stduuid/archive/{}.zip".format(stduuid_tag),
+    sha256 = stduuid_sha256,
 )

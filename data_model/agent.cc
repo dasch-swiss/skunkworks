@@ -4,7 +4,7 @@
 
 #include "agent.h"
 
-#include "helpers/uuid.h"
+#include "../shared/uuid.h"
 
 namespace dsp {
 

@@ -2,8 +2,8 @@
 // Created by Ivan Subotic on 25/11/2020.
 //
 
-#include "helpers/uuid.h"
-#include "helpers/error.h"
+#include "shared/uuid.h"
+#include "shared/error/error.h"
 
 #include "property.h"
 #include "resource_class.h"

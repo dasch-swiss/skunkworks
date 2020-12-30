@@ -5,8 +5,8 @@
 #include <sstream>
 #include "gtest/gtest.h"
 
-//#include "helpers/xsd_types/date_time.h"
-#include "helpers/xsd_types/xsd.h"
+//#include "shared/xsd_types/date_time.h"
+#include "shared/xsd_types/xsd.h"
 
 TEST(XsdString, Generic) {
 

@@ -3,15 +3,11 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "helpers",
+    name = "error",
     srcs = [
-        "h_tree_node.cc",
-        "uuid.cc",
         "error.cc",
     ],
     hdrs = [
-        "h_tree_node.h",
-        "uuid.h",
         "error.h",
     ],
 )
