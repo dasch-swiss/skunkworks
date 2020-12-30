@@ -4,7 +4,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "helpers/error.h"
+#include "shared/error/error.h"
 #include "user.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {

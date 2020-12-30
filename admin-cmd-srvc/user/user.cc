@@ -2,8 +2,8 @@
 // Created by Ivan Subotic on 27/11/2020.
 //
 
-#include "helpers/uuid.h"
-#include "helpers/error.h"
+#include "shared/uuid.h"
+#include "shared/error/error.h"
 #include "user.h"
 #include "value_types/identifier.h"
 #include "value_types/username.h"
