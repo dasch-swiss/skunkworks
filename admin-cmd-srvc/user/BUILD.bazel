@@ -16,8 +16,8 @@ cc_library(
         "//admin-cmd-srvc/user/value_types:status",
         "//admin-cmd-srvc/user/value_types:token",
         "//admin-cmd-srvc/user/value_types:username",
-        "//helpers",
-        "//helpers/xsd_types",
+        "//shared",
+        "//shared/xsd_types",
     ],
 )
 
@@ -36,8 +36,8 @@ cc_test(
       "//admin-cmd-srvc/user/value_types:status",
       "//admin-cmd-srvc/user/value_types:token",
       "//admin-cmd-srvc/user/value_types:username",
-      "//helpers",
-      "//helpers/xsd_types",
+      "//shared",
+      "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
   ],

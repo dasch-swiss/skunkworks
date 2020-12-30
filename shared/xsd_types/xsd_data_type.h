@@ -10,8 +10,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "helpers/xsd_types/xsd_error.h"
-#include "helpers/xsd_types/xsd_restriction.h"
+#include "shared/xsd_types/xsd_error.h"
+#include "shared/xsd_types/xsd_restriction.h"
 
 namespace xsd {
 

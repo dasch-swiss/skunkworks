@@ -4,7 +4,7 @@
 
 #include "catch2/catch.hpp"
 
-#include "helpers/uuid.h"
+#include "shared/uuid.h"
 
 #include "identifier.h"
 

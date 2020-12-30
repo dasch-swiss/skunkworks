@@ -2,7 +2,7 @@
 // Created by Ivan Subotic on 23/12/2020.
 //
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 
 #include "password.h"
 

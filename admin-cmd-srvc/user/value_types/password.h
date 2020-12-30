@@ -6,7 +6,7 @@
 #define SKUNKWORKS_ENTITIES_USER_PASSWORD_H_
 
 #include <string>
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 
 namespace admin::user {
 
