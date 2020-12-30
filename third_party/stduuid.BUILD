@@ -9,9 +9,17 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "stduuid",
-    hdrs = glob([
-       "include/*.h",
-       "gls/*"
-   ]),
-    copts = ["-Iexternal/stduuid/gsl"],
+    hdrs = [
+       "include/uuid.h",
+       "gsl/gsl",
+       "gsl/gsl_algorithm",
+       "gsl/gsl_assert",
+       "gsl/gsl_byte",
+       "gsl/gsl_util",
+       "gsl/multi_span",
+       "gsl/pointers",
+       "gsl/span",
+       "gsl/string_span",
+   ],
+    visibility = ["//visibility:public"],
 )

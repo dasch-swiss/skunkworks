@@ -4,6 +4,7 @@
 
 #include "catch2/catch.hpp"
 
+#include "external/stduuid/gsl/gsl"
 #include "external/stduuid/include/uuid.h"
 
 TEST_CASE("stduuid tests", "[stduuid|") {
