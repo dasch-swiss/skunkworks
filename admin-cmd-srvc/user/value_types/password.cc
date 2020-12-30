@@ -6,7 +6,6 @@
 
 #include "password.h"
 
-
 namespace admin::user {
 
 Password::Password(){
