@@ -21,6 +21,5 @@ cc_library(
        "gsl/span",
        "gsl/string_span",
    ],
-    copts = ["-Iexternal/stduuid/gsl"],
     visibility = ["//visibility:public"],
 )
