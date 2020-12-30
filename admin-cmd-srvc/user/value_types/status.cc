@@ -6,4 +6,8 @@
 
 namespace admin::user {
 
+Status::Status() {
+  value_ = false;
+}
+
 }

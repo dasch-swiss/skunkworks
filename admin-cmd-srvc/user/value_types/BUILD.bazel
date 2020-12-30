@@ -146,6 +146,7 @@ cc_test(
     size = "small",
     deps = [
       ":status",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -189,7 +190,7 @@ cc_test(
   size = "small",
   deps = [
       ":username",
-      "//shared",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
