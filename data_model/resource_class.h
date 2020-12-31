@@ -37,7 +37,7 @@ class ResourceClass : public ClassObj {
   } HasProperty;
 
  private:
-  typedef std::unordered_map<dsp::Id, HasProperty> HasPropertiesMap;
+  typedef std::unordered_map<dsp::Identifier, HasProperty> HasPropertiesMap;
 
  public:
 
@@ -75,7 +75,7 @@ class ResourceClass : public ClassObj {
    * @param property_id
    * @param min_count
    */
-  void change_min_count(const dsp::Id &property_id, int min_count);
+  void change_min_count(const dsp::Identifier &property_id, int min_count);
 
   /*!
    * Modifiy the max_count of this property
@@ -83,7 +83,7 @@ class ResourceClass : public ClassObj {
    * @param property_id
    * @param max_count
    */
-  void change_max_count(const dsp::Id &property_id, int max_count);
+  void change_max_count(const dsp::Identifier &property_id, int max_count);
 
   inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
     outStream << "ResourceClass:: " << std::endl <<

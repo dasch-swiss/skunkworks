@@ -15,19 +15,19 @@
 
 using namespace std::string_literals;
 
-TEST_CASE("DSP data types: Id", "SId") {
+TEST_CASE("DSP data types: Identifier", "SId") {
   CHECK_NOTHROW(dsp::Id());
-  std::unordered_map<dsp::Id, std::string> mm;
-  dsp::Id id1;
-  dsp::Id id2;
+  std::unordered_map<dsp::Identifier, std::string> mm;
+  dsp::Identifier id1;
+  dsp::Identifier id2;
   mm[id1] = "eins"s;
   mm[id2] = "zwei"s;
   CHECK(mm[id1] == "eins"s);
-  dsp::Id my_id;
+  dsp::Identifier my_id;
   std::string my_id_string = my_id.to_string();
-  dsp::Id my_id2(my_id_string);
+  dsp::Identifier my_id2(my_id_string);
   CHECK(my_id == my_id2);
-  auto named_id1 = dsp::Id("dasch.swiss"s, "lukas"s);
-  auto named_id2 = dsp::Id("dasch.swiss"s, "lukas"s);
+  auto named_id1 = dsp::Identifier("dasch.swiss"s, "lukas"s);
+  auto named_id2 = dsp::Identifier("dasch.swiss"s, "lukas"s);
   CHECK(named_id1 == named_id2);
 }

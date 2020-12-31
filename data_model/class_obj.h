@@ -48,7 +48,7 @@ class ClassObj {
    *
    * @param id
    */
-  ClassObj(const dsp::Id &id);
+  ClassObj(const dsp::Identifier &id);
 
   /*!
    * Getter for ID
@@ -56,7 +56,7 @@ class ClassObj {
    * @return
    */
   [[gnu::pure]] [[nodiscard]]
-  inline dsp::Id id() const { return id_; }
+  inline dsp::Identifier id() const { return id_; }
 
   /*!
    * Getter for in_data_model
@@ -124,7 +124,7 @@ class ClassObj {
   void class_description(const xsd::LangString &class_description);
 
  protected:
-  dsp::Id id_;
+  dsp::Identifier id_;
   std::weak_ptr<DataModel> in_data_model_;
   xsd::DateTimeStamp creation_date_;
   std::weak_ptr<Agent> created_by_;

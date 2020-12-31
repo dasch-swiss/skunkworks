@@ -14,7 +14,7 @@ static const char file_[] = __FILE__;
 namespace dsp {
 
 Project::Project() {
-  id_ = Id();
+  id_ = Identifier();
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
@@ -55,7 +55,7 @@ void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
   } // TODO: Use C++20 with contains ASAP!
 }
 
-std::optional<DataModelPtr> Project::get_data_model(const dsp::Id &data_model_id) {
+std::optional<DataModelPtr> Project::get_data_model(const dsp::Identifier &data_model_id) {
     auto res = data_models_.find(data_model_id);
     if (res == data_models_.end()) {
       return {};
@@ -64,7 +64,7 @@ std::optional<DataModelPtr> Project::get_data_model(const dsp::Id &data_model_id
     }
 }
 
-std::optional<DataModelPtr> Project::remove_data_model(const dsp::Id &data_model_id) {
+std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &data_model_id) {
   //
   // ToDo: Check here if data model is in use!!!
   //

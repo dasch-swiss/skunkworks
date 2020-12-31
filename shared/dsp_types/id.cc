@@ -7,16 +7,16 @@
 
 namespace dsp {
 
-Id::Id() {
+Identifier::Identifier() {
   //id_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-fA-F0-9]{8}[a-fA-F0-9]{4}[a-fA-F0-9]{4}[a-fA-F0-9]{4}[a-fA-F0-9]{12})", "UUID restriction"));
   uuid_ = uuids::uuid_system_generator{}();
 }
 
-Id::Id(const std::string &uuid_str)  {
+Identifier::Identifier(const std::string &uuid_str)  {
   uuid_ = uuids::uuid::from_string(uuid_str).value();
 }
 
-Id::Id(const std::string &base, const std::string &name) {
+Identifier::Identifier(const std::string &base, const std::string &name) {
   uuids::uuid empty;
   uuids::uuid_name_generator gen1(empty);
   uuids::uuid base_uuid = gen1(base);

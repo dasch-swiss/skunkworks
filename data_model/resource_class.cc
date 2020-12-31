@@ -38,7 +38,7 @@ void ResourceClass::add_property(const std::shared_ptr<Property> &property,
   throw Error(file_, __LINE__, "Property with same id already exists!");
 }
 
-void ResourceClass::change_min_count(const dsp::Id &property_id, int min_count) {
+void ResourceClass::change_min_count(const dsp::Identifier &property_id, int min_count) {
   try {
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
@@ -58,7 +58,7 @@ void ResourceClass::change_min_count(const dsp::Id &property_id, int min_count) 
   }
 }
 
-void ResourceClass::change_max_count(const dsp::Id &property_id, int max_count) {
+void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max_count) {
   try {
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.

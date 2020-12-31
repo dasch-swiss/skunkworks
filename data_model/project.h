@@ -70,7 +70,7 @@ class Project : public std::enable_shared_from_this<Project> {
    *
    * @return
    */
-  [[gnu::pure]] inline dsp::Id id() const { return id_; }
+  [[gnu::pure]] inline dsp::Identifier id() const { return id_; }
 
 
   /*!
@@ -86,24 +86,24 @@ class Project : public std::enable_shared_from_this<Project> {
    * @param data_model_id
    * @return
    */
-  std::optional<DataModelPtr> get_data_model(const dsp::Id &data_model_id);
+  std::optional<DataModelPtr> get_data_model(const dsp::Identifier &data_model_id);
 
   /*!
    * Remove the data model from the project.
    * @param data_model_id
    * @return
    */
-  std::optional<DataModelPtr> remove_data_model(const dsp::Id &data_model_id);
+  std::optional<DataModelPtr> remove_data_model(const dsp::Identifier &data_model_id);
 
  private:
-  dsp::Id id_;
+  dsp::Identifier id_;
   xsd::DateTimeStamp creation_date_;
   std::weak_ptr<Agent> created_by_;
   xsd::DateTimeStamp last_modification_date_;
   std::weak_ptr<Agent> modified_by_;
   dsp::Shortcode shortcode_;
   dsp::Shortname shortname_;
-  std::unordered_map<dsp::Id, std::shared_ptr<DataModel>> data_models_;
+  std::unordered_map<dsp::Identifier, std::shared_ptr<DataModel>> data_models_;
 };
 
 using ProjectPtr = std::shared_ptr<Project>;

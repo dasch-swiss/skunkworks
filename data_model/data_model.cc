@@ -47,7 +47,7 @@ void DataModel::add_resource_class(const std::shared_ptr<ResourceClass> &resourc
   } // TODO: Use C++20 with contains ASAP!
 }
 
-std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Id &resource_class_id) const {
+std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Identifier &resource_class_id) const {
   auto res = resource_classes_.find(resource_class_id);
   if (res == resource_classes_.end()) {
     return {};
@@ -56,7 +56,7 @@ std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Id &res
   }
 }
 
-std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Id &resource_class_id) {
+std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Identifier &resource_class_id) {
   //
   // ToDo: Check here if data model is in use!!!
   //
@@ -89,7 +89,7 @@ void DataModel::add_property(const std::shared_ptr<Property> &property) {
   } // TODO: Use C++20 with contains ASAP!
 }
 
-std::optional<PropertyPtr> DataModel::get_property(const dsp::Id &property_id) const {
+std::optional<PropertyPtr> DataModel::get_property(const dsp::Identifier &property_id) const {
   auto res = properties_.find(property_id);
   if (res == properties_.end()) {
     return {};
@@ -98,7 +98,7 @@ std::optional<PropertyPtr> DataModel::get_property(const dsp::Id &property_id) c
   }
 }
 
-std::optional<PropertyPtr> DataModel::remove_property(const dsp::Id &property_id) {
+std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &property_id) {
   //
   // ToDo: Check here if data model is in use!!!
   //
