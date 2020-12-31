@@ -9,7 +9,7 @@
 namespace admin::user {
 
 Password::Password(){
-  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(4, "The minimum password length is 4"));
+  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(4, "The minimum Password length is 4"));
 }
 
 }

@@ -43,6 +43,13 @@ class FamilyName {
   inline FamilyName &operator=(const std::string &value) { value_ = value; return *this; }
 
   /*!
+   * Direct assignment operator. Allows assigning a FamilyName directly as a value.
+   * @param value of type FamilyName which is being directly assigned.
+   * @return FamilyName
+   */
+  inline FamilyName &operator=(const FamilyName &value) = default;
+
+  /*!
    * Accessor returning the value as std::string.
    * @return std::string
    */

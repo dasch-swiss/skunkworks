@@ -17,6 +17,7 @@ cc_test(
     size = "small",
     deps = [
       ":email",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -60,6 +61,7 @@ cc_test(
     size = "small",
     deps = [
       ":given_name",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -82,6 +84,7 @@ cc_test(
     size = "small",
     deps = [
       ":identifier",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -103,6 +106,7 @@ cc_test(
     size = "small",
     deps = [
       ":lang",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",
@@ -168,6 +172,7 @@ cc_test(
     size = "small",
     deps = [
       ":token",
+      "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",
       "@catch2//:catch2",

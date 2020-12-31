@@ -5,7 +5,7 @@
 
 namespace admin::user {
 
-Username::Username(const std::string &value) {
+Username::Username() {
 
   /**
    * * A valid username has the following restriction:
@@ -16,14 +16,9 @@ Username::Username(const std::string &value) {
    *
    * regex from scala: ^(?=.{4,50}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._]+(?<![_.])$
    */
-
-  std::vector<std::shared_ptr<xsd::Restriction>> restrictions = {
-      std::make_shared<xsd::RestrictionMinLength>(4),
-      std::make_shared<xsd::RestrictionMaxLength>(50),
-      std::make_shared<xsd::RestrictionPattern>("([a-zA-Z0-9]*)")
-  };
-
-  value_ = xsd::String(value, restrictions);
+  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(4, "The minimum Username length is 4."));
+  value_.add_restriction(std::make_shared<xsd::RestrictionMaxLength>(50, "The maximum Username length is 50."));
+  value_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-zA-Z0-9]*)", "Only alphanumeric characters allowed inside an Username."));
 }
 
 } // namespace entities::user

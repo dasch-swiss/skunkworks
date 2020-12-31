@@ -7,12 +7,8 @@
 
 namespace admin::user {
 
-GivenName::GivenName(const std::string &value) {
-  value_ = value;
-}
-
-bool GivenName::operator==(const GivenName &rhs) const {
-  return static_cast<std::string>(value_) ==static_cast<std::string>(rhs.value_);
+GivenName::GivenName() {
+  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(2, "The minimum GivenName length is 2."));
 }
 
 }

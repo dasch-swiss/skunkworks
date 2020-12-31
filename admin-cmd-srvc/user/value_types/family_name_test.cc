@@ -27,7 +27,7 @@ TEST_CASE("family name value type", "[admin][user][family_name]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(FamilyName("d"), dsp::Error);
+    // CHECK_THROWS_AS(FamilyName("d"), xsd::Error);
   }
 
   SECTION("comparisons") {

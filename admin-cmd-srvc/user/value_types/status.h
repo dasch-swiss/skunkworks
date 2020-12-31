@@ -39,9 +39,16 @@ class Status {
   /*!
    * Direct assignment operator. Allows assigning a std::string directly as a value.
    * @param value of type std::string which is being directly assigned.
-   * @return
+   * @return Status
    */
   inline Status &operator=(const bool &value) { value_ = value; return *this; }
+
+  /*!
+   * Direct assignment operator. Allows assigning a Status directly as a value.
+   * @param value of type Status which is being directly assigned.
+   * @return Status
+   */
+  inline Status &operator=(const Status &value) = default;
 
   /*!
    * Accessor returning the value as bool.

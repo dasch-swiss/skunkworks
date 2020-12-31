@@ -6,8 +6,8 @@
 
 namespace admin::user {
 
-Email::Email(const std::string &value) {
-  value_ = "mailto:" + value;
+Email::Email() {
+  value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(3, "The minimum Email length is 3."));
 }
 
 }

@@ -43,6 +43,13 @@ class Password {
   inline Password &operator=(const std::string &value) { value_ = value; return *this; }
 
   /*!
+   * Direct assignment operator. Allows assigning a Password directly as a value.
+   * @param value of type Password which is being directly assigned.
+   * @return Password
+   */
+  inline Password &operator=(const Password &value) = default;
+
+  /*!
    * Accessor returning the value as std::string.
    * @return std::string
    */
