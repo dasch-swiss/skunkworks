@@ -3,8 +3,31 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_test(
-  name = "dsp_types_test",
-  srcs = ["dsp_types_test.cc"],
+  name = "shortcode_test",
+  srcs = ["shortcode_test.cc"],
+  copts = ["-Iexternal/stduuid/gsl"],
+  deps = [
+      ":dsp_types",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+cc_test(
+  name = "shortname_test",
+  srcs = ["shortname_test.cc"],
+  copts = ["-Iexternal/stduuid/gsl"],
+  deps = [
+      ":dsp_types",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+cc_test(
+  name = "id_test",
+  srcs = ["id_test.cc"],
+  copts = ["-Iexternal/stduuid/gsl"],
   deps = [
       ":dsp_types",
       "//tests:test_main",
@@ -21,13 +44,14 @@ cc_library(
         "id.cc"
     ],
     hdrs = [
-        "uuid.h",
         "shortcode.h",
         "shortname.h",
         "id.h",
     ],
     deps = [
-        "//helpers:helpers",
-        "//helpers/xsd_types"
+        "//shared",
+        "//shared/error",
+        "//shared/xsd_types",
+        "//third_party/stduuid"
     ],
 )

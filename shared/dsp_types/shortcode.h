@@ -5,7 +5,7 @@
 #ifndef SKUNKWORKS_HELPERS_DSP_TYPES_SHORTCODE_H_
 #define SKUNKWORKS_HELPERS_DSP_TYPES_SHORTCODE_H_
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 
 namespace dsp {
 

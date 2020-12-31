@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 #include "property.h"
 #include "resource_class.h"
 
@@ -37,7 +37,7 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    *
    * @return
    */
-  inline xsd::AnyUri id() const { return id_; }
+  inline dsp::Id id() const { return id_; }
 
   /*!
    * getter for shortname
@@ -65,7 +65,7 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    * @param resource_class_id
    * @return Optional shared_ptr to ResourceClass instance
    */
-  std::optional<ResourceClassPtr> get_resource_class(const xsd::AnyUri &resource_class_id) const ;
+  std::optional<ResourceClassPtr> get_resource_class(const dsp::Id &resource_class_id) const ;
 
   /*!
    * Remove a resource class from the data model
@@ -73,7 +73,7 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    * @param resource_class_id
    * @return Optional shared_ptr to ResourceClass instance that has been removed.
    */
-  std::optional<ResourceClassPtr> remove_resource_class(const xsd::AnyUri &resource_class_id);
+  std::optional<ResourceClassPtr> remove_resource_class(const dsp::Id &resource_class_id);
 
   /*!
    * Add a property to the data model
@@ -88,7 +88,7 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    * @param property_id
    * @return
    */
-  std::optional<PropertyPtr> get_property(const xsd::AnyUri &property_id) const ;
+  std::optional<PropertyPtr> get_property(const dsp::Id &property_id) const ;
 
   /*!
    * Remove property from data model
@@ -96,16 +96,16 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    * @param property_id
    * @return Optional shared_ptr to Property instance that has been removed
    */
-  std::optional<PropertyPtr> remove_property(const xsd::AnyUri &property_id);
+  std::optional<PropertyPtr> remove_property(const dsp::Id &property_id);
 
   friend Project; // grant access to class Project to private member variable project_
  private:
 
-  xsd::AnyUri id_;
+  dsp::Id id_;
   xsd::String shortname_;
   std::weak_ptr<Project> project_;
-  std::unordered_map<xsd::AnyUri, std::shared_ptr<ResourceClass>> resource_classes_;
-  std::unordered_map<std::string, std::shared_ptr<Property>> properties_;
+  std::unordered_map<dsp::Id, std::shared_ptr<ResourceClass>> resource_classes_;
+  std::unordered_map<dsp::Id, std::shared_ptr<Property>> properties_;
 
   //inline void project(const std::shared_ptr<Project> &project) { project_.lock() = project; }
 

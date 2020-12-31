@@ -8,10 +8,11 @@
 #include <string>
 #include <unordered_map>
 
-#include "helpers/xsd_types/xsd_any_uri.h"
-#include "helpers/xsd_types/xsd_restriction.h"
-#include "helpers/dsp_types/shortcode.h"
-#include "helpers/dsp_types/shortname.h"
+#include "shared/xsd_types/xsd_any_uri.h"
+#include "shared/xsd_types/xsd_restriction.h"
+#include "shared/dsp_types/id.h"
+#include "shared/dsp_types/shortcode.h"
+#include "shared/dsp_types/shortname.h"
 
 #include "data_model.h"
 
@@ -69,7 +70,7 @@ class Project : public std::enable_shared_from_this<Project> {
    *
    * @return
    */
-  [[gnu::pure]] inline xsd::AnyUri id() const { return id_; }
+  [[gnu::pure]] inline dsp::Id id() const { return id_; }
 
 
   /*!
@@ -85,24 +86,24 @@ class Project : public std::enable_shared_from_this<Project> {
    * @param data_model_id
    * @return
    */
-  std::optional<DataModelPtr> get_data_model(const xsd::AnyUri &data_model_id);
+  std::optional<DataModelPtr> get_data_model(const dsp::Id &data_model_id);
 
   /*!
    * Remove the data model from the project.
    * @param data_model_id
    * @return
    */
-  std::optional<DataModelPtr> remove_data_model(const xsd::AnyUri &data_model_id);
+  std::optional<DataModelPtr> remove_data_model(const dsp::Id &data_model_id);
 
  private:
-  xsd::AnyUri id_;
+  dsp::Id id_;
   xsd::DateTimeStamp creation_date_;
   std::weak_ptr<Agent> created_by_;
   xsd::DateTimeStamp last_modification_date_;
   std::weak_ptr<Agent> modified_by_;
   dsp::Shortcode shortcode_;
   dsp::Shortname shortname_;
-  std::unordered_map<xsd::AnyUri, std::shared_ptr<DataModel>> data_models_;
+  std::unordered_map<dsp::Id, std::shared_ptr<DataModel>> data_models_;
 };
 
 using ProjectPtr = std::shared_ptr<Project>;

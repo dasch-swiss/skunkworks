@@ -35,6 +35,7 @@ cc_library(
     deps = [
         "//shared",
         "//shared/error",
-        "//shared/xsd_types"
+        "//shared/xsd_types",
+        "//shared/dsp_types"
     ],
 )

@@ -38,7 +38,7 @@ void ResourceClass::add_property(const std::shared_ptr<Property> &property,
   throw Error(file_, __LINE__, "Property with same id already exists!");
 }
 
-void ResourceClass::change_min_count(const xsd::String &property_id, int min_count) {
+void ResourceClass::change_min_count(const dsp::Id &property_id, int min_count) {
   try {
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
@@ -47,18 +47,18 @@ void ResourceClass::change_min_count(const xsd::String &property_id, int min_cou
       if (min_count <= tmp.min_count_) {
         tmp.min_count_ = min_count;
       } else {
-        throw Error(file_, __LINE__, "Cannot make min_count more restrictive for property in use (id=" + static_cast<std::string>(property_id) + ")!");
+        throw Error(file_, __LINE__, "Cannot make min_count more restrictive for property in use (id=" + property_id.to_string() + ")!");
       }
     } else {
       tmp.min_count_ = min_count;
     }
     has_properties_[property_id] = tmp;
   } catch (const std::out_of_range &err) {
-    throw Error(file_, __LINE__, "Property with id=" + static_cast<std::string>(property_id) + " does not exist!");
+    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
 }
 
-void ResourceClass::change_max_count(const xsd::String &property_id, int max_count) {
+void ResourceClass::change_max_count(const dsp::Id &property_id, int max_count) {
   try {
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
@@ -67,14 +67,14 @@ void ResourceClass::change_max_count(const xsd::String &property_id, int max_cou
       if (max_count <= tmp.max_count_) {
         tmp.max_count_ = max_count;
       } else {
-        throw Error(file_, __LINE__, "Cannot make max_count more restrictive for property in use (id=" + static_cast<std::string>(property_id) + ")!");
+        throw Error(file_, __LINE__, "Cannot make max_count more restrictive for property in use (id=" + property_id.to_string() + ")!");
       }
     } else {
       tmp.max_count_ = max_count;
     }
     has_properties_[property_id] = tmp;
   } catch (const std::out_of_range &err) {
-    throw Error(file_, __LINE__, "Property with id=" + static_cast<std::string>(property_id) + " does not exist!");
+    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
 }
 

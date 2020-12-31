@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "shared/xsd_types/xsd.h"
+#include "shared/dsp_types/id.h"
 #include "configuration.h"
 #include "agent.h"
 //#include "data_model.h"
@@ -47,7 +48,7 @@ class ClassObj {
    *
    * @param id
    */
-  ClassObj(const xsd::AnyUri &id);
+  ClassObj(const dsp::Id &id);
 
   /*!
    * Getter for ID
@@ -55,7 +56,7 @@ class ClassObj {
    * @return
    */
   [[gnu::pure]] [[nodiscard]]
-  inline xsd::AnyUri id() const { return id_; }
+  inline dsp::Id id() const { return id_; }
 
   /*!
    * Getter for in_data_model
@@ -123,7 +124,7 @@ class ClassObj {
   void class_description(const xsd::LangString &class_description);
 
  protected:
-  xsd::AnyUri id_;
+  dsp::Id id_;
   std::weak_ptr<DataModel> in_data_model_;
   xsd::DateTimeStamp creation_date_;
   std::weak_ptr<Agent> created_by_;

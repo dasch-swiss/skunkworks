@@ -5,7 +5,7 @@
 #ifndef SKUNKWORKS_HELPERS_DSP_TYPES_SHORTNAME_H_
 #define SKUNKWORKS_HELPERS_DSP_TYPES_SHORTNAME_H_
 
-#include "helpers/xsd_types/xsd.h"
+#include "shared/xsd_types/xsd.h"
 
 namespace dsp {
 
@@ -81,6 +81,11 @@ class Shortname {
    * @return
    */
   bool operator==(const std::string &other) const;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, const Shortname &rhs) {
+    out_stream << static_cast<std::string>(rhs);
+    return out_stream;
+  }
 
  private:
   xsd::String shortname_;

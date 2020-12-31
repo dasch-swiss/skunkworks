@@ -66,7 +66,7 @@ TEST_CASE("Data model tests", "[catch2|") {
 
   my_data_model->add_property(my_property);
 
-  std::set<std::string> props;
+  std::set<dsp::Id> props;
   REQUIRE_NOTHROW(my_resource_class->add_property(my_property, 1, 1));
   props.insert(my_property->id());
 

@@ -20,7 +20,7 @@ ClassObj::ClassObj(
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
-ClassObj::ClassObj(const xsd::AnyUri &id) : id_(id) {}
+ClassObj::ClassObj(const dsp::Id &id) : id_(id) {}
 
 void ClassObj::class_label(const xsd::LangString &class_label) {
   class_label_ = class_label;
