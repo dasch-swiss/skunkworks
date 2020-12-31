@@ -32,7 +32,7 @@ User::User(
     const std::shared_ptr<Status> &status,
     const std::shared_ptr<Lang> &lang) {
 
-  id_ = Identifier();
+  id_ = std::make_shared<Identifier>();
 
   username_ = username;
   email_ = email;
