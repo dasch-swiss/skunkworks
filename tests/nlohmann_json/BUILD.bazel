@@ -3,11 +3,10 @@ load("@rules_cc//cc:defs.bzl", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_test(
-  name = "stduuid_test",
-  srcs = ["stduuid_test.cc"],
+  name = "nlohmann_json_test",
+  srcs = ["nlohmann_json_test.cc"],
   deps = [
-      "@stduuid//:uuid",
-      "@stduuid//:gsl",
+      "@nlohmann//:nlohmann",
       "//tests:test_main",
       "@catch2//:catch2",
   ],
