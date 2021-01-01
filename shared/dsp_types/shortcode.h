@@ -5,6 +5,8 @@
 #ifndef SKUNKWORKS_HELPERS_DSP_TYPES_SHORTCODE_H_
 #define SKUNKWORKS_HELPERS_DSP_TYPES_SHORTCODE_H_
 
+#include <string>
+
 #include "shared/xsd_types/xsd.h"
 
 namespace dsp {
@@ -20,19 +22,19 @@ class Shortcode {
    * Constructor taking a std::string as parameter
    * @param shortcode
    */
-  explicit Shortcode(const std::string &shortcode);
+  inline explicit Shortcode(const std::string &shortcode)  : Shortcode() { shortcode_ = shortcode; }
 
   /*!
    * Constructor taking a xsd::string as parameter
    * @param shortcode
    */
-  explicit Shortcode(const xsd::String &shortcode);
+  inline explicit Shortcode(const xsd::String &shortcode)  : Shortcode() { shortcode_ = shortcode; }
 
   /*!
    * Copy constructor taking a dsp::Shortname as parameter
    * @param shortcode
    */
-  Shortcode(const Shortcode &shortcode);
+  inline Shortcode(const Shortcode &shortcode) : Shortcode() { shortcode_ = shortcode.shortcode_; }
 
   /*!
    * Assignment operator with dsp:Shortcode
@@ -59,28 +61,28 @@ class Shortcode {
    * Explicit type cast to std::string
    * @return
    */
-  explicit operator std::string() const;
+  inline explicit operator std::string() const { return static_cast<std::string>(shortcode_); }
 
   /*!
    * Equality operator with other shortcode
    * @param other
    * @return
    */
-  bool operator==(const Shortcode &other) const;
+  inline bool operator==(const Shortcode &other) const { return shortcode_ == other.shortcode_; }
 
   /*!
    * Equality operator with xsd::String
    * @param other
    * @return
    */
-  bool operator==(const xsd::String &other) const;
+  inline bool operator==(const xsd::String &other) const { return shortcode_ == other; }
 
   /*!
    * Equality operator with std::string
    * @param other
    * @return
    */
-  bool operator==(const std::string &other) const;
+  inline bool operator==(const std::string &other) const { return static_cast<std::string>(shortcode_) == other; }
 
  private:
   xsd::String shortcode_;

@@ -20,19 +20,19 @@ class Shortname {
    * Constructor taking a std::string as parameter
    * @param Shortname
    */
-  explicit Shortname(const std::string &shortname);
+  inline explicit Shortname(const std::string &shortname) : Shortname() { shortname_ = shortname; }
 
   /*!
    * Constructor taking a xsd::string as parameter
    * @param shortname
    */
-  explicit Shortname(const xsd::String &shortname);
+  inline explicit Shortname(const xsd::String &shortname) : Shortname() { shortname_ = shortname; }
 
   /*!
    * Copy constructor taking a dsp::Shortname as parameter
    * @param shortname
    */
-  Shortname(const Shortname &shortname);
+  inline Shortname(const Shortname &shortname) : Shortname() { shortname_ = shortname.shortname_; }
 
   /*!
    * Assignment operator with dsp:Shortname
@@ -59,28 +59,28 @@ class Shortname {
    * Explicit type cast to std::string
    * @return
    */
-  explicit operator std::string() const;
+  inline explicit operator std::string() const { return static_cast<std::string>(shortname_); }
 
   /*!
    * Equality operator with other shortname
    * @param other
    * @return
    */
-  bool operator==(const Shortname &other) const;
+  inline bool operator==(const Shortname &other) const { return shortname_ == other.shortname_; }
 
   /*!
    * Equality operator with xsd::String
    * @param other
    * @return
    */
-  bool operator==(const xsd::String &other) const;
+  bool operator==(const xsd::String &other) const { return shortname_ == other; }
 
   /*!
    * Equality operator with std::string
    * @param other
    * @return
    */
-  bool operator==(const std::string &other) const;
+  bool operator==(const std::string &other) const { return static_cast<std::string>(shortname_) == other; }
 
   inline friend std::ostream &operator<<(std::ostream &out_stream, const Shortname &rhs) {
     out_stream << static_cast<std::string>(rhs);
