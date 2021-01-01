@@ -8,15 +8,15 @@
 #include <memory>
 #include <string>
 
-#include "value_types/identifier.h"
-#include "value_types/username.h"
-#include "value_types/email.h"
-#include "value_types/password.h"
-#include "value_types/token.h"
-#include "value_types/given_name.h"
-#include "value_types/family_name.h"
-#include "value_types/status.h"
-#include "value_types/lang.h"
+#include "shared/dsp_types/identifier.h"
+#include "shared/dsp_types/username.h"
+#include "shared/dsp_types/email.h"
+#include "shared/dsp_types/password.h"
+#include "shared/dsp_types/token.h"
+#include "shared/dsp_types/given_name.h"
+#include "shared/dsp_types/family_name.h"
+#include "shared/dsp_types/status.h"
+#include "shared/dsp_types/lang.h"
 
 namespace admin::user {
 
