@@ -1,0 +1,44 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "user",
+    srcs = ["user.cc"],
+    hdrs = ["user.h"],
+    deps = [
+        "//shared/dsp_types:email",
+        "//shared/dsp_types:family_name",
+        "//shared/dsp_types:given_name",
+        "//shared/dsp_types:identifier",
+        "//shared/dsp_types:lang",
+        "//shared/dsp_types:password",
+        "//shared/dsp_types:status",
+        "//shared/dsp_types:token",
+        "//shared/dsp_types:username",
+        "//shared/error",
+        "//shared/xsd_types",
+    ],
+)
+
+cc_test(
+    name = "user_test",
+    srcs = ["user_test.cc"],
+    size = "small",
+    deps = [
+        ":user",
+        "//shared/dsp_types:email",
+        "//shared/dsp_types:family_name",
+        "//shared/dsp_types:given_name",
+        "//shared/dsp_types:identifier",
+        "//shared/dsp_types:lang",
+        "//shared/dsp_types:password",
+        "//shared/dsp_types:status",
+        "//shared/dsp_types:token",
+        "//shared/dsp_types:username",
+        "//shared/error",
+        "//shared/xsd_types",
+        "//tests:test_main",
+        "@catch2//:catch2",
+    ],
+)

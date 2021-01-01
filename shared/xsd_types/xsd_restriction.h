@@ -32,9 +32,9 @@ class Restriction {
   virtual ~Restriction() = default;
 
   /*!
-   * Check if the string given a parameter fullfills the restriction
+   * Check if the string given a parameter fulfills the restriction
    * @param strval String to be checked
-   * @return "true" if restriction is fullfilled, "false" otherwise
+   * @return "true" if restriction is fulfilled, "false" otherwise
    */
   [[nodiscard]] virtual Result validate(const std::string &strval) const = 0;
  protected:
