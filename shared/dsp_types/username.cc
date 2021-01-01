@@ -3,7 +3,7 @@
 #include "shared/xsd_types/xsd.h"
 #include "username.h"
 
-namespace admin::user {
+namespace dsp {
 
 Username::Username() {
 

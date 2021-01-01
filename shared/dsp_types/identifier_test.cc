@@ -10,7 +10,7 @@
 
 TEST_CASE("identifier value type", "[entities][user][identifier]") {
 
-  using namespace admin::user;
+  using namespace dsp;
 
   SECTION("create identifier through default constructor (no provided value)") {
     CHECK_NOTHROW(Identifier());

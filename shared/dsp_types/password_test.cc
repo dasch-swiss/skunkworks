@@ -11,7 +11,7 @@
 TEST_CASE("password value type", "[entities][user][password]") {
 
   using namespace std::string_literals; // enables s-suffix for std::string literals
-  using namespace admin::user;
+  using namespace dsp;
 
   SECTION("create") {
     CHECK(Password().empty());

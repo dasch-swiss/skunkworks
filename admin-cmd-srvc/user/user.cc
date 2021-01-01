@@ -23,16 +23,16 @@ namespace admin::user {
 User::User(){}
 
 User::User(
-    const std::shared_ptr<Username> &username,
-    const std::shared_ptr<Email> &email,
-    const std::shared_ptr<Password> &password,
-    const std::shared_ptr<Token> &token,
-    const std::shared_ptr<GivenName> &given_name,
-    const std::shared_ptr<FamilyName> &family_name,
-    const std::shared_ptr<Status> &status,
-    const std::shared_ptr<Lang> &lang) {
+    const std::shared_ptr<dsp::Username> &username,
+    const std::shared_ptr<dsp::Email> &email,
+    const std::shared_ptr<dsp::Password> &password,
+    const std::shared_ptr<dsp::Token> &token,
+    const std::shared_ptr<dsp::GivenName> &given_name,
+    const std::shared_ptr<dsp::FamilyName> &family_name,
+    const std::shared_ptr<dsp::Status> &status,
+    const std::shared_ptr<dsp::Lang> &lang) {
 
-  id_ = std::make_shared<Identifier>();
+  id_ = std::make_shared<dsp::Identifier>();
 
   username_ = username;
   email_ = email;

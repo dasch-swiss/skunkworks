@@ -5,7 +5,7 @@
 #include "shared/xsd_types/xsd.h"
 #include "given_name.h"
 
-namespace admin::user {
+namespace dsp {
 
 GivenName::GivenName() {
   value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(2, "The minimum GivenName length is 2."));

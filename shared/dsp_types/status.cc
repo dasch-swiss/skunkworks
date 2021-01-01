@@ -4,7 +4,7 @@
 
 #include "status.h"
 
-namespace admin::user {
+namespace dsp {
 
 Status::Status() {
   value_ = false;

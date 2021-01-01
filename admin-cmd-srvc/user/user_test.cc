@@ -11,14 +11,14 @@ TEST_CASE("creating the user and getting all value", "[entities][user]") {
   using namespace admin::user;
 
   SECTION("create email") {
-    User user = User(std::make_shared<Username>("dduck"),
-                     std::make_shared<Email>("dduck@example.com"),
-                     std::make_shared<Password>("1234"),
-                     std::make_shared<Token>("none"),
-                     std::make_shared<GivenName>("Donald"),
-                     std::make_shared<FamilyName>("Duck"),
-                     std::make_shared<Status>(true),
-                     std::make_shared<Lang>("en"));
+    User user = User(std::make_shared<dsp::Username>("dduck"),
+                     std::make_shared<dsp::Email>("dduck@example.com"),
+                     std::make_shared<dsp::Password>("1234"),
+                     std::make_shared<dsp::Token>("none"),
+                     std::make_shared<dsp::GivenName>("Donald"),
+                     std::make_shared<dsp::FamilyName>("Duck"),
+                     std::make_shared<dsp::Status>(true),
+                     std::make_shared<dsp::Lang>("en"));
 
     CHECK(user.username() == "dduck");
     CHECK(user.email() == "dduck@example.com");

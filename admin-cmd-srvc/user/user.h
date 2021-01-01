@@ -33,14 +33,14 @@ class User {
   /*!
    * Constructor for creating a fully populated user.
    */
-  User(const std::shared_ptr<Username> &username,
-       const std::shared_ptr<Email> &email,
-       const std::shared_ptr<Password> &password,
-       const std::shared_ptr<Token> &token,
-       const std::shared_ptr<GivenName> &given_name,
-       const std::shared_ptr<FamilyName> &family_name,
-       const std::shared_ptr<Status> &status,
-       const std::shared_ptr<Lang> &lang);
+  User(const std::shared_ptr<dsp::Username> &username,
+       const std::shared_ptr<dsp::Email> &email,
+       const std::shared_ptr<dsp::Password> &password,
+       const std::shared_ptr<dsp::Token> &token,
+       const std::shared_ptr<dsp::GivenName> &given_name,
+       const std::shared_ptr<dsp::FamilyName> &family_name,
+       const std::shared_ptr<dsp::Status> &status,
+       const std::shared_ptr<dsp::Lang> &lang);
 
   inline std::string id() { return id_->value(); };
   inline std::string username() { return username_->value(); };
@@ -53,15 +53,15 @@ class User {
   inline std::string lang() { return lang_->value(); };
 
  private:
-  std::shared_ptr<Identifier> id_;
-  std::shared_ptr<Username> username_;
-  std::shared_ptr<Email> email_;
-  std::shared_ptr<Password> password_;
-  std::shared_ptr<Token> token_;
-  std::shared_ptr<GivenName> given_name_;
-  std::shared_ptr<FamilyName> family_name_;
-  std::shared_ptr<Status> status_;
-  std::shared_ptr<Lang> lang_;
+  std::shared_ptr<dsp::Identifier> id_;
+  std::shared_ptr<dsp::Username> username_;
+  std::shared_ptr<dsp::Email> email_;
+  std::shared_ptr<dsp::Password> password_;
+  std::shared_ptr<dsp::Token> token_;
+  std::shared_ptr<dsp::GivenName> given_name_;
+  std::shared_ptr<dsp::FamilyName> family_name_;
+  std::shared_ptr<dsp::Status> status_;
+  std::shared_ptr<dsp::Lang> lang_;
 };
 
 } // namespace admin::user

@@ -10,7 +10,7 @@
 TEST_CASE("given name value type", "[entities][user][given_name]") {
 
   using namespace std::string_literals; // enables s-suffix for std::string literals
-  using namespace admin::user;
+  using namespace dsp;
 
   SECTION("create") {
     CHECK(GivenName().empty());

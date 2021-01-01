@@ -5,7 +5,7 @@
 #include "shared/uuid.h"
 #include "identifier.h"
 
-namespace admin::user {
+namespace dsp {
 
 Identifier::Identifier() {
   value_ = uuid::generate_uuid_v4();

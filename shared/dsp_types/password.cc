@@ -6,7 +6,7 @@
 
 #include "password.h"
 
-namespace admin::user {
+namespace dsp {
 
 Password::Password(){
   value_.add_restriction(std::make_shared<xsd::RestrictionMinLength>(4, "The minimum Password length is 4"));

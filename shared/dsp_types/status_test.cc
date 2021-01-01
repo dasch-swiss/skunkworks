@@ -10,7 +10,7 @@
 
 TEST_CASE("status value type", "[entities][user][status]") {
 
-  using namespace admin::user;
+  using namespace dsp;
 
   SECTION("create") {
     CHECK(!Status().value());

@@ -7,7 +7,7 @@
 
 #include "lang.h"
 
-namespace admin::user {
+namespace dsp {
 
 Lang::Lang() {
   std::set<std::string> supported_languages = {"en", "de", "fr", "it", "rm"};

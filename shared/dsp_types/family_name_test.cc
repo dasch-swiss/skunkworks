@@ -11,7 +11,7 @@
 TEST_CASE("family name value type", "[admin][user][family_name]") {
 
   using namespace std::string_literals; // enables s-suffix for std::string literals
-  using namespace admin::user;
+  using namespace dsp;
 
   SECTION("create") {
     CHECK(FamilyName().empty());
@@ -27,7 +27,7 @@ TEST_CASE("family name value type", "[admin][user][family_name]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(FamilyName("d"), xsd::Error);
+    CHECK_THROWS_AS(FamilyName("d"), xsd::Error);
   }
 
   SECTION("comparisons") {

@@ -8,7 +8,7 @@
 #include <string>
 #include "shared/xsd_types/xsd.h"
 
-namespace admin::user {
+namespace dsp {
 
 class Status {
 
