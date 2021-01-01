@@ -28,7 +28,8 @@ TEST_CASE("status value type", "[entities][user][status]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(Status("non_bool"), dsp::Error);
+    // FIXME: any kind of string is always true. Need to support more than two states.
+    // CHECK_THROWS_AS(Status("non_bool"), xsd::Error);
   }
 
   SECTION("comparisons") {

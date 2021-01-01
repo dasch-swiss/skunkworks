@@ -36,7 +36,7 @@ TEST_CASE("lang value type", "[admin][user][lang]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(Lang("sr"s), xsd::Error);
+    CHECK_THROWS_AS(Lang("sr"s), xsd::Error);
   }
 
   SECTION("comparisons") {

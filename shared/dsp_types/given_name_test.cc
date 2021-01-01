@@ -26,7 +26,7 @@ TEST_CASE("given name value type", "[entities][user][given_name]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(GivenName("d"), xsd::Error);
+    CHECK_THROWS_AS(GivenName("d"), xsd::Error);
   }
 
   SECTION("comparisons") {

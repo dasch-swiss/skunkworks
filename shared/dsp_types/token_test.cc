@@ -21,12 +21,12 @@ TEST_CASE("creating the token value type", "[entities][user][token]") {
 
   SECTION("direct assignments") {
     Token token;
-    token = "New token"s;
-    CHECK(token.value() == "New token"s);
+    token = "new token which whe want to directly assign"s;
+    CHECK(token.value() == "new token which whe want to directly assign"s);
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(Token("123456789"), dsp::Error);
+    CHECK_THROWS_AS(Token("123456789"), xsd::Error);
   }
 
   SECTION("comparisons") {

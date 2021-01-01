@@ -34,7 +34,7 @@ TEST_CASE("creating the username value type", "[entities][user][username]") {
   SECTION("restrictions - length") {
 
     // username has 3 characters
-    // CHECK_THROWS_AS(Username("abc"), xsd::Error);
+    CHECK_THROWS_AS(Username("abc"), xsd::Error);
 
     // username has 4 characters
     CHECK_NOTHROW(Username("root"));
@@ -43,13 +43,13 @@ TEST_CASE("creating the username value type", "[entities][user][username]") {
     CHECK_NOTHROW(Username("12345678901234567890123456789012345678901234567890"));
 
     // username has 51 characters
-    // CHECK_THROWS_AS(Username("123456789012345678901234567890123456789012345678901"), xsd::Error);
+    CHECK_THROWS_AS(Username("123456789012345678901234567890123456789012345678901"), xsd::Error);
   }
 
   // Only contains alphanumeric characters
   SECTION("restrictions - allowed characters") {
     // username has not allowed characters
-    // CHECK_THROWS_AS(admin::user::Username("abc123._"), xsd::Error);
+    CHECK_THROWS_AS(Username("abc123._"), xsd::Error);
   }
 
   SECTION("comparisons") {

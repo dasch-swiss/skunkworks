@@ -27,7 +27,7 @@ TEST_CASE("password value type", "[entities][user][password]") {
   }
 
   SECTION("restrictions") {
-    // CHECK_THROWS_AS(Password("abr"), dsp::Error);
+    CHECK_THROWS_AS(Password("abr"), xsd::Error);
   }
 
   SECTION("comparisons") {
