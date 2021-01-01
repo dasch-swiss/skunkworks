@@ -1,9 +1,16 @@
 workspace(name = "swiss_dasch_skunkworks")
-
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
+# Get rules_cc. Although the cc rules are built into Bazel, they will be moved
+# out in the future, into their own rules. Using this now, will save migration work later.
+rules_cc_tag = "b1c40e1de81913a3c40e5948f78719c28152486d" # 11. November 2020
+rules_cc_sha256 = "d0c573b94a6ef20ef6ff20154a23d0efcb409fb0e1ff0979cec318dfe42f0cdd"
+http_archive(
+    name = "rules_cc",
+    strip_prefix = "rules_cc-{}".format(rules_cc_tag),
+    url = "https://github.com/bazelbuild/rules_cc/archive/{}.zip".format(rules_cc_tag),
+    sha256 = rules_cc_sha256,
+)
 
 # The rules_foreign_cc rule repository - commit from 26.10.2020
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
@@ -14,13 +21,12 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_foreign_cc/archive/%s.zip" % rules_foreign_cc_version,
     sha256 = rules_foreign_cc_version_sha256,
 )
-
+# Recursively import foreign_cc rules' dependencies and register default tools-toolchains (make, cmake, ninja).
 load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependencies")
-
-# Register default toolchain. It is also possible to register
-# custom toolchains.
 rules_foreign_cc_dependencies(register_default_tools = True)
 
+# used as default build file content in the download rules used in combination with rules_foreign_cc
+all_content = """filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])"""
 
 # @zlib//:all
 http_archive(
@@ -94,8 +100,31 @@ http_archive(
 # curl
 http_archive(
     name = "curl",
-    build_file_content = all_and_magic_files,
+    build_file_content = all_content,
     strip_prefix = "curl-7.70.0",
     urls = ["https://curl.haxx.se/download/curl-7.70.0.tar.gz"],
     sha256 = "ca2feeb8ef13368ce5d5e5849a5fd5e2dd4755fecf7d8f0cc94000a4206fb8e7",
+)
+
+# catch2
+catch2_tag = "2.13.3"
+catch2_sha256 = "1804feb72bc15c0856b4a43aa586c661af9c3685a75973b6a8fc0b950c7cfd13"
+http_archive(
+    name = "catch2",
+    strip_prefix = "Catch2-{}".format(catch2_tag),
+    type = "zip",
+    url = "https://github.com/catchorg/Catch2/archive/v{}.zip".format(catch2_tag),
+    sha256 = catch2_sha256,
+)
+
+# stduuid
+stduuid_tag = "5890c94bfac2f00f22a1c1481e5839c51d6a6f3f"
+stduuid_sha256 = "eb1b83aecb19019c6d67536ec42598c2f3c05c4e34bbc7e24714f8a65bdd63ad"
+http_archive(
+    name = "stduuid",
+    build_file = "@//third_party:stduuid.BUILD",
+    strip_prefix = "stduuid-{}".format(stduuid_tag),
+    type = "zip",
+    url = "https://github.com/mariusbancila/stduuid/archive/{}.zip".format(stduuid_tag),
+    sha256 = stduuid_sha256,
 )

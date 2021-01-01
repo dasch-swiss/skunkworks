@@ -1,0 +1,40 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "data_model_test",
+  srcs = ["data_model_test.cc"],
+  deps = [
+      ":data_model",
+      "//tests:test_main",
+      "@catch2//:catch2",
+  ],
+)
+
+cc_library(
+    name = "data_model",
+    srcs = [
+        "configuration.cc",
+        "data_model.cc",
+        "project.cc",
+        "agent.cc",
+        "class_obj.cc",
+        "property.cc",
+        "resource_class.cc",
+    ],
+    hdrs = [
+        "configuration.h",
+        "data_model.h",
+        "project.h",
+        "agent.h",
+        "class_obj.h",
+        "property.h",
+        "resource_class.h",
+    ],
+    deps = [
+        "//shared",
+        "//shared/error",
+        "//shared/xsd_types"
+    ],
+)
