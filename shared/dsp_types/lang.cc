@@ -9,9 +9,6 @@
 
 namespace dsp {
 
-Lang::Lang() {
-  std::set<std::string> supported_languages = {"en", "de", "fr", "it", "rm"};
-  value_.add_restriction(std::make_shared<xsd::RestrictionEnumeration>(supported_languages));
-}
+Lang::Lang() {}
 
 }

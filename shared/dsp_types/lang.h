@@ -21,13 +21,13 @@ class Lang {
    * Constructor taking a std::string as parameter.
    * @param value
    */
-  inline explicit Lang(const std::string &value) : Lang() { value_ = value; };
+  inline explicit Lang(const std::string &value) : Lang() { value_ = xsd::Language(value); };
 
   /*!
    * Constructor taking a xsd::String as parameter.
    * @param value
    */
-  inline explicit Lang(const xsd::String &value) : Lang() { value_ = value; };
+  inline explicit Lang(const xsd::String &value) : Lang() { value_ = xsd::Language(value); };
 
   /*!
    * Copy constructor taking a dsp::FamilyName as parameter.
@@ -40,7 +40,7 @@ class Lang {
    * @param value of type std::string which is being directly assigned.
    * @return Lang
    */
-  inline Lang &operator=(const std::string &value) { value_ = value; return *this; };
+  inline Lang &operator=(const std::string &value) { value_ = xsd::Language(value); return *this; };
 
   /*!
    * Direct assignment operator. Allows assigning a Lang directly as a value.
@@ -82,7 +82,7 @@ class Lang {
   }
 
  private:
-  xsd::String value_;
+  xsd::Language value_;
 };
 
 }
