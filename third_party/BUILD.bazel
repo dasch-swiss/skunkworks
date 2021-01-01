@@ -25,7 +25,7 @@ configure_make(
     ],
     deps = [
         ":openssl",
-        ":zlib",
+        "@zlib//:zlib",
     ]
 )
 
@@ -73,7 +73,7 @@ configure_make(
             "AR": "",
     },
     deps = [
-        ":zlib",
+        "@zlib//:zlib",
     ],
     static_libraries = [
         "libssl.a",
@@ -81,12 +81,13 @@ configure_make(
     ],
 )
 
+# using the version that comes with protobuf
 # build zlib
-configure_make(
-    name = "zlib",
-    configure_options = [
-        "--static",
-    ],
-    lib_source = "@zlib//:all",
-    static_libraries = ["libz.a"],
-)
+#configure_make(
+#    name = "zlib",
+#    configure_options = [
+#        "--static",
+#    ],
+#    lib_source = "@zlib//:all",
+#    static_libraries = ["libz.a"],
+#)

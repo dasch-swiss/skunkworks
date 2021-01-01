@@ -4,7 +4,10 @@
 
 #include "catch2/catch.hpp"
 
-#include "external/stduuid/include/uuid.h"
+#include "external/stduuid/gsl/gsl" // compiles but does not work in IDE
+#include "gsl/gsl" // only needed for IDE
+#include "external/stduuid/include/uuid.h" // compiles but does not work in IDE
+#include "include/uuid.h" // only needed for IDE
 
 TEST_CASE("stduuid tests", "[stduuid|") {
   uuids::uuid empty;
