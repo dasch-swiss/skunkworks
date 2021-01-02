@@ -1,0 +1,19 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "create_user",
+    srcs = ["create_user.cc"],
+    hdrs = ["create_user.h"],
+    deps = [
+    ],
+)
+
+cc_library(
+    name = "find_user",
+    srcs = ["find_user.cc"],
+    hdrs = ["find_user.h"],
+    deps = [
+    ],
+)

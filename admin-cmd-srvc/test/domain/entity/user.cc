@@ -5,10 +5,10 @@
 #include "catch2/catch.hpp"
 
 #include "shared/error/error.h"
-#include "user.h"
+#include "admin-cmd-srvc/src/domain/entity/user.h"
 
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
-  using namespace admin::user;
+  using namespace admin::entity;
 
   SECTION("create email") {
     User user = User(std::make_shared<dsp::Username>("dduck"),

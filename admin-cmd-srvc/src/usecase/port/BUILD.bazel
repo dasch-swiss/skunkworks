@@ -1,0 +1,11 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_library(
+    name = "i_user_repository",
+    hdrs = ["i_user_repository.h"],
+    deps = [
+        "//admin-cmd-srvc/src/domain/entity:user",
+    ],
+)

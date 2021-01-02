@@ -18,7 +18,7 @@
 #include "shared/dsp_types/status.h"
 #include "shared/dsp_types/lang.h"
 
-namespace admin::user {
+namespace admin::entity {
 
 /*!
  * The class represents a user in the system.
