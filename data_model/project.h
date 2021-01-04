@@ -8,13 +8,26 @@
 #include <string>
 #include <unordered_map>
 
+#include "external/nlohmann/json.hpp"
+
 #include "shared/xsd_types/xsd_any_uri.h"
 #include "shared/xsd_types/xsd_restriction.h"
 #include "shared/dsp_types/id.h"
 #include "shared/dsp_types/shortcode.h"
 #include "shared/dsp_types/shortname.h"
 
+#include "generic_object_description.h"
 #include "data_model.h"
+#include "adapter.h"
+#include "key_value_store.h"
+
+// ToDo!! Temporary code
+template <typename T>
+bool is_uninitialized(std::weak_ptr<T> const& weak) {
+  using wt = std::weak_ptr<T>;
+  return !weak.owner_before(wt{}) && !wt{}.owner_before(weak);
+}
+
 
 namespace dsp {
 
@@ -51,26 +64,33 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
 
+  Project(const GenericObjectDesciption& object_description);
+
+  inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
+  inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }
+  inline xsd::DateTimeStamp last_modification_date() const { return last_modification_date_; }
+  inline std::shared_ptr<Agent> modified_by() const { return modified_by_.lock(); }
+
   /*!
    * Getter for Shortcode
    *
    * @return
    */
-  [[gnu::pure]] inline dsp::Shortcode shortcode() { return shortcode_; }
+  inline dsp::Shortcode shortcode() { return shortcode_; }
 
   /*!
    * Getter for shortname
    *
    * @return
    */
-  [[gnu::pure]] inline dsp::Shortname shortname() const { return shortname_; }
+  inline dsp::Shortname shortname() const { return shortname_; }
 
   /*!
    * Getter for the ID
    *
    * @return
    */
-  [[gnu::pure]] inline dsp::Identifier id() const { return id_; }
+  inline dsp::Identifier id() const { return id_; }
 
 
   /*!
@@ -94,6 +114,8 @@ class Project : public std::enable_shared_from_this<Project> {
    * @return
    */
   std::optional<DataModelPtr> remove_data_model(const dsp::Identifier &data_model_id);
+
+  GenericObjectDescription get_generic_object_description();
 
  private:
   dsp::Identifier id_;

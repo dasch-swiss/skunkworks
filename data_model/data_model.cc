@@ -2,6 +2,8 @@
 // Created by Lukas Rosenthaler on 21.12.20.
 //
 
+#include <sstream>
+
 #include "shared/uuid.h"
 #include "shared/error/error.h"
 
@@ -100,8 +102,17 @@ std::optional<PropertyPtr> DataModel::get_property(const dsp::Identifier &proper
 
 std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &property_id) {
   //
-  // ToDo: Check here if data model is in use!!!
+  // ToDo! Check here if property is in use in any data model!!!
   //
+  for (const auto &resclass: resource_classes_) {
+    for(const auto &prop: resclass.second->has_properties_) {
+      if (prop.first == property_id) {
+        std::ostringstream ss;
+        ss << "Resource class " << resclass.second->class_label().get("en") << " is using the property!";
+        throw dsp::Error(file_, __LINE__, ss.str());
+      }
+    }
+  }
   auto res = properties_.find(property_id);
   if (res == properties_.end()) {
     return {};

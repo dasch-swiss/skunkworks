@@ -5,19 +5,22 @@
 #ifndef SKUNKWORKS_ENTITIES_ADAPTER_H_
 #define SKUNKWORKS_ENTITIES_ADAPTER_H_
 
-#include "helpers/xsd_types/xsd.h"
+#include "generic_object_description.h"
+#include "key_value_store.h"
 
 namespace dsp {
 
-template <typename T>
 class Adapter {
-  T read(const T &obj) = 0;
-  T create(const T &obj) = 0;
-  T update(const T &obj) = 0;
-  T remove(const T &obj) = 0;
+ public:
+  Adapter(const std::shared_ptr<KeyValueStore> &store) : store_(store) {};
+  virtual GenericObjectDescription read(const Identifier &id) = 0;
+  virtual void create(const GenericObjectDescription &obj) = 0;
+  virtual void update(const GenericObjectDescription &obj) = 0;
+  virtual void remove(const Identifier &id) = 0;
+ private:
+  std::shared_ptr<KeyValueStore> store_;
 };
 
 }
-
 
 #endif //SKUNKWORKS_ENTITIES_ADAPTER_H_

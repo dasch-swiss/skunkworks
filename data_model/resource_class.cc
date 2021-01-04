@@ -78,4 +78,19 @@ void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max
   }
 }
 
+void ResourceClass::remove_property(const Identifier &property_id) {
+  try {
+    HasProperty tmp = has_properties_.at(property_id);
+    // ToDo: Check if property is in use.
+    bool in_use = false;
+    if (in_use) {
+      throw Error(file_, __LINE__, "Cannot remove property in use (id=" + property_id.to_string() + ")!");
+    } else {
+      has_properties_.erase(property_id);
+    }
+  } catch (const std::out_of_range &err) {
+    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
+  }
+}
+
 }

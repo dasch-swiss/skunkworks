@@ -85,6 +85,8 @@ class ResourceClass : public ClassObj {
    */
   void change_max_count(const dsp::Identifier &property_id, int max_count);
 
+  void remove_property(const dsp::Identifier &property_id);
+
   inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
     outStream << "ResourceClass:: " << std::endl <<
               "id=" << rhs.id_ << std::endl;
