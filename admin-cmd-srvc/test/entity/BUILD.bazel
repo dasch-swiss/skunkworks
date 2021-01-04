@@ -7,7 +7,7 @@ cc_test(
     srcs = ["user.cc"],
     size = "small",
     deps = [
-        "//admin-cmd-srvc/src/domain/entity:user",
+        "//admin-cmd-srvc/src/entity:user",
         "//shared/dsp_types:email",
         "//shared/dsp_types:family_name",
         "//shared/dsp_types:given_name",

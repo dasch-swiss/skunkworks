@@ -7,8 +7,4 @@
 
 namespace dsp {
 
-Identifier::Identifier() {
-  value_ = uuid::generate_uuid_v4();
-}
-
 }

@@ -1,34 +1,21 @@
 //
-// Created by Ivan Subotic on 27/11/2020.
+// Created by Ivan Subotic on 03/01/2021.
 //
 
-#ifndef SKUNKWORKS_ENTITIES_ADMIN_USER_USER_H_
-#define SKUNKWORKS_ENTITIES_ADMIN_USER_USER_H_
+#ifndef SKUNKWORKS_ADMIN_CMD_SRVC_SRC_CONFIG_MANUAL_CONFIG_H_
+#define SKUNKWORKS_ADMIN_CMD_SRVC_SRC_CONFIG_MANUAL_CONFIG_H_
 
-#include <memory>
-#include <string>
-
-#include "shared/dsp_types/identifier.h"
-#include "shared/dsp_types/username.h"
-#include "shared/dsp_types/email.h"
-#include "shared/dsp_types/password.h"
-#include "shared/dsp_types/token.h"
-#include "shared/dsp_types/given_name.h"
-#include "shared/dsp_types/family_name.h"
-#include "shared/dsp_types/status.h"
-#include "shared/dsp_types/lang.h"
-
-namespace admin::entity {
+namespace admin::config {
 
 /*!
- * The class represents a user in the system.
+ * The class represents a manual configuration.
  */
-class User {
+class ManualConfig {
  public:
   /*!
-   * Default constructor, creating an empty user.
+   * Default constructor, creating the manual configuration.
    */
-  User();
+  ManualConfig();
 
   /*!
    * Constructor for creating a fully populated user.
@@ -66,4 +53,4 @@ class User {
 
 } // namespace admin::user
 
-#endif //SKUNKWORKS_ENTITIES_ADMIN_USER_USER_H_
+#endif //SKUNKWORKS_ADMIN_CMD_SRVC_SRC_CONFIG_MANUAL_CONFIG_H_

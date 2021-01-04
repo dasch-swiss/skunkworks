@@ -106,6 +106,11 @@ class String : public DataType {
     return (strval_ == other.strval_);
   }
 
+  /*!
+   * Check for empty xsd::String.
+   */
+  inline bool empty() { return strval_.empty(); };
+
  protected:
   std::string strval_;
 

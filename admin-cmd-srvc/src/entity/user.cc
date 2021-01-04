@@ -3,7 +3,6 @@
 //
 
 #include "user.h"
-#include "shared/dsp_types/identifier.h"
 #include "shared/dsp_types/username.h"
 #include "shared/dsp_types/email.h"
 #include "shared/dsp_types/password.h"
@@ -13,12 +12,9 @@
 #include "shared/dsp_types/status.h"
 #include "shared/dsp_types/lang.h"
 
-#include <utility>
 #include <memory>
 
-namespace admin::entity {
-
-User::User(){}
+namespace admin {
 
 User::User(
     const std::shared_ptr<dsp::Username> &username,
@@ -30,7 +26,7 @@ User::User(
     const std::shared_ptr<dsp::Status> &status,
     const std::shared_ptr<dsp::Lang> &lang) {
 
-  id_ = std::make_shared<dsp::Identifier>();
+  id_->with_uuid_v4();
 
   username_ = username;
   email_ = email;
@@ -41,5 +37,14 @@ User::User(
   status_ = status;
   lang_ = lang;
 }
+std::string User::to_string() {
 
-} // namespace entities::user
+  
+
+  return std::string();
+}
+User User::from_string(const std::string &value) {
+  return User();
+}
+
+} // namespace admin

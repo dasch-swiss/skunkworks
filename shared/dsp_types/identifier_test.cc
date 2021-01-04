@@ -14,7 +14,8 @@ TEST_CASE("identifier value type", "[entities][user][identifier]") {
 
   SECTION("create identifier through default constructor (no provided value)") {
     CHECK_NOTHROW(Identifier());
-    CHECK(Identifier().value().length() > 0);
+    CHECK(Identifier().is_null());
+    CHECK(Identifier().with_uuid_v4().value().length() > 0);
   }
 
   SECTION("create identifier by providing existing value") {
