@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <string>
-
+#include "external/nlohmann/json.hpp"
 #include "shared/dsp_types/identifier.h"
 #include "shared/dsp_types/username.h"
 #include "shared/dsp_types/email.h"
@@ -33,53 +33,53 @@ class User {
   /*!
    * Constructor for creating a fully populated user.
    */
-  User(const std::shared_ptr<dsp::Username> &username,
-       const std::shared_ptr<dsp::Email> &email,
-       const std::shared_ptr<dsp::Password> &password,
-       const std::shared_ptr<dsp::Token> &token,
-       const std::shared_ptr<dsp::GivenName> &given_name,
-       const std::shared_ptr<dsp::FamilyName> &family_name,
-       const std::shared_ptr<dsp::Status> &status,
-       const std::shared_ptr<dsp::Lang> &lang);
+  User(const dsp::Username &username,
+       const dsp::Email &email,
+       const dsp::Password &password,
+       const dsp::Token &token,
+       const dsp::GivenName &given_name,
+       const dsp::FamilyName &family_name,
+       const dsp::Status &status,
+       const dsp::Lang &lang);
 
-  inline std::string id() { return id_->value(); };
-  inline std::string username() { return username_->value(); };
-  inline std::string email() { return email_->value(); };
-  inline std::string password() { return password_->value(); };
-  inline std::string token() { return token_->value(); };
-  inline std::string given_name() { return given_name_->value(); };
-  inline std::string family_name() { return family_name_->value(); };
-  inline bool status() { return status_->value(); };
-  inline std::string lang() { return lang_->value(); };
+  inline std::string id() { return id_.value(); };
+  inline std::string username() { return username_.value(); };
+  inline std::string email() { return email_.value(); };
+  inline std::string password() { return password_.value(); };
+  inline std::string token() { return token_.value(); };
+  inline std::string given_name() { return given_name_.value(); };
+  inline std::string family_name() { return family_name_.value(); };
+  inline bool status() { return status_.value(); };
+  inline std::string lang() { return lang_.value(); };
 
   /*!
    * Check the user for null. If the user was only created through
    * the default constructor, then the Identifier is null.
    * @return
    */
-  inline bool is_null() { return id_->is_null(); };
+  inline bool is_null() { return id_.is_null(); };
 
   /*!
    * Serialize user.
    */
-  std::string to_string();
+  [[nodiscard]] nlohmann::json to_json() const;
 
   /*!
    * Deserialize user.
    */
-  User from_string(const std::string &value);
+  User from_json(const nlohmann::json &json_obj);
 
 
  private:
-  std::shared_ptr<dsp::Identifier> id_;
-  std::shared_ptr<dsp::Username> username_;
-  std::shared_ptr<dsp::Email> email_;
-  std::shared_ptr<dsp::Password> password_;
-  std::shared_ptr<dsp::Token> token_;
-  std::shared_ptr<dsp::GivenName> given_name_;
-  std::shared_ptr<dsp::FamilyName> family_name_;
-  std::shared_ptr<dsp::Status> status_;
-  std::shared_ptr<dsp::Lang> lang_;
+  dsp::Identifier id_;
+  dsp::Username username_;
+  dsp::Email email_;
+  dsp::Password password_;
+  dsp::Token token_;
+  dsp::GivenName given_name_;
+  dsp::FamilyName family_name_;
+  dsp::Status status_;
+  dsp::Lang lang_;
 };
 
 } // namespace admin
