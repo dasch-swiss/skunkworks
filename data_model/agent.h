@@ -9,7 +9,7 @@
 
 #include "shared/xsd_types/xsd_any_uri.h"
 #include "shared/dsp_types/id.h"
-#include "generic_object_description.h"
+#include "shared/generic_object_description/generic_object_description.h"
 
 namespace dsp {
 

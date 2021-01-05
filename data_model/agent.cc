@@ -14,7 +14,7 @@ Agent::Agent() {
 }
 
 Agent::Agent(const GenericObjectDescription& object_description) {
-  if (object_description.object_type() != GenericObjectDescription::ObjectType::AgentType) {
+  if (object_description.object_type() != "Agent") {
     throw Error(file_, __LINE__, "GenericObjectDescription is not from \"Agent\" class.");
   }
   if (!object_description.has_member("id"))
@@ -23,7 +23,7 @@ Agent::Agent(const GenericObjectDescription& object_description) {
 }
 
 GenericObjectDescription Agent::get_generic_object_description() {
-  GenericObjectDescription object_description(GenericObjectDescription::ObjectType::AgentType);
+  GenericObjectDescription object_description(1, "Agent");
   object_description.member("id", id_);
 }
 

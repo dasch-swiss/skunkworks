@@ -22,7 +22,7 @@ Project::Project() {
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
-Project::Project(const std::shared_ptr<Agent> &created_by,  dsp::Shortcode &shortcode, const dsp::Shortname &shortname) : Project() {
+Project::Project(const std::shared_ptr<Agent> &created_by,  const dsp::Shortcode &shortcode, const dsp::Shortname &shortname) : Project() {
   created_by_ = created_by;
   shortcode_ = shortcode;
   shortname_ = shortname;
@@ -41,7 +41,7 @@ Project::Project(const std::shared_ptr<Agent> &created_by, const std::string &sh
 }
 
 Project::Project(const GenericObjectDescription& object_description) {
-  if (object_description.object_type() != GenericObjectDescription::ObjectType::ProjectType) {
+  if (object_description.object_type() != "Project") {
     throw Error(file_, __LINE__, "GenericObjectDescription is not from \"project\" class."s);
   }
   if (!object_description.has_member("id"s))
@@ -63,13 +63,12 @@ Project::Project(const GenericObjectDescription& object_description) {
   }
   if (!object_description.has_member("shortcode"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortcode".)"s);
-  shortcode_ = dsp::Shortcode(object_description.member<xsd::String>("shortcode"s))
+  shortcode_ = dsp::Shortcode(object_description.member<xsd::String>("shortcode"s));
   if (!object_description.has_member("shortname"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortname".)"s);
   shortcode_ = dsp::Shortcode(object_description.member<xsd::String>("shortcode"s))
 
 }
-
 
 
 
@@ -117,7 +116,7 @@ std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &da
 }
 
 GenericObjectDescription Project::get_generic_object_description() {
-  GenericObjectDescription object_description(GenericObjectDescription::ObjectType::AgentType);
+  GenericObjectDescription object_description(1, "Project");
   object_description.member("id"s, id_);
   object_description.member("creation_date"s, creation_date_);
   object_description.member("created_by"s, created_by_.lock()->id());

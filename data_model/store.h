@@ -5,7 +5,7 @@
 #ifndef SKUNKWORKS_DATA_MODEL_STORE_H_
 #define SKUNKWORKS_DATA_MODEL_STORE_H_
 
-#include "generic_object_description.h"
+#include "shared/generic_object_description/generic_object_description.h"
 #include "shared/dsp_types/id.h"
 namespace dsp {
 
