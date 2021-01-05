@@ -38,7 +38,6 @@ cc_test(
         "//shared/dsp_types:username",
         "//shared/error",
         "//shared/xsd_types",
-        "//tests:test_main",
-        "@catch2//:catch2",
+        "@catch2//:catch2_with_main",
     ],
 )

@@ -2,18 +2,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_test(
-  name = "generic_object_description_test",
-  srcs = ["generic_object_description_test.cc"],
-  deps = [
-      "//tests:test_main",
-      "//shared/generic_object_description",
-      "//shared/xsd_types",
-      "@catch2//:catch2",
-  ],
-)
-
-
 cc_library(
     name = "generic_object_description",
     srcs = [
@@ -26,4 +14,14 @@ cc_library(
         "//shared/error",
         "//shared/xsd_types",
     ],
+)
+
+cc_test(
+  name = "generic_object_description_test",
+  srcs = ["generic_object_description_test.cc"],
+  deps = [
+      ":generic_object_description",
+      "//shared/xsd_types",
+      "@catch2//:catch2_with_main",
+  ],
 )

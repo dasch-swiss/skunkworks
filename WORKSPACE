@@ -140,8 +140,8 @@ http_archive(
 )
 
 # catch2
-catch2_tag = "2.13.3"
-catch2_sha256 = "1804feb72bc15c0856b4a43aa586c661af9c3685a75973b6a8fc0b950c7cfd13"
+catch2_tag = "2.13.4"
+catch2_sha256 = "f9f957db59e29b099f9eb10f9dcec1bbdbc6da07b9dd8b6b3149ed6a57f986da"
 http_archive(
     name = "catch2",
     strip_prefix = "Catch2-{}".format(catch2_tag),

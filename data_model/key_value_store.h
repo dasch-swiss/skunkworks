@@ -13,7 +13,7 @@
 #include "external/nlohmann/json.hpp"
 
 #include "shared/xsd_types/xsd.h"
-#include "shared/dsp_types/id.h"
+#include "shared/dsp_types/identifier.h"
 
 #include "project.h"
 
