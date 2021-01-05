@@ -19,13 +19,11 @@ class GenericObjectDescription {
   typedef std::unordered_map<std::string, std::shared_ptr<xsd::DataType>> DataMap;
 
  public:
-  enum class ObjectType {
-    AgentType, ProjectType, ResourceClassType, PropertyType
-  };
+  inline explicit GenericObjectDescription(int version, const std::string& object_type) : object_type_(object_type), version_(version) {};
 
-  inline explicit GenericObjectDescription(ObjectType object_type) : object_type_(object_type) {};
+  inline int version() const { return version_; }
 
-  inline ObjectType object_type() const { return object_type_; }
+  inline std::string object_type() const { return object_type_; }
 
   template<typename T>
   void member(const std::string& name, const T& data);
@@ -41,7 +39,8 @@ class GenericObjectDescription {
   iterator end() { return data_.end(); }
 
  private:
-  ObjectType object_type_;
+  int version_;
+  std::string object_type_;
   DataMap data_;
 
 };

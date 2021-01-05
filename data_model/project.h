@@ -28,7 +28,6 @@ bool is_uninitialized(std::weak_ptr<T> const& weak) {
   return !weak.owner_before(wt{}) && !wt{}.owner_before(weak);
 }
 
-
 namespace dsp {
 
 
@@ -46,7 +45,7 @@ class Project : public std::enable_shared_from_this<Project> {
    * @param shortcode
    * @param shortname
    */
-  Project(const std::shared_ptr<Agent> &created_by,  dsp::Shortcode &shortcode, const dsp::Shortname &shortname);
+  Project(const std::shared_ptr<Agent> &created_by,  const dsp::Shortcode &shortcode, const dsp::Shortname &shortname);
 
   /*!
    * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
