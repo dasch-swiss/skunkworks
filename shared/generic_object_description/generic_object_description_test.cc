@@ -14,6 +14,8 @@ TEST_CASE("Simple catch2 tests", "[catch2]") {
   dsp::GenericObjectDescription gaga(1, "GAGA");
   gaga.member<xsd::String>("test-1", xsd::String("a test"));
   gaga.member<xsd::Integer>("test-2", xsd::Integer(42));
+  CHECK(gaga.version() == 1);
+  CHECK(gaga.object_type() == "GAGA");
   CHECK(gaga.member<xsd::String>("test-1") == xsd::String("a test"));
   CHECK(gaga.member<xsd::Integer>("test-2") == xsd::Integer(42));
 }
