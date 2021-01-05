@@ -3,7 +3,7 @@
 //
 
 #include "external/nlohmann/json.hpp"
-#include "generic_object_description.h",
+#include "shared/generic_object_description/generic_object_description.h",
 
 #include "kv_json_store.h"
 

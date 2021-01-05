@@ -16,7 +16,7 @@
 #include "shared/dsp_types/shortcode.h"
 #include "shared/dsp_types/shortname.h"
 
-#include "generic_object_description.h"
+#include "shared/generic_object_description/generic_object_description.h"
 #include "data_model.h"
 #include "adapter.h"
 #include "key_value_store.h"
