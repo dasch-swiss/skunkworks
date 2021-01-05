@@ -26,6 +26,7 @@ class DataType {
    */
   inline DataType() = default;
 
+  virtual ~DataType() {};
 
   /*!
    * Getter for the data type
@@ -95,6 +96,7 @@ class DataType {
    */
   virtual std::ostream &print_to_stream(std::ostream &out_stream) const = 0;
 };
+
 
 }
 
