@@ -26,21 +26,22 @@ namespace admin {
 class User {
  public:
   /*!
-   * Default constructor, creating an empty (null) user.
-   */
-  inline User() = default;
-
-  /*!
    * Constructor for creating a fully populated user.
    */
-  User(const dsp::Username &username,
-       const dsp::Email &email,
-       const dsp::Password &password,
-       const dsp::Token &token,
-       const dsp::GivenName &given_name,
-       const dsp::FamilyName &family_name,
-       const dsp::Status &status,
-       const dsp::Lang &lang);
+  User(const dsp::Username& username,
+       const dsp::Email& email,
+       const dsp::Password& password,
+       const dsp::Token& token,
+       const dsp::GivenName& given_name,
+       const dsp::FamilyName& family_name,
+       const dsp::Status& status,
+       const dsp::Lang& lang);
+
+  /*!
+   * Constructor for crating a user from the GOD (general object description)
+   * serialization
+   */
+  explicit User(const std::string& value);
 
   inline std::string id() { return id_.value(); };
   inline std::string username() { return username_.value(); };
@@ -60,14 +61,9 @@ class User {
   inline bool is_null() { return id_.is_null(); };
 
   /*!
-   * Serialize user.
+   * Serialize user to GOD (general object description).
    */
-  [[nodiscard]] nlohmann::json to_json() const;
-
-  /*!
-   * Deserialize user.
-   */
-  User from_json(const nlohmann::json &json_obj);
+  [[nodiscard]] std::string to_god();
 
 
  private:

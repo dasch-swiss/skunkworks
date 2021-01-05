@@ -15,7 +15,7 @@ void InMemoryUserRepository::write(const std::shared_ptr<User> &user) {
     throw dsp::Error(file_, __LINE__, "Writing an empty user to the repository not allowed!");
   }
 
-  repository_[user->id()] = user->to_string();
+  repository_[user->id()] = user->to_god();
 }
 
 std::shared_ptr<User> InMemoryUserRepository::read(const std::string &id) {
@@ -27,7 +27,7 @@ std::shared_ptr<User> InMemoryUserRepository::read(const std::string &id) {
     throw dsp::Error(file_, __LINE__, "User not found in repository. Could not read!");
   }
 
-  std::shared_ptr<User> user = std::make_shared<User>()->from_string(serialized_user);
+  std::shared_ptr<User> user = std::make_shared<User>(serialized_user);
   return user;
 }
 

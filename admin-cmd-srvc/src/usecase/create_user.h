@@ -13,7 +13,7 @@ namespace admin {
 
 class CreateUser {
  public:
-  inline CreateUser(const std::shared_ptr<IUserRepository> &repository) { repository_ = repository};d
+  inline CreateUser(const std::shared_ptr<IUserRepository> &repository) { repository_ = repository; };
 
   void create(const std::shared_ptr<User> &user);
 

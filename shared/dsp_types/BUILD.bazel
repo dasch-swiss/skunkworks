@@ -19,8 +19,7 @@ cc_test(
       ":email",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -41,8 +40,7 @@ cc_test(
       ":family_name",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -63,8 +61,7 @@ cc_test(
       ":given_name",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -86,8 +83,7 @@ cc_test(
       ":identifier",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -108,8 +104,7 @@ cc_test(
       ":lang",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -130,8 +125,7 @@ cc_test(
       ":password",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -152,8 +146,7 @@ cc_test(
       ":status",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -174,8 +167,7 @@ cc_test(
       ":token",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -197,7 +189,6 @@ cc_test(
       ":username",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
   ],
 )

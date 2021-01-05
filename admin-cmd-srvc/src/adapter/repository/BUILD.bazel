@@ -8,5 +8,6 @@ cc_library(
     hdrs = ["in_memory_user_repository.h"],
     deps = [
         "//admin-cmd-srvc/src/entity:user",
+        "//admin-cmd-srvc/src/usecase/port:i_user_repository",
     ],
 )

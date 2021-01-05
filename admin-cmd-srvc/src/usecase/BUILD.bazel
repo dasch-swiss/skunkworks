@@ -7,6 +7,9 @@ cc_library(
     srcs = ["create_user.cc"],
     hdrs = ["create_user.h"],
     deps = [
+        "//admin-cmd-srvc/src/entity:user",
+        "//admin-cmd-srvc/src/usecase/port:i_user_repository",
+        "//shared/error",
     ],
 )
 
@@ -15,5 +18,6 @@ cc_library(
     srcs = ["find_user.cc"],
     hdrs = ["find_user.h"],
     deps = [
+        "//shared/error",
     ],
 )
