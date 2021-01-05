@@ -53,6 +53,8 @@ class Integer : public DataType {
    */
   inline explicit Integer(int64_t val) : Integer() { val_ = val; };
 
+  inline ~Integer() {}
+
   /*!
    * Constructor with int64_t parameter and one restriction
    * @param val
