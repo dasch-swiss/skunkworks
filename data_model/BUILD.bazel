@@ -8,6 +8,7 @@ cc_test(
   deps = [
       "@nlohmann//:nlohmann",
       ":data_model",
+      "//shared/generic_object_description",
       "//tests:test_main",
       "@catch2//:catch2",
   ],
@@ -20,7 +21,6 @@ cc_library(
         "key_value_store.cc",
         "in_mem_store.cc",
         "configuration.cc",
-        "generic_object_description.cc",
         "kv_json_store.cc",
         "data_model.cc",
         "project.cc",
@@ -37,7 +37,6 @@ cc_library(
         "in_mem_store.h",
         "key_value_store.h",
         "configuration.h",
-        "generic_object_description.h",
         "kv_json_store.h",
         "data_model.h",
         "project.h",
