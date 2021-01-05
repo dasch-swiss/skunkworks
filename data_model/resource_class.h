@@ -14,41 +14,79 @@
 #include "configuration.h"
 #include "agent.h"
 #include "class_obj.h"
+#include "property.h"
 
 namespace dsp {
 
-class Property; // forward declaration
+
+class DataModel;
 
 class ResourceClass : public ClassObj {
-
+  /*!
+   * Implements the ResourceClass class.
+   *
+   * The ResourceClass defines the template for resources. A ResourceClass defines several "properties"
+   * that must have a given cardinality. The properties are hold in an unordered_map of HasProperty structs.
+   * You can iterate over the ResourceClass to get all HasProperty elements.
+   */
+ public:
   typedef struct has_property {
-    std::shared_ptr<Property> property_;
+    std::weak_ptr<Property> property_;
     int min_count_;
     int max_count_;
   } HasProperty;
 
+ private:
+  typedef std::unordered_map<dsp::Identifier, HasProperty> HasPropertiesMap;
+
  public:
-  ResourceClass() = default;
+
   /*!
+   * Default constructor
+   */
+  ResourceClass() = default;
+
+  /*!
+   * Constructor for ResourceClass. Please note that the resource class should be added to a data model!
    *
+   * @param agent
    * @param class_label
    * @param class_description
    * @param sub_class_of
    */
   ResourceClass(
-      DataModelPtr in_data_model,
-      AgentPtr agent,
+      const std::shared_ptr<Agent> &agent,
       const xsd::LangString &class_label,
       const xsd::LangString &class_description,
       std::shared_ptr<ResourceClass> sub_class_of = nullptr);
 
-  inline xsd::AnyUri data_model_id() { return data_model_id_; }
-
-  inline std::string prefix() { return configuration_->resclass_prefix(in_data_model_); }
-
+  /*!
+   * Add a property to the resource class with cardinality
+   *
+   * @param property
+   * @param min_count
+   * @param max_count
+   */
   void add_property(const std::shared_ptr<Property> &property, int min_count, int max_count);
 
-  // usage: cout << resource_class_instance << ...;
+  /*!
+   * Modifiy the min_count of this property
+   *
+   * @param property_id
+   * @param min_count
+   */
+  void change_min_count(const dsp::Identifier &property_id, int min_count);
+
+  /*!
+   * Modifiy the max_count of this property
+   *
+   * @param property_id
+   * @param max_count
+   */
+  void change_max_count(const dsp::Identifier &property_id, int max_count);
+
+  void remove_property(const dsp::Identifier &property_id);
+
   inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
     outStream << "ResourceClass:: " << std::endl <<
               "id=" << rhs.id_ << std::endl;
@@ -60,12 +98,15 @@ class ResourceClass : public ClassObj {
 
   friend DataModel; // allows access to data_model_id(...)
 
- private:
-  xsd::AnyUri data_model_id_;
-  std::shared_ptr<ResourceClass> sub_class_of_;
-  std::unordered_map<std::string, HasProperty> has_properties_;
+  typedef HasPropertiesMap::iterator iterator;
+  typedef HasPropertiesMap::const_iterator const_iterator;
+  iterator begin() { return has_properties_.begin(); }
+  iterator end() { return has_properties_.end(); }
 
-  inline void data_model_id(const xsd::AnyUri &data_model_id) { data_model_id_ = data_model_id_; }
+ private:
+
+  HasPropertiesMap has_properties_;
+  std::shared_ptr<ResourceClass> sub_class_of_;
 
 };
 

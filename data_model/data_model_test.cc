@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "external/nlohmann/json.hpp"
+
 #include "shared/xsd_types/lang_string.h"
 #include "shared/xsd_types/xsd_error.h"
 #include "shared/error/error.h"
@@ -22,6 +24,10 @@ TEST_CASE("Simple catch2 tests", "[catch2|") {
   dsp::DataModelPtr my_data_model = std::make_shared<dsp::DataModel>("test-model");
   CHECK_NOTHROW(my_project->add_data_model(my_data_model));
   REQUIRE(my_data_model->project_id() == my_project->id());
+
+  nlohmann::json j = my_project->to_json();
+  std::cerr << j.dump(2) << std::endl;
+  CHECK(false);
 
   dsp::DataModelPtr my_data_model2 = std::make_shared<dsp::DataModel>("test-model2");
 
