@@ -3,6 +3,27 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
+    name = "dsp_types",
+    srcs = [
+        "identifier.cc",
+        "shortcode.cc",
+        "shortname.cc",
+    ],
+    hdrs = [
+        "identifier.h",
+        "shortcode.h",
+        "shortname.h",
+    ],
+    copts = ["-Iexternal/stduuid/gsl"],
+    deps = [
+        "//shared",
+        "//shared/error",
+        "//shared/xsd_types",
+        "//third_party/stduuid"
+        ],
+)
+
+cc_library(
     name = "email",
     srcs = ["email.cc"],
     hdrs = ["email.h"],
@@ -68,22 +89,22 @@ cc_test(
     ],
 )
 
-cc_library(
-    name = "identifier",
-    srcs = ["identifier.cc"],
-    hdrs = ["identifier.h"],
-    deps = [
-        "//shared",
-        "//shared/xsd_types",
-    ],
-)
+#cc_library(
+#    name = "identifier",
+#    srcs = ["identifier.cc"],
+#    hdrs = ["identifier.h"],
+#    deps = [
+#        "//shared",
+#        "//shared/xsd_types",
+#    ],
+#)
 
 cc_test(
     name = "identifier_test",
     srcs = ["identifier_test.cc"],
     size = "small",
     deps = [
-      ":identifier",
+      ":dsp_types",
       "//shared/error",
       "//shared/xsd_types",
       "//tests:test_main",

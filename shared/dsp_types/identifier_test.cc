@@ -4,7 +4,11 @@
 
 #include "catch2/catch.hpp"
 
-#include "shared/uuid.h"
+//#include "shared/uuid.h"
+#define UUID_SYSTEM_GENERATOR
+
+#include "third_party/stduuid/gsl/gsl"
+#include "third_party/stduuid/uuid.h"
 
 #include "identifier.h"
 
@@ -14,13 +18,13 @@ TEST_CASE("identifier value type", "[entities][user][identifier]") {
 
   SECTION("create identifier through default constructor (no provided value)") {
     CHECK_NOTHROW(Identifier());
-    CHECK(Identifier().value().length() > 0);
+    CHECK(Identifier().to_string().length() > 0);
   }
 
   SECTION("create identifier by providing existing value") {
-    std::string existing_uuid = uuid::generate_uuid_v4();
+    std::string existing_uuid = uuids::to_string(uuids::uuid_system_generator{}());
     CHECK_NOTHROW(Identifier(existing_uuid));
-    CHECK(Identifier(existing_uuid).value() == existing_uuid);
+    CHECK(Identifier(existing_uuid).to_string() == existing_uuid);
     CHECK(Identifier(existing_uuid) == Identifier(existing_uuid));
   }
 

@@ -42,6 +42,8 @@ class Boolean : public DataType {
 
   Boolean &operator=(bool bval);
 
+  inline bool operator==(const Boolean &other) const { return val_ == other.val_; };
+
  protected:
   void parse(const std::string &strval);
 
