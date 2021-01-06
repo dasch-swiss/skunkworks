@@ -19,6 +19,7 @@ build:linux --repo_env=CC=clang-11
 build:linux --repo_env=CXX=clang++-11
 build:linux --cxxopt=-stdlib=libstdc++
 build:linux --host_cxxopt=-std=c++17
+build:linux --linkopt=-luuid
 
 # linux compiler settings for debugging include paths
 # build:linux --cxxopt='-E'
