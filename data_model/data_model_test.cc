@@ -34,9 +34,6 @@ TEST_CASE("Data model tests", "[catch2|") {
   CHECK_NOTHROW(my_project->add_data_model(my_data_model));
   REQUIRE(my_data_model->project()->id() == my_project->id());
 
-  nlohmann::json j = my_project->to_json();
-  std::cerr << j.dump(2) << std::endl;
-  CHECK(false);
 
   dsp::DataModelPtr my_data_model2 = std::make_shared<dsp::DataModel>("test-model2");
 
