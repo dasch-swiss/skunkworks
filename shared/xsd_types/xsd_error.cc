@@ -63,4 +63,4 @@ std::ostream &operator<<(std::ostream &out_stream, const Error &rhs) {
 }
 //============================================================================
 
-}
+} // namespace xsd

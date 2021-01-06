@@ -24,6 +24,8 @@ class Identifier {
 
   Identifier(const std::string &uuid_str);
 
+  inline explicit Identifier(const Identifier &value) : Identifier() { uuid_ = value.uuid_ ;};
+
   Identifier(const std::string &base, const std::string &name);
 
   inline bool operator==(const Identifier &other) const { return uuid_ == other.uuid_; }
