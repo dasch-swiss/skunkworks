@@ -12,7 +12,7 @@
 
 #include "shared/xsd_types/xsd_any_uri.h"
 #include "shared/xsd_types/xsd_restriction.h"
-#include "shared/dsp_types/id.h"
+#include "shared/dsp_types/identifier.h"
 #include "shared/dsp_types/shortcode.h"
 #include "shared/dsp_types/shortname.h"
 

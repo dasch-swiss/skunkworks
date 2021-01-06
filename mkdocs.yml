@@ -1,0 +1,23 @@
+site_name: Skunkworks API Documentation
+
+nav:
+  - Introduction: index.md
+  - Base Data Types: base_data_types.md
+  - Admin Entities: admin/index.md
+
+theme:
+  name: material
+  logo: 'assets/images/dasch-icon-white.svg'
+  favicon: 'assets/images/dasch-favicon.ico'
+  palette:
+    primary: 'deep blue'
+    accent: 'deep blue'
+  feature:
+    tabs: false
+
+extra_css:
+  - 'assets/style/theme.css'
+
+plugins:
+  - search
+  - mermaid2

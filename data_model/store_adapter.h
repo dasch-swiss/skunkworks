@@ -7,7 +7,7 @@
 
 //#include "shared/generic_object_description/generic_object_description.h"
 #include "external/nlohmann/json.hpp"
-#include "shared/dsp_types/id.h"
+#include "shared/dsp_types/identifier.h"
 
 namespace dsp {
 
