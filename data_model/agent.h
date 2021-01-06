@@ -19,7 +19,6 @@ class Agent {
 
   Agent(const nlohmann::json& object_description);
 
-
   [[nodiscard]] inline dsp::Identifier id() const { return id_; }
 
   nlohmann::json to_json();

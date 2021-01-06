@@ -12,6 +12,7 @@ configure_make(
         "--enable-shared=no",
         "--enable-static",
         "--without-libidn2",
+        "--without-nghttp2",
     ],
     lib_source = "@curl//:all",
     configure_env_vars = {
