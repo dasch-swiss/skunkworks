@@ -8,7 +8,7 @@
 
 TEST_CASE("Simple catch2 tests", "[catch2|") {
 
-SimpleTextValue text_value;
+//SimpleTextValue text_value;
 
 REQUIRE(1==1);
 REQUIRE_FALSE(2==3);

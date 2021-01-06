@@ -16,7 +16,7 @@
 using namespace std::string_literals;
 
 TEST_CASE("DSP data types: Identifier", "SId") {
-  CHECK_NOTHROW(dsp::Id());
+  CHECK_NOTHROW(dsp::Identifier());
   std::unordered_map<dsp::Identifier, std::string> mm;
   dsp::Identifier id1;
   dsp::Identifier id2;
