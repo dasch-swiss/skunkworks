@@ -17,11 +17,23 @@
 
 TEST_CASE("Data model tests", "[catch2|") {
   dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
+  nlohmann::json json_agent = my_agent->to_json();
+  dsp::AgentPtr my_agent2 = std::make_shared<dsp::Agent>(json_agent);
+  CHECK(my_agent->id() == my_agent2->id());
+
 
   INFO("Project tests...")
   dsp::ProjectPtr my_project = std::make_shared<dsp::Project>(my_agent, "4123", "testproject");
   REQUIRE(static_cast<std::string>(my_project->shortcode()) == "4123");
   REQUIRE(static_cast<std::string>(my_project->shortname()) == "testproject");
+
+  nlohmann::json json_project = my_project->to_json();
+  dsp::ProjectPtr my_project2 = std::make_shared<dsp::Project>(json_project);
+  CHECK(my_project->id() == my_project2->id());
+  CHECK(my_project->creation_date() == my_project2->creation_date());
+  CHECK(my_project->shortcode() == my_project2->shortcode());
+  CHECK(my_project->shortname() == my_project2->shortname());
+
 
   REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>(my_agent, "412X", "gaga"), Catch::Matchers::Contains(std::string("Short code restriction"))) ;
   REQUIRE_THROWS_WITH(std::make_shared<dsp::Project>(my_agent, "4122", "2gaga"), Catch::Matchers::Contains(std::string("Short name restriction"))) ;

@@ -6,7 +6,8 @@
 #define SKUNKWORKS_DATA_MODEL_JSON_MEM_KV_STORE_ADAPTER_H_
 
 #include "kv_store.h"
-#include "shared/generic_object_description/generic_object_description.h"
+//#include "shared/generic_object_description/generic_object_description.h"
+#include "external/nlohmann/json.hpp"
 #include "store_adapter.h"
 
 namespace dsp {
@@ -17,11 +18,11 @@ class JsonMemKVStoreAdapter : public StoreAdapter  {
 
   inline ~JsonMemKVStoreAdapter() override = default;
 
-  void create(GenericObjectDescription& obj) override ;
+  void create(nlohmann::json& json_obj) override ;
 
-  GenericObjectDescription read(const dsp::Identifier& id) override ;
+  nlohmann::json read(const dsp::Identifier& id) override ;
 
-  void update(const dsp::Identifier& id, GenericObjectDescription& obj) override ;
+  void update(const dsp::Identifier& id, nlohmann::json& obj) override ;
 
   void remove(const dsp::Identifier& id) override ;
 

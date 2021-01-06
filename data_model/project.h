@@ -16,7 +16,8 @@
 #include "shared/dsp_types/shortcode.h"
 #include "shared/dsp_types/shortname.h"
 
-#include "shared/generic_object_description/generic_object_description.h"
+//#include "shared/generic_object_description/generic_object_description.h"
+#include "external/nlohmann/json.hpp"
 #include "data_model.h"
 
 // ToDo!! Temporary code
@@ -61,7 +62,7 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
 
-  Project(const GenericObjectDescription& obj);
+  Project(const nlohmann::json& json_obj);
 
   inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
   inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }
@@ -112,7 +113,7 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   std::optional<DataModelPtr> remove_data_model(const dsp::Identifier &data_model_id);
 
-  GenericObjectDescription get_generic_object_description();
+  nlohmann::json to_json();
 
  private:
   dsp::Identifier id_;

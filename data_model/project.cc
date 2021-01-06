@@ -38,34 +38,35 @@ Project::Project(const std::shared_ptr<Agent> &created_by, const std::string &sh
   shortname_ = shortname;
 }
 
-Project::Project(const GenericObjectDescription& obj) {
-  obj.print();
-  if (obj.object_type() != "Project") {
-    throw Error(file_, __LINE__, R"(GenericObjectDescription is not from "project" class.)");
+Project::Project(const nlohmann::json& json_obj) {
+  if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "Project")) {
+    if (json_obj.contains("id")) {
+      id_ = dsp::Identifier(json_obj["id"]);
+      if (!json_obj.contains("creation_date")) throw Error(file_, __LINE__, R"("Project" has no "creation_date")");
+      creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"]);
+
+      if (!json_obj.contains("created_by")) throw Error(file_, __LINE__, R"("Project" has no "created_by")");
+      dsp::Identifier created_by_id(json_obj["created_by"]);
+
+      if (!json_obj.contains("shortcode")) throw Error(file_, __LINE__, R"("Project" has no "shortcode")");
+      shortcode_ = json_obj["shortcode"];
+
+      if (!json_obj.contains("shortname")) throw Error(file_, __LINE__, R"("Project" has no "shortname")");
+      shortname_ = json_obj["shortname"];
+
+      std::vector<std::string> data_model_ids = json_obj["data_models"];
+
+      if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
+        last_modification_date_ = xsd::DateTimeStamp(json_obj["last_modification_date"]);
+        dsp::Identifier modified_by_id(json_obj["modified_by"]);
+      }
+
+    } else{
+      throw Error(file_, __LINE__, "Project serialization has no id.");
+    }
+  } else {
+    throw Error(file_, __LINE__, "Object serialization not consistent.");
   }
-  if (!obj.has_member("id"s))
-    throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "id".)"s);
-  id_ = dsp::Identifier(obj.member<xsd::String>("id"s));
-  if (!obj.has_member("creation_date"s))
-    throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "creation_date".)"s);
-  creation_date_ = obj.member<xsd::DateTimeStamp>("creation_date"s);
-  if (!obj.has_member("created_by"s))
-    throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "created_by".)"s);
-  dsp::Identifier created_by_id(dsp::Identifier(obj.member<xsd::String>("created_by"s)));
-  // ToDo: get Agent with the given Id here...
-  if (obj.has_member("modified_by"s)) {
-    if (!obj.has_member("last_modification_date"s))
-      throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "last_modification_date".)"s);
-    last_modification_date_ = obj.member<xsd::DateTimeStamp>("last_modification_date"s);
-    dsp::Identifier modified_by_id(dsp::Identifier(obj.member<xsd::String>("modified_by"s)));
-    // ToDo: get Agent with given Id here...
-  }
-  if (!obj.has_member("shortcode"s))
-    throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortcode".)"s);
-  shortcode_ = dsp::Shortcode(obj.member<xsd::String>("shortcode"s));
-  if (!obj.has_member("shortname"s))
-    throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortname".)"s);
-  shortname_ = dsp::Shortname(obj.member<xsd::String>("shortname"s));
 }
 
 
@@ -89,12 +90,12 @@ void Project::add_data_model(const std::shared_ptr<DataModel> &data_model) {
 }
 
 std::optional<DataModelPtr> Project::get_data_model(const dsp::Identifier &data_model_id) {
-    auto res = data_models_.find(data_model_id);
-    if (res == data_models_.end()) {
-      return {};
-    } else {
-      return res->second;
-    }
+  auto res = data_models_.find(data_model_id);
+  if (res == data_models_.end()) {
+    return {};
+  } else {
+    return res->second;
+  }
 }
 
 std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &data_model_id) {
@@ -110,21 +111,29 @@ std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &da
     data_model_ptr->project_ = std::weak_ptr<Project>();
     return data_model_ptr;
   }
-
 }
 
-GenericObjectDescription Project::get_generic_object_description() {
-  GenericObjectDescription obj(1, "Project");
-  obj.member("id"s, id_.to_xsd());
-  obj.member("creation_date"s, creation_date_);
-  obj.member("created_by"s, created_by_.lock()->id().to_xsd());
-  if (!modified_by_.expired()) {
-    obj.member("last_modification_date"s, last_modification_date_);
-    obj.member("modified_by"s, modified_by_.lock()->id().to_xsd());
+nlohmann::json Project::to_json() {
+  std::vector<std::string> data_model_ids;
+  for (auto [key, value]: data_models_) {
+    data_model_ids.push_back(key);
   }
-  obj.member("shortcode"s, static_cast<xsd::String>(shortcode_));
-  obj.member("shortname"s, static_cast<xsd::String>(shortname_));
-  return obj;
+  nlohmann::json json_data_models(data_model_ids);
+  nlohmann::json json_obj = {
+      {"version", 1},
+      {"type", "Project"},
+      {"id", id_},
+      {"creation_date", creation_date_},
+      {"created_by", created_by_.lock()->id()},
+      {"shortcode", shortcode_},
+      {"shortname", shortname_},
+      {"data_models", json_data_models}
+  };
+  if (!modified_by_.expired()) {
+    json_obj["last_modification_date"] = last_modification_date_;
+    json_obj["modified_by"] = modified_by_.lock()->id();
+  }
+  return json_obj;
 }
 
 }

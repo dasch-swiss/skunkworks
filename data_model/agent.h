@@ -9,20 +9,20 @@
 
 #include "shared/xsd_types/xsd_any_uri.h"
 #include "shared/dsp_types/id.h"
-#include "shared/generic_object_description/generic_object_description.h"
-
+//#include "shared/generic_object_description/generic_object_description.h"
+#include "external/nlohmann/json.hpp"
 namespace dsp {
 
 class Agent {
  public:
   Agent();
 
-  Agent(const GenericObjectDescription& object_description);
+  Agent(const nlohmann::json& object_description);
 
 
   [[nodiscard]] inline dsp::Identifier id() const { return id_; }
 
-  GenericObjectDescription get_generic_object_description();
+  nlohmann::json to_json();
 
  private:
   dsp::Identifier id_;

@@ -13,19 +13,25 @@ Agent::Agent() {
   id_ = Identifier();
 }
 
-Agent::Agent(const GenericObjectDescription& object_description) {
-  if (object_description.object_type() != "Agent") {
-    throw Error(file_, __LINE__, "GenericObjectDescription is not from \"Agent\" class.");
+Agent::Agent(const nlohmann::json& json_obj) {
+  if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "Agent")) {
+    if (json_obj.contains("id")) {
+      id_ = dsp::Identifier(json_obj["id"]);
+    } else{
+      throw Error(file_, __LINE__, "Agent serialization has no id.");
+    }
+  } else {
+    throw Error(file_, __LINE__, "Object serialization not consistent.");
   }
-  if (!object_description.has_member("id"))
-    throw Error(file_, __LINE__, "GenericObjectDescription for \"Agent\" has no \"id\".");
-  id_ = dsp::Identifier(object_description.member<xsd::String>("id"));
 }
 
-GenericObjectDescription Agent::get_generic_object_description() {
-  GenericObjectDescription obj(1, "Agent");
-  obj.member("id", id_.to_xsd());
-  return obj;
+nlohmann::json Agent::to_json() {
+  nlohmann::json json_obj = {
+      {"version", 1},
+      {"type", "Agent"},
+      {"id", id_.to_string()}
+  };
+  return json_obj;
 }
 
 }

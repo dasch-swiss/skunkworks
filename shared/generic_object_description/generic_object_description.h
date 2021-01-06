@@ -34,7 +34,6 @@ class GenericObjectDescription {
   template<typename T>
   inline T member(const std::string& name) const {
     try {
-      std::cerr << ":: " << *(data_.at(name)) << std::endl;
       void *gaga = data_.at(name).get();
       T* ptr = (T*) gaga;
       return *ptr;
