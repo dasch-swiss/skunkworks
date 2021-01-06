@@ -10,15 +10,13 @@
 
 #include "agent.h"
 #include "project.h"
-#include "key_value_store.h"
-#include "adapter.h"
+#include "store_adapter.h"
 
 namespace dsp {
 
-template<typename T>
 class DomainModel {
  public:
-  DomainModel(const std::shared_ptr<KeyValueStore> &store, const std::shared_ptr<Adapter<T>> &adapter) : store_(store), adapter_(adapter) {}
+  DomainModel(const std::shared_ptr<StoreAdapter> &store_adapter) : store_adapter(store_adapter) {}
 
   std::shared_ptr<Agent> agent(const dsp::Identifier &id);
 
@@ -29,11 +27,9 @@ class DomainModel {
   void project(const std::shared_ptr<Project> &project);
 
  private:
-  std::shared_ptr<KeyValueStore> store_;
-  std::shared_ptr<Adapter<T>> adapter_;
+  std::shared_ptr<StoreAdapter> store_adapter;
   std::unordered_map<dsp::Identifier, std::shared_ptr<Agent>> agents_;
   std::unordered_map<dsp::Identifier, std::shared_ptr<Project>> projects_;
-
 };
 
 }

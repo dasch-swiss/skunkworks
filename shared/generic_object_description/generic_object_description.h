@@ -34,7 +34,11 @@ class GenericObjectDescription {
   template<typename T>
   inline T member(const std::string& name) const {
     try {
-      T* ptr = dynamic_cast<T*>(data_.at(name).get());
+      std::cerr << __FILE__ << __LINE__ << std::endl;
+      //const std::shared_ptr<T> ptr = std::dynamic_pointer_cast<T>(data_.at(name)); // funktioniert nicht!! :-(
+      // Bad hack:
+      void *gaga = data_.at(name).get();
+      T* ptr = (T*) gaga;
       return *ptr;
     } catch (const std::out_of_range &err) {
       throw Error(__FILE__, __LINE__, "GenericObjectDescription has no member \"" + name + "\".");
@@ -42,6 +46,14 @@ class GenericObjectDescription {
   }
 
   bool has_member(const std::string& name) const;
+
+  void print() const {
+    std::cerr << "::" << "Version=" << version_ << std::endl;
+    std::cerr << "::" << "Object type=" << object_type_ << std::endl;
+    for (auto i: data_) {
+      std::cerr << "::" << i.first << "=" << *(i.second) << std::endl;
+    }
+  }
 
   typedef DataMap::iterator iterator;
   typedef DataMap::const_iterator const_iterator;

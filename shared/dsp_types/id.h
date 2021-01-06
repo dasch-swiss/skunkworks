@@ -36,6 +36,8 @@ class Identifier {
 
   inline std::string to_string() const { return uuids::to_string(uuid_); }
 
+  inline xsd::String to_xsd() const { return xsd::String(uuids::to_string(uuid_)); }
+
   inline operator std::string() const { return to_string(); }
 
   inline friend std::ostream &operator<<(std::ostream &out_stream, const Identifier &rhs) {

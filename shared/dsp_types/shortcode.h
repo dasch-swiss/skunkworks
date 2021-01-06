@@ -84,6 +84,8 @@ class Shortcode {
    */
   inline bool operator==(const std::string &other) const { return static_cast<std::string>(shortcode_) == other; }
 
+  inline operator xsd::String() { return shortcode_; }
+
  private:
   xsd::String shortcode_;
 

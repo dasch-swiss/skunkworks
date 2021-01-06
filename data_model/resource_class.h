@@ -11,7 +11,6 @@
 #include <unordered_map>
 
 #include "shared/xsd_types/xsd.h"
-#include "configuration.h"
 #include "agent.h"
 #include "class_obj.h"
 #include "property.h"

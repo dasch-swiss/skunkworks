@@ -5,11 +5,9 @@
 #include <sstream>
 #include <vector>
 
-#include "shared/uuid.h"
 #include "shared/error/error.h"
 
 #include "project.h"
-#include "adapter.h"
 
 static const char file_[] = __FILE__;
 
@@ -40,34 +38,34 @@ Project::Project(const std::shared_ptr<Agent> &created_by, const std::string &sh
   shortname_ = shortname;
 }
 
-Project::Project(const GenericObjectDescription& object_description) {
-  if (object_description.object_type() != "Project") {
-    throw Error(file_, __LINE__, "GenericObjectDescription is not from \"project\" class."s);
+Project::Project(const GenericObjectDescription& obj) {
+  obj.print();
+  if (obj.object_type() != "Project") {
+    throw Error(file_, __LINE__, R"(GenericObjectDescription is not from "project" class.)");
   }
-  if (!object_description.has_member("id"s))
+  if (!obj.has_member("id"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "id".)"s);
-  id_ = dsp::Identifier(object_description.member<xsd::String>("id"s));
-  if (!object_description.has_member("creation_date"s))
+  id_ = dsp::Identifier(obj.member<xsd::String>("id"s));
+  if (!obj.has_member("creation_date"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "creation_date".)"s);
-  creation_date_ = object_description.member<xsd::DateTimeStamp>("creation_date"s);
-  if (!object_description.has_member("created_by"s))
+  creation_date_ = obj.member<xsd::DateTimeStamp>("creation_date"s);
+  if (!obj.has_member("created_by"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "created_by".)"s);
-  dsp::Identifier created_by_id(dsp::Identifier(object_description.member<xsd::String>("created_by"s)));
+  dsp::Identifier created_by_id(dsp::Identifier(obj.member<xsd::String>("created_by"s)));
   // ToDo: get Agent with the given Id here...
-  if (object_description.has_member("modified_by"s)) {
-    if (!object_description.has_member("last_modification_date"s))
+  if (obj.has_member("modified_by"s)) {
+    if (!obj.has_member("last_modification_date"s))
       throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "last_modification_date".)"s);
-    last_modification_date_ = object_description.member<xsd::DateTimeStamp>("last_modification_date"s);
-    dsp::Identifier modified_by_id(dsp::Identifier(object_description.member<xsd::String>("modified_by"s)));
+    last_modification_date_ = obj.member<xsd::DateTimeStamp>("last_modification_date"s);
+    dsp::Identifier modified_by_id(dsp::Identifier(obj.member<xsd::String>("modified_by"s)));
     // ToDo: get Agent with given Id here...
   }
-  if (!object_description.has_member("shortcode"s))
+  if (!obj.has_member("shortcode"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortcode".)"s);
-  shortcode_ = dsp::Shortcode(object_description.member<xsd::String>("shortcode"s));
-  if (!object_description.has_member("shortname"s))
+  shortcode_ = dsp::Shortcode(obj.member<xsd::String>("shortcode"s));
+  if (!obj.has_member("shortname"s))
     throw Error(file_, __LINE__, R"(GenericObjectDescription for "Project" has no "shortname".)"s);
-  shortcode_ = dsp::Shortcode(object_description.member<xsd::String>("shortcode"s))
-
+  shortname_ = dsp::Shortname(obj.member<xsd::String>("shortname"s));
 }
 
 
@@ -116,16 +114,17 @@ std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &da
 }
 
 GenericObjectDescription Project::get_generic_object_description() {
-  GenericObjectDescription object_description(1, "Project");
-  object_description.member("id"s, id_);
-  object_description.member("creation_date"s, creation_date_);
-  object_description.member("created_by"s, created_by_.lock()->id());
+  GenericObjectDescription obj(1, "Project");
+  obj.member("id"s, id_.to_xsd());
+  obj.member("creation_date"s, creation_date_);
+  obj.member("created_by"s, created_by_.lock()->id().to_xsd());
   if (!modified_by_.expired()) {
-    object_description.member("last_modification_date"s, last_modification_date_);
-    object_description.member("modified_by"s, modified_by_.lock()->id());
+    obj.member("last_modification_date"s, last_modification_date_);
+    obj.member("modified_by"s, modified_by_.lock()->id().to_xsd());
   }
-  object_description.member("shortcode"s, shortcode_);
-  object_description.member("shortname"s, shortname_);
+  obj.member("shortcode"s, static_cast<xsd::String>(shortcode_));
+  obj.member("shortname"s, static_cast<xsd::String>(shortname_));
+  return obj;
 }
 
 }

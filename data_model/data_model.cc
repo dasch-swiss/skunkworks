@@ -4,7 +4,6 @@
 
 #include <sstream>
 
-#include "shared/uuid.h"
 #include "shared/error/error.h"
 
 #include "data_model.h"
@@ -21,13 +20,13 @@ DataModel::DataModel() {
 
 
 DataModel::DataModel(const xsd::String &shortname) : DataModel() {
-  id_ = uuid::generate_uuid_v4();
+  id_ = dsp::Identifier();
   shortname_ = shortname;
 }
 
 
 DataModel::DataModel(const std::string &shortname) : DataModel() {
-  id_ = uuid::generate_uuid_v4();
+  id_ = dsp::Identifier();
   shortname_ = shortname;
 }
 

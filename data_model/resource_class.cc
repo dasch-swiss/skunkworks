@@ -2,7 +2,6 @@
 // Created by Ivan Subotic on 25/11/2020.
 //
 
-#include "shared/uuid.h"
 #include "shared/error/error.h"
 
 #include "property.h"
@@ -20,8 +19,7 @@ ResourceClass::ResourceClass(
     const xsd::LangString &class_description,
     std::shared_ptr<ResourceClass> sub_class_of)
     : ClassObj(nullptr, agent, class_label, class_description), sub_class_of_(sub_class_of) {
-  Configuration *configuration = Configuration::init();
-  id_ = uuid::generate_uuid_v4();
+  id_ = dsp::Identifier();
 }
 
 void ResourceClass::add_property(const std::shared_ptr<Property> &property,

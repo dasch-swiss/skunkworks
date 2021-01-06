@@ -10,7 +10,6 @@
 
 #include "shared/xsd_types/xsd.h"
 #include "shared/dsp_types/id.h"
-#include "configuration.h"
 #include "agent.h"
 //#include "data_model.h"
 
@@ -26,7 +25,7 @@ class ClassObj {
   /*!
    * Default constructor
    */
-  ClassObj() { configuration_ = Configuration::init(); }
+  ClassObj() = default;
 
   /*!
    * Constructor taking all necessary parameters
@@ -132,7 +131,6 @@ class ClassObj {
   std::weak_ptr<Agent> modified_by_;
   xsd::LangString class_label_;
   xsd::LangString class_description_;
-  Configuration *configuration_;
   std::set<std::string> changed_;
 
   //inline void data_model_id(const std::shared_ptr<DataModel> &in_data_model) { in_data_model_ = in_data_model; }

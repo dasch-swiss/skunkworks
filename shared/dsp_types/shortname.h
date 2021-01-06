@@ -82,6 +82,8 @@ class Shortname {
    */
   bool operator==(const std::string &other) const { return static_cast<std::string>(shortname_) == other; }
 
+  inline operator xsd::String() const { return shortname_; }
+
   inline friend std::ostream &operator<<(std::ostream &out_stream, const Shortname &rhs) {
     out_stream << static_cast<std::string>(rhs);
     return out_stream;

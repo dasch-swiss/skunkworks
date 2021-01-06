@@ -4,12 +4,7 @@
 
 #include <string>
 
-#include "../shared/uuid.h"
-
 #include "property.h"
-
-static const char __file__[] = __FILE__;
-
 
 namespace dsp {
 
@@ -23,7 +18,7 @@ Property::Property(std::shared_ptr<Agent> agent,
                    ClassObj(nullptr, agent, class_label, class_description),
     value_type_(value_type),
     sub_property_of_(sub_property_of) {
-  id_ = uuid::generate_uuid_v4();
+  id_ = dsp::Identifier();
 }
 
 }

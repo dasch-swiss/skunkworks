@@ -18,8 +18,6 @@
 
 #include "shared/generic_object_description/generic_object_description.h"
 #include "data_model.h"
-#include "adapter.h"
-#include "key_value_store.h"
 
 // ToDo!! Temporary code
 template <typename T>
@@ -63,7 +61,7 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
 
-  Project(const GenericObjectDesciption& object_description);
+  Project(const GenericObjectDescription& obj);
 
   inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
   inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }

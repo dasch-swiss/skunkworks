@@ -23,8 +23,9 @@ Agent::Agent(const GenericObjectDescription& object_description) {
 }
 
 GenericObjectDescription Agent::get_generic_object_description() {
-  GenericObjectDescription object_description(1, "Agent");
-  object_description.member("id", id_);
+  GenericObjectDescription obj(1, "Agent");
+  obj.member("id", id_.to_xsd());
+  return obj;
 }
 
 }
