@@ -34,9 +34,7 @@ class GenericObjectDescription {
   template<typename T>
   inline T member(const std::string& name) const {
     try {
-      std::cerr << __FILE__ << __LINE__ << std::endl;
-      //const std::shared_ptr<T> ptr = std::dynamic_pointer_cast<T>(data_.at(name)); // funktioniert nicht!! :-(
-      // Bad hack:
+      std::cerr << ":: " << *(data_.at(name)) << std::endl;
       void *gaga = data_.at(name).get();
       T* ptr = (T*) gaga;
       return *ptr;
