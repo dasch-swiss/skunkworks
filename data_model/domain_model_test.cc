@@ -27,11 +27,13 @@ TEST_CASE("Data model tests", "[catch2|") {
   std::shared_ptr<dsp::InMemKVStore> store = std::make_shared<dsp::InMemKVStore>();
   std::shared_ptr<dsp::JsonMemKVStoreAdapter> store_adapter = std::make_shared<dsp::JsonMemKVStoreAdapter>(store);
   std::shared_ptr<dsp::DomainModel> model = std::make_shared<dsp::DomainModel>(store_adapter);
+
   dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
   model->agent(my_agent);
   dsp::ProjectPtr my_project = std::make_shared<dsp::Project>(my_agent, "4123", "test-project");
   dsp::Identifier proj_id = my_project->id();
   model->project(my_project);
+  dsp::Identifier created_by_id = my_project->created_by()->id();
   //
   // remove my_agent, my_project and model
   //
@@ -47,6 +49,7 @@ TEST_CASE("Data model tests", "[catch2|") {
 
   CHECK(same_project->shortcode() == dsp::Shortcode("4123"));
   CHECK(same_project->shortname() == dsp::Shortname("test-project"));
+  CHECK(same_project->created_by()->id() == created_by_id);
 
 }
 

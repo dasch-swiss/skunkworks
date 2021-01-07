@@ -14,9 +14,9 @@
 
 namespace dsp {
 
-class DomainModel {
+class DomainModel : public std::enable_shared_from_this<DomainModel> {
  public:
-  DomainModel(const std::shared_ptr<StoreAdapter> &store_adapter) : store_adapter(store_adapter) {}
+  DomainModel(std::shared_ptr<StoreAdapter> store_adapter) : store_adapter_(store_adapter) {}
 
   std::shared_ptr<Agent> agent(const dsp::Identifier &id);
 
@@ -26,13 +26,16 @@ class DomainModel {
 
   void project(const std::shared_ptr<Project> &project);
 
+  std::shared_ptr<DataModel> data_model(const dsp::Identifier &id) {};
+
+  void data_model(const std::shared_ptr<DataModel> &data_model) {};
+
  private:
-  std::shared_ptr<StoreAdapter> store_adapter;
+  std::shared_ptr<StoreAdapter> store_adapter_;
   std::unordered_map<dsp::Identifier, std::shared_ptr<Agent>> agents_;
   std::unordered_map<dsp::Identifier, std::shared_ptr<Project>> projects_;
 };
 
 }
-
 
 #endif //SKUNKWORKS_DATA_MODEL_DOMAIN_MODEL_H_

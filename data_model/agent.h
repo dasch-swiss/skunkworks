@@ -13,11 +13,13 @@
 #include "external/nlohmann/json.hpp"
 namespace dsp {
 
+class DomainModel;
+
 class Agent {
  public:
   Agent();
 
-  Agent(const nlohmann::json& object_description);
+  Agent(const nlohmann::json& object_description, std::shared_ptr<DomainModel>& model);
 
   [[nodiscard]] inline dsp::Identifier id() const { return id_; }
 

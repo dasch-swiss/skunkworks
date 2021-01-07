@@ -13,7 +13,7 @@ Agent::Agent() {
   id_ = Identifier();
 }
 
-Agent::Agent(const nlohmann::json &json_obj) {
+Agent::Agent(const nlohmann::json &json_obj, std::shared_ptr<DomainModel>& model) {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type")
       && (json_obj["type"] == "Agent")) {
     if (json_obj.contains("id")) {

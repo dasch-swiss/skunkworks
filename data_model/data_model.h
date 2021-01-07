@@ -16,6 +16,7 @@
 namespace dsp {
 
 class Project;
+class DomainModel;
 
 class DataModel : public std::enable_shared_from_this<DataModel>{
  public:
@@ -24,13 +25,17 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    */
   DataModel();
 
-  DataModel(const xsd::String &shortname);
+  DataModel(const std::shared_ptr<Agent> &created_by, const dsp::Shortname& shortname);
   /*!
    * Constructor taking a shortname as parameter
    *
    * @param shortname
    */
-  DataModel(const std::string &shortname);
+  DataModel(const std::shared_ptr<Agent> &created_by, const xsd::String& shortname);
+
+  DataModel(const std::shared_ptr<Agent> &created_by, const std::string& shortname);
+
+  DataModel(const nlohmann::json& json_obj, std::shared_ptr<DomainModel>& model);
 
   /*!
    * Getter for ID
@@ -43,7 +48,7 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    * getter for shortname
    * @return
    */
-  inline std::string shortname() const { return shortname_; }
+  inline dsp::Shortname shortname() const { return shortname_; }
 
   /*!
    * Getter for project (shared_ptr)
@@ -99,10 +104,17 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
   std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id);
 
   friend Project; // grant access to class Project to private member variable project_
+
+  nlohmann::json to_json();
+
  private:
 
   dsp::Identifier id_;
-  xsd::String shortname_;
+  xsd::DateTimeStamp creation_date_;
+  std::weak_ptr<Agent> created_by_;
+  xsd::DateTimeStamp last_modification_date_;
+  std::weak_ptr<Agent> modified_by_;
+  dsp::Shortname shortname_;
   std::weak_ptr<Project> project_;
   std::unordered_map<dsp::Identifier, std::shared_ptr<ResourceClass>> resource_classes_;
   std::unordered_map<dsp::Identifier, std::shared_ptr<Property>> properties_;

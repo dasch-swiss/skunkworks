@@ -29,6 +29,7 @@ bool is_uninitialized(std::weak_ptr<T> const& weak) {
 
 namespace dsp {
 
+  class DomainModel;
 
 class Project : public std::enable_shared_from_this<Project> {
  public:
@@ -62,7 +63,7 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
 
-  Project(const nlohmann::json& json_obj);
+  Project(const nlohmann::json& json_obj, std::shared_ptr<DomainModel>& model);
 
   inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
   inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }

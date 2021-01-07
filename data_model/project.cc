@@ -6,7 +6,7 @@
 #include <vector>
 
 #include "shared/error/error.h"
-
+#include "domain_model.h"
 #include "project.h"
 
 static const char file_[] = __FILE__;
@@ -38,7 +38,7 @@ Project::Project(const std::shared_ptr<Agent> &created_by, const std::string &sh
   shortname_ = shortname;
 }
 
-Project::Project(const nlohmann::json& json_obj) {
+Project::Project(const nlohmann::json& json_obj, std::shared_ptr<DomainModel>& model) {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "Project")) {
     if (json_obj.contains("id")) {
       id_ = dsp::Identifier(json_obj["id"]);
@@ -47,6 +47,8 @@ Project::Project(const nlohmann::json& json_obj) {
 
       if (!json_obj.contains("created_by")) throw Error(file_, __LINE__, R"("Project" has no "created_by")");
       dsp::Identifier created_by_id(json_obj["created_by"]);
+      std::shared_ptr<Agent> created_by = model->agent(created_by_id);
+      created_by_ = created_by;
 
       if (!json_obj.contains("shortcode")) throw Error(file_, __LINE__, R"("Project" has no "shortcode")");
       shortcode_ = json_obj["shortcode"];
@@ -59,6 +61,8 @@ Project::Project(const nlohmann::json& json_obj) {
       if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
         last_modification_date_ = xsd::DateTimeStamp(json_obj["last_modification_date"]);
         dsp::Identifier modified_by_id(json_obj["modified_by"]);
+        std::shared_ptr<Agent> modified_by = model->agent(modified_by_id);
+        modified_by_ = modified_by;
       }
 
     } else{

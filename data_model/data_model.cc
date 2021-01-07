@@ -5,8 +5,12 @@
 #include <sstream>
 
 #include "shared/error/error.h"
+#include "shared/dsp_types/identifier.h"
+#include "shared/dsp_types/shortname.h"
 
 #include "data_model.h"
+#include "domain_model.h"
+#include "project.h"
 #include "resource_class.h"
 
 static const char file_[] = __FILE__;
@@ -14,20 +18,62 @@ static const char file_[] = __FILE__;
 namespace dsp {
 
 DataModel::DataModel() {
-  shortname_.add_restriction(std::make_shared<xsd::RestrictionPattern>("([a-zA-Z_][\\w\\-]*)", "Short name restriction"));
-  shortname_.add_restriction(std::make_shared<xsd::RestrictionMaxLength>(64, "Short name max length=64"));
+  id_ = dsp::Identifier();
+  creation_date_ = xsd::DateTimeStamp(); // current timestamp
 }
 
 
-DataModel::DataModel(const xsd::String &shortname) : DataModel() {
-  id_ = dsp::Identifier();
+DataModel::DataModel(const std::shared_ptr<Agent> &created_by, const dsp::Shortname &shortname) : DataModel() {
+  created_by_ = created_by;
   shortname_ = shortname;
 }
 
 
-DataModel::DataModel(const std::string &shortname) : DataModel() {
-  id_ = dsp::Identifier();
+DataModel::DataModel(const std::shared_ptr<Agent> &created_by, const xsd::String& shortname) : DataModel() {
+  created_by_ = created_by;
   shortname_ = shortname;
+}
+
+DataModel::DataModel(const std::shared_ptr<Agent> &created_by, const std::string& shortname) : DataModel() {
+  created_by_ = created_by;
+  shortname_ = shortname;
+}
+
+DataModel::DataModel(const nlohmann::json& json_obj, std::shared_ptr<DomainModel>& model) {
+  if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "DataModel")) {
+    if (json_obj.contains("id")) {
+      id_ = dsp::Identifier(json_obj["id"]);
+      if (!json_obj.contains("creation_date")) throw Error(file_, __LINE__, R"("DataModel" has no "creation_date")");
+      creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"]);
+
+      if (!json_obj.contains("created_by")) throw Error(file_, __LINE__, R"("DataModel" has no "created_by")");
+      dsp::Identifier created_by_id(json_obj["created_by"]);
+      std::shared_ptr<Agent> created_by = model->agent(created_by_id);
+      created_by_ = created_by;
+
+      if (!json_obj.contains("shortname")) throw Error(file_, __LINE__, R"("DataModel" has no "shortname")");
+      shortname_ = json_obj["shortname"];
+
+      if (!json_obj.contains("project")) throw Error(file_, __LINE__, R"("DataModel" has no "project")");
+      dsp::Identifier project_id(json_obj["project"]);
+      std::shared_ptr<Project> project = model->project(project_id);
+      project_ = project;
+
+      std::vector<std::string> data_model_ids = json_obj["resource_classes"];
+      std::vector<std::string> property_ids = json_obj["properties"];
+
+      if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
+        last_modification_date_ = xsd::DateTimeStamp(json_obj["last_modification_date"]);
+        dsp::Identifier modified_by_id(json_obj["modified_by"]);
+        std::shared_ptr<Agent> modified_by = model->agent(modified_by_id);
+        modified_by_ = modified_by;
+      }
+    } else{
+      throw Error(file_, __LINE__, R"("DataModel" serialization has no "id".)");
+    }
+  } else{
+    throw Error(file_, __LINE__, R"("DataModel" serialization not consistent.)");
+  }
 }
 
 void DataModel::add_resource_class(const std::shared_ptr<ResourceClass> &resource_class) {
@@ -123,5 +169,33 @@ std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &pro
   }
 }
 
+nlohmann::json DataModel::to_json() {
+  std::vector<std::string> resource_class_ids;
+  for (auto [key, value]: resource_classes_) {
+    resource_class_ids.push_back(key);
+  }
+
+  std::vector<std::string> property_ids;
+  for (auto [key, value]: properties_) {
+    property_ids.push_back(key);
+  }
+
+  nlohmann::json json_obj = {
+      {"version", 1},
+      {"type", "DataModel"},
+      {"id", id_},
+      {"shortname", shortname_},
+      {"creation_date", creation_date_},
+      {"created_by", created_by_.lock()->id()},
+      {"project", project_.lock()->id()},
+      {"resource_classes", resource_class_ids},
+      {"properties", property_ids},
+  };
+  if (!modified_by_.expired()) {
+    json_obj["last_modification_date"] = last_modification_date_;
+    json_obj["modified_by"] = modified_by_.lock()->id();
+  }
+  return json_obj;
+}
 
 }
