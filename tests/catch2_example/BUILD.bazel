@@ -1,0 +1,11 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "catch2_exampe_test",
+  srcs = ["catch2_example_test.cc"],
+  deps = [
+      "@catch2//:catch2_with_main",
+  ],
+)

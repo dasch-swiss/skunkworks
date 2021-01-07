@@ -7,7 +7,7 @@ cc_library(
     srcs = ["user.cc"],
     hdrs = ["user.h"],
     deps = [
-        "//shared/dsp_types",
+        "//shared/dsp_types:identifier",
         "//shared/dsp_types:email",
         "//shared/dsp_types:family_name",
         "//shared/dsp_types:given_name",
@@ -27,7 +27,7 @@ cc_test(
     size = "small",
     deps = [
         ":user",
-        "//shared/dsp_types",
+        "//shared/dsp_types:identifier",
         "//shared/dsp_types:email",
         "//shared/dsp_types:family_name",
         "//shared/dsp_types:given_name",
@@ -38,7 +38,6 @@ cc_test(
         "//shared/dsp_types:username",
         "//shared/error",
         "//shared/xsd_types",
-        "//tests:test_main",
-        "@catch2//:catch2",
+        "@catch2//:catch2_with_main",
     ],
 )

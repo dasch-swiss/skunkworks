@@ -7,7 +7,6 @@ cc_test(
   srcs = ["nlohmann_json_test.cc"],
   deps = [
       "@nlohmann//:nlohmann",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
   ],
 )
