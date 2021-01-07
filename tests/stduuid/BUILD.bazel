@@ -8,7 +8,6 @@ cc_test(
   deps = [
       "@stduuid//:uuid",
       "@stduuid//:gsl",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
   ],
 )

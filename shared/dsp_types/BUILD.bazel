@@ -3,27 +3,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "dsp_types",
-    srcs = [
-        "identifier.cc",
-        "shortcode.cc",
-        "shortname.cc",
-    ],
-    hdrs = [
-        "identifier.h",
-        "shortcode.h",
-        "shortname.h",
-    ],
-    copts = ["-Iexternal/stduuid/gsl"],
-    deps = [
-        "//shared",
-        "//shared/error",
-        "//shared/xsd_types",
-        "//third_party/stduuid"
-        ],
-)
-
-cc_library(
     name = "email",
     srcs = ["email.cc"],
     hdrs = ["email.h"],
@@ -37,11 +16,10 @@ cc_test(
     srcs = ["email_test.cc"],
     size = "small",
     deps = [
-      ":email",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":email",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
     ],
 )
 
@@ -59,11 +37,10 @@ cc_test(
     srcs = ["family_name_test.cc"],
     size = "small",
     deps = [
-      ":family_name",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":family_name",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
     ],
 )
 
@@ -81,34 +58,36 @@ cc_test(
     srcs = ["given_name_test.cc"],
     size = "small",
     deps = [
-      ":given_name",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":given_name",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
     ],
 )
 
-#cc_library(
-#    name = "identifier",
-#    srcs = ["identifier.cc"],
-#    hdrs = ["identifier.h"],
-#    deps = [
-#        "//shared",
-#        "//shared/xsd_types",
-#    ],
-#)
+cc_library(
+    name = "identifier",
+    srcs = ["identifier.cc"],
+    hdrs = ["identifier.h"],
+    deps = [
+        "//shared",
+        "//shared/xsd_types",
+        "@stduuid//:uuid",
+        "@stduuid//:gsl",
+    ],
+)
 
 cc_test(
     name = "identifier_test",
     srcs = ["identifier_test.cc"],
     size = "small",
     deps = [
-      ":dsp_types",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":identifier",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@stduuid//:uuid",
+        "@stduuid//:gsl",
+        "@catch2//:catch2_with_main",
     ],
 )
 
@@ -126,11 +105,10 @@ cc_test(
     srcs = ["lang_test.cc"],
     size = "small",
     deps = [
-      ":lang",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":lang",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
     ],
 )
 
@@ -148,11 +126,10 @@ cc_test(
     srcs = ["password_test.cc"],
     size = "small",
     deps = [
-      ":password",
-      "//shared/error",
-      "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+        ":password",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
     ],
 )
 
@@ -170,11 +147,64 @@ cc_test(
     srcs = ["status_test.cc"],
     size = "small",
     deps = [
-      ":status",
+        ":status",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
+    ],
+)
+
+cc_library(
+    name = "shortcode",
+    srcs = [
+        "shortcode.cc",
+    ],
+    hdrs = [
+        "shortcode.h",
+    ],
+    deps = [
+        "//shared",
+        "//shared/error",
+        "//shared/xsd_types",
+    ],
+)
+
+cc_test(
+    name = "shortcode_test",
+    srcs = ["shortcode_test.cc"],
+    size = "small",
+    deps = [
+        ":shortcode",
+        "//shared/error",
+        "//shared/xsd_types",
+        "@catch2//:catch2_with_main",
+    ],
+)
+
+cc_library(
+    name = "shortname",
+    srcs = [
+        "shortname.cc",
+    ],
+    hdrs = [
+        "shortname.h",
+    ],
+    deps = [
+        "//shared",
+        "//shared/error",
+        "//shared/xsd_types",
+    ],
+)
+
+cc_test(
+    name = "shortname_test",
+    srcs = ["shortname_test.cc"],
+    size = "small",
+    deps = [
+      ":shortname",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -195,8 +225,7 @@ cc_test(
       ":token",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
     ],
 )
 
@@ -218,7 +247,6 @@ cc_test(
       ":username",
       "//shared/error",
       "//shared/xsd_types",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@catch2//:catch2_with_main",
   ],
 )
