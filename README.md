@@ -16,6 +16,45 @@ exceptions which are documented in this section.
   export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
   ```
 
+### On macOS install the following:
+
+- Homebrew:
+
+  Follow instructions on https://brew.sh 
+
+- Apple Command Line Tools:
+  ```bash
+  $ xcode-select --install
+  ```
+
+- Java 11:
+  ```
+  $ brew tap AdoptOpenJDK/openjdk
+  $ brew cask install AdoptOpenJDK/openjdk/adoptopenjdk11
+  ```
+
+  To pin the version of Java, please add this environment variable to your starup script:
+  ```
+  export JAVA_HOME=`/usr/libexec/java_home -v 11`
+  ```
+
+- Node:
+  ```
+  $ brew install node
+  $ brew install n // optional
+  $ n lts // optional
+  ```
+
+- Bazel:
+  ```
+  $ npm install -g @bazel/bazelisk
+  $ npm install -g @bazel/buildozer
+  ```
+
+- CMake:
+  ```
+  $ brew install cmake
+  ```
 
 ## References
 
