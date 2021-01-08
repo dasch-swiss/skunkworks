@@ -26,9 +26,17 @@ install-python-requirements: ## install python requirements for documentation
 build: ## build the project
 	bazel build //...
 
+.PHONY:build-arm
+build-arm: ## build the project
+	USE_BAZEL_VERSION=last_green bazel build -c opt --cpu=darwin_arm64 //...
+
 .PHONY:test
 test: ## test the project
 	bazel test //...
+
+.PHONY:test-arm
+test-arm: ## build the project
+	USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
 
 .PHONY: help
 help: ## this help

@@ -1,8 +1,25 @@
 workspace(name = "swiss_dasch_skunkworks")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+#
+# bazel-skylib 1.0.3 released 2020.08.27 (https://github.com/bazelbuild/bazel-skylib/releases/tag/1.0.3)
+#
+skylib_version = "1.0.3"
+http_archive(
+    name = "bazel_skylib",
+    type = "tar.gz",
+    url = "https://github.com/bazelbuild/bazel-skylib/releases/download/{}/bazel-skylib-{}.tar.gz".format (skylib_version, skylib_version),
+    sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+)
+
+# Recursively import bazel_skylib dependencies
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+bazel_skylib_workspace()
+
+#
 # Get rules_cc. Although the cc rules are built into Bazel, they will be moved
 # out in the future, into their own rules. Using this now, will save migration work later.
+#
 rules_cc_tag = "b1c40e1de81913a3c40e5948f78719c28152486d" # 11. November 2020
 rules_cc_sha256 = "d0c573b94a6ef20ef6ff20154a23d0efcb409fb0e1ff0979cec318dfe42f0cdd"
 http_archive(
@@ -16,7 +33,9 @@ http_archive(
 load("@rules_cc//cc:repositories.bzl", "rules_cc_dependencies")
 rules_cc_dependencies()
 
+#
 # The rules_foreign_cc rule repository - commit from 26.10.2020
+#
 rules_foreign_cc_version = "d54c78ab86b40770ee19f0949db9d74a831ab9f0"
 rules_foreign_cc_version_sha256 = "3c6445404e9e5d17fa0ecdef61be00dd93b20222c11f45e146a98c0a3f67defa"
 http_archive(
@@ -30,9 +49,11 @@ http_archive(
 load("@rules_foreign_cc//:workspace_definitions.bzl", "rules_foreign_cc_dependencies")
 rules_foreign_cc_dependencies(register_default_tools = True)
 
+#
 # rules_proto defines abstract rules for building Protocol Buffers.
-rules_proto_version = "218ffa7dfa5408492dc86c01ee637614f8695c45"
-rules_proto_version_sha256 = "2490dca4f249b8a9a3ab07bd1ba6eca085aaf8e45a734af92aad0c42d9dc7aaf"
+#
+rules_proto_version = "84ba6ec814eebbf5312b2cc029256097ae0042c3"
+rules_proto_version_sha256 = "3bce0e2fcf502619119c7cac03613fb52ce3034b2159dd3ae9d35f7339558aa3"
 http_archive(
     name = "rules_proto",
     strip_prefix = "rules_proto-%s" % rules_proto_version,
