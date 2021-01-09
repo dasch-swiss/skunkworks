@@ -22,21 +22,25 @@ docs-publish: ## build and publish docs to Github Pages
 install-python-requirements: ## install python requirements for documentation
 	pip3 install -r requirements.txt
 
-.PHONY:build
+.PHONY: build
 build: ## build the project
 	bazel build //...
 
-.PHONY:build-arm
+.PHONY: build-arm
 build-arm: ## build the project
 	USE_BAZEL_VERSION=last_green bazel build -c opt --cpu=darwin_arm64 //...
 
-.PHONY:test
+.PHONY: test
 test: ## test the project
 	bazel test //...
 
-.PHONY:test-arm
+.PHONY: test-arm
 test-arm: ## build the project
 	USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
+
+.PHONY: start-linux-container
+start-linux-container: ## Start the Linux Docker container which can be used to run builds inside
+	docker run -it --rm -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
 
 .PHONY: help
 help: ## this help
