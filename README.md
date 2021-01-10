@@ -10,19 +10,24 @@ exceptions which are documented in this section.
 
 ## Linux Container
 
-To test if the build and tests run under Linux, you can start a Linux Docker container:
+To test if the build and tests run under Linux, you can start a Linux Docker container,
+which matches your current CPU platform:
 ```bash
-$ make start-linux-container
+$ make start-linux-amd64-container
+$ make start-linux-arm64-container
+$ make start-linux-armv7-container
 ```
 
-Then inside the container, run the test in the following way:
+Then inside the container, change into the `src` directory, and run
+the `test-linux` make target:
 ```bash
-$ bazel test --config=linux //...
+$ cd src
+$ make test-linux
 ```
 
 ## Experimental Apple Silicon Support
 
 To run the tests on a Apple Silicon machine, run the following:
 ```bash
-$ USE_BAZEL_VERSION=last_green bazelisk test -c opt --cpu=darwin_arm64 //...
+$ USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
 ```
