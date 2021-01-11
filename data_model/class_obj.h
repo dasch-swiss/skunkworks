@@ -8,24 +8,24 @@
 #include <set>
 #include <memory>
 
+#include "external/nlohmann/json.hpp"
+
 #include "shared/xsd_types/xsd.h"
 #include "shared/dsp_types/identifier.h"
 #include "agent.h"
 //#include "data_model.h"
+#include "model_item.h"
 
 namespace dsp {
 
 class DataModel;
 
-class ClassObj {
+class ClassObj: public ModelItem {
   /*!
    * Base class for ResourceClass and Property
    */
  public:
-  /*!
-   * Default constructor
-   */
-  ClassObj() = default;
+  ClassObj() = delete ;
 
   /*!
    * Constructor taking all necessary parameters
@@ -36,41 +36,33 @@ class ClassObj {
    * @param class_description
    */
   ClassObj(
-      const std::shared_ptr<DataModel>& in_data_model,
-      const std::shared_ptr<Agent>& agent,
+      const dsp::Identifier& created_by,
+      const dsp::Identifier& in_data_model,
       const xsd::LangString& class_label,
       const xsd::LangString& class_description
   );
 
-  /*!
-   * Constructor with just a ID as parameter
-   *
-   * @param id
-   */
-  ClassObj(const dsp::Identifier &id);
 
-  /*!
-   * Getter for ID
-   *
-   * @return
-   */
-  [[gnu::pure]] [[nodiscard]]
-  inline dsp::Identifier id() const { return id_; }
+  ClassObj(const nlohmann::json &json_obj);
+
+  inline ~ClassObj() { }
 
   /*!
    * Getter for in_data_model
    * @return
    */
+  [[nodiscard]]
+  inline dsp::Identifier in_data_model_id() const { return in_data_model_; };
 
-  [[gnu::pure]] [[nodiscard]]
-  inline std::shared_ptr<DataModel> in_data_model() const { return in_data_model_.lock(); };
+  std::shared_ptr<DataModel> in_data_model() const { return get_item<DataModel>(in_data_model_); }
+
 
   /*!
    * Getter for creation_date
    *
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
+  [[nodiscard]]
   inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
 
   /*!
@@ -78,15 +70,15 @@ class ClassObj {
    *
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
-  inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }
+  [[nodiscard]]
+  inline dsp::Identifier created_by_id() const { return created_by_; }
 
   /*!
    * Getter for lastmodification date
    *
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
+  [[nodiscard]]
   inline xsd::DateTimeStamp last_modification_date() const { return last_modification_date_; }
 
   /*!
@@ -94,44 +86,41 @@ class ClassObj {
    *
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
-  inline std::shared_ptr<Agent> modified_by() const { return modified_by_.lock(); }
+  [[nodiscard]]
+  inline dsp::Identifier modified_by_id() const { return modified_by_; }
 
   /*!
    * Getter for label
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
-  inline xsd::LangString class_label() const { return class_label_; }
+  [[nodiscard]]
+  inline xsd::LangString label() const { return label_; }
 
   /*!
    * Getter for description
    *
    * @return
    */
-  [[gnu::pure]] [[nodiscard]]
-  inline xsd::LangString class_description() const { return class_description_; }
+  [[nodiscard]]
+  inline xsd::LangString description() const { return description_; }
 
-  /*!
-   * Getter for changed set
-   * @return
-   */
-  [[gnu::pure]] [[nodiscard]]
-  inline std::set<std::string> changed() const { return changed_; }
+  void label(const xsd::LangString &label);
 
-  void class_label(const xsd::LangString &class_label);
-  void class_description(const xsd::LangString &class_description);
+  void description(const xsd::LangString &description);
+
+  bool operator==(const ClassObj &other);
+
+  virtual nlohmann::json to_json();
 
  protected:
   dsp::Identifier id_;
-  std::weak_ptr<DataModel> in_data_model_;
   xsd::DateTimeStamp creation_date_;
-  std::weak_ptr<Agent> created_by_;
+  dsp::Identifier created_by_;
+  dsp::Identifier in_data_model_;
   xsd::DateTimeStamp last_modification_date_;
-  std::weak_ptr<Agent> modified_by_;
-  xsd::LangString class_label_;
-  xsd::LangString class_description_;
-  std::set<std::string> changed_;
+  dsp::Identifier modified_by_;
+  xsd::LangString label_;
+  xsd::LangString description_;
 
   //inline void data_model_id(const std::shared_ptr<DataModel> &in_data_model) { in_data_model_ = in_data_model; }
 

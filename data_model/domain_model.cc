@@ -3,52 +3,38 @@
 //
 #include <memory>
 #include "shared/error/error.h"
-//#include "shared/generic_object_description/generic_object_description.h"
-
 #include "domain_model.h"
 
 
 namespace dsp {
 
-std::shared_ptr<Agent> DomainModel::agent(const dsp::Identifier &id) {
+template<typename T>
+void DomainModel::create(const std::shared_ptr<T> &item) {
+  nlohmann::json json_obj = item->to_json();
+  store_adapter_->create(json_obj);
+  items_[item->id()] = item;
+
+}
+
+template<typename T>
+std::shared_ptr<T> DomainModel::read(const dsp::Identifier &id) {
   try {
-    std::shared_ptr<Agent> agent = agents_.at(id);
-    return agent;
+    std::shared_ptr<T> item = std::dynamic_pointer_cast<T>(items_.at(id));
+    return item;
   } catch (const std::out_of_range &err) {
     nlohmann::json json_obj = store_adapter_->read(id);
-    std::shared_ptr<DomainModel> m = shared_from_this();
-    Agent agent(json_obj, m);
-    std::shared_ptr<Agent> agent_ptr = std::make_shared<Agent>(agent);
-    agents_[id] = agent_ptr;
-    return agent_ptr;
+    T item(json_obj);
+    std::shared_ptr<T> item_ptr = std::make_shared<Agent>(item);
+    items_[id] = item_ptr;
+    return item_ptr;
   }
 }
 
-void DomainModel::agent(const std::shared_ptr<Agent> &agent) {
-  nlohmann::json json_obj = agent->to_json();
-  store_adapter_->create(json_obj);
-  agents_[agent->id()] = agent;
+template<typename T>
+void DomainModel::update(const dsp::Identifier &id, const std::shared_ptr<T> &item) {
+  nlohmann::json old_json_obj = store_adapter_->read(id);
+  nlohmann::json json_obj = item->to_json();
+  store_adapter_->update(id, json_obj);
 }
-
-std::shared_ptr<Project> DomainModel::project(const dsp::Identifier &id) {
-  try {
-    std::shared_ptr<Project> project = projects_.at(id);
-    return project;
-  } catch (const std::out_of_range &err) {
-    nlohmann::json json_obj = store_adapter_->read(id);
-    std::shared_ptr<DomainModel> m = shared_from_this();
-    Project project(json_obj, m);
-    std::shared_ptr<Project> project_ptr = std::make_shared<Project>(project);
-    projects_[id] = project_ptr;
-    return project_ptr;
-  }
-}
-
-void DomainModel::project(const std::shared_ptr<Project> &project) {
-  nlohmann::json json_obj = project->to_json();
-  store_adapter_->create(json_obj);
-  projects_[project->id()] = project;
-};
-
 
 }

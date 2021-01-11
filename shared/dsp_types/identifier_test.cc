@@ -28,6 +28,12 @@ TEST_CASE("identifier value type", "[entities][user][identifier]") {
     CHECK(Identifier(existing_uuid) == Identifier(existing_uuid));
   }
 
+  SECTION("Named identifiers") {
+    dsp::Identifier named1("GAGA", "gugus");
+    dsp::Identifier named2("GAGA", "gugus2");
+    CHECK(named1 != named2);
+  }
+
 }
 
 

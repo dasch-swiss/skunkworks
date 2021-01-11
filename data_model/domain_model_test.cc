@@ -28,12 +28,15 @@ TEST_CASE("Data model tests", "[catch2|") {
   std::shared_ptr<dsp::JsonMemKVStoreAdapter> store_adapter = std::make_shared<dsp::JsonMemKVStoreAdapter>(store);
   std::shared_ptr<dsp::DomainModel> model = std::make_shared<dsp::DomainModel>(store_adapter);
 
-  dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>();
-  model->agent(my_agent);
-  dsp::ProjectPtr my_project = std::make_shared<dsp::Project>(my_agent, "4123", "test-project");
+  dsp::AgentPtr my_agent = std::make_shared<dsp::Agent>("myAgent");
+  model->create<dsp::Agent>(my_agent);
+  dsp::ProjectPtr my_project = std::make_shared<dsp::Project>(my_agent->id(), "4123", "test-project");
   dsp::Identifier proj_id = my_project->id();
-  model->project(my_project);
+  model->create<dsp::Project>(my_project);
   dsp::Identifier created_by_id = my_project->created_by()->id();
+
+  dsp::DataModelPtr my_data_model = std::make_shared<dsp::DataModel>(my_agent->id(), "my-data-model");
+  model->create<dsp::DataModel>(my_data_model);
   //
   // remove my_agent, my_project and model
   //
@@ -45,7 +48,8 @@ TEST_CASE("Data model tests", "[catch2|") {
   // reread the model from the store
   //
   std::shared_ptr<dsp::DomainModel> new_model = std::make_shared<dsp::DomainModel>(store_adapter);
-  dsp::ProjectPtr same_project = new_model->project(proj_id);
+
+  dsp::ProjectPtr same_project = new_model->read<dsp::Project>(proj_id);
 
   CHECK(same_project->shortcode() == dsp::Shortcode("4123"));
   CHECK(same_project->shortname() == dsp::Shortname("test-project"));

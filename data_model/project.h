@@ -6,69 +6,81 @@
 #define SKUNKWORKS_ENTITIES_PROJECT_H_
 
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 #include "external/nlohmann/json.hpp"
 
 #include "shared/xsd_types/xsd_any_uri.h"
 #include "shared/xsd_types/xsd_restriction.h"
+#include "shared/xsd_types/xsd_boolean.h"
 #include "shared/dsp_types/identifier.h"
 #include "shared/dsp_types/shortcode.h"
 #include "shared/dsp_types/shortname.h"
 
 //#include "shared/generic_object_description/generic_object_description.h"
 #include "external/nlohmann/json.hpp"
+#include "model_item.h"
 #include "data_model.h"
-
-// ToDo!! Temporary code
-template <typename T>
-bool is_uninitialized(std::weak_ptr<T> const& weak) {
-  using wt = std::weak_ptr<T>;
-  return !weak.owner_before(wt{}) && !wt{}.owner_before(weak);
-}
+#include "agent.h"
 
 namespace dsp {
 
-  class DomainModel;
+class Domain;
 
-class Project : public std::enable_shared_from_this<Project> {
+class Project : public ModelItem {
  public:
   /*!
-   * Default constructor. Assignes a unique ID (based on a uuid) and initializes restrictions for the
-   * Shortcode and shortname.
-   */
-  Project();
-
-  /*!
-   * Constructor taking an Agent, a Shortcode and Shortname as parameter
+   * Factory for managed Project
    * @param created_by
    * @param shortcode
    * @param shortname
+   * @return
    */
-  Project(const std::shared_ptr<Agent> &created_by,  const dsp::Shortcode &shortcode, const dsp::Shortname &shortname);
+  static std::shared_ptr<Project> Factory(
+      const dsp::Identifier &created_by,
+      const dsp::Shortcode &shortcode,
+      const dsp::Shortname &shortname);
 
   /*!
-   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
-   *
-   * @param shortcode A xsd::String instance
-   * @param shortname A xsd::String instance
+   * Factory for managed Project
+   * @param created_by
+   * @param shortcode
+   * @param shortname
+   * @return
    */
-  Project(const std::shared_ptr<Agent> &created_by,  xsd::String &shortcode, const xsd::String &shortname);
+  static std::shared_ptr<Project> Factory(
+      const dsp::Identifier &created_by,
+      const xsd::String &shortcode,
+      const xsd::String &shortname);
 
   /*!
-   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
-   *
-   * @param shortcode A std::string instance
-   * @param shortname A std::string instance
+   * Factory for managed Project
+   * @param created_by
+   * @param shortcode
+   * @param shortname
+   * @return
    */
-  Project(const std::shared_ptr<Agent> &created_by, const std::string &shortcode, const std::string &shortname);
+  static std::shared_ptr<Project> Factory(
+      const dsp::Identifier &created_by,
+      const std::string &shortcode,
+      const std::string &shortname);
 
-  Project(const nlohmann::json& json_obj, std::shared_ptr<DomainModel>& model);
+  /*!
+   * Factory for managed project
+   * @param json_obj
+   * @return
+   */
+  static std::shared_ptr<Project> Factory(const nlohmann::json& json_obj);
+
+  virtual ~Project();
+
+  std::shared_ptr<Project> get(const dsp::Identifier& id);
+
 
   inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
-  inline std::shared_ptr<Agent> created_by() const { return created_by_.lock(); }
+  std::shared_ptr<Agent> created_by() const { return get_item<Agent>(created_by_); }
   inline xsd::DateTimeStamp last_modification_date() const { return last_modification_date_; }
-  inline std::shared_ptr<Agent> modified_by() const { return modified_by_.lock(); }
+  inline std::shared_ptr<Agent> modified_by() const { return get_item<Agent>(modified_by_); }
 
   /*!
    * Getter for Shortcode
@@ -84,12 +96,6 @@ class Project : public std::enable_shared_from_this<Project> {
    */
   inline dsp::Shortname shortname() const { return shortname_; }
 
-  /*!
-   * Getter for the ID
-   *
-   * @return
-   */
-  inline dsp::Identifier id() const { return id_; }
 
 
   /*!
@@ -97,7 +103,7 @@ class Project : public std::enable_shared_from_this<Project> {
    *
    * @param data_model
    */
-  void add_data_model(const std::shared_ptr<DataModel> &data_model);
+  void add_data_model(const dsp::Identifier &data_model_id);
 
   /*!
    * Get a data model from the given data model ID
@@ -117,14 +123,43 @@ class Project : public std::enable_shared_from_this<Project> {
   nlohmann::json to_json();
 
  private:
-  dsp::Identifier id_;
+  /*!
+ * Constructor taking an Agent, a Shortcode and Shortname as parameter
+ * @param created_by
+ * @param shortcode
+ * @param shortname
+ */
+  Project(const dsp::Identifier &created_by,  const dsp::Shortcode &shortcode, const dsp::Shortname &shortname);
+
+  /*!
+   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
+   *
+   * @param shortcode A xsd::String instance
+   * @param shortname A xsd::String instance
+   */
+  Project(const dsp::Identifier &created_by,  const xsd::String &shortcode, const xsd::String &shortname);
+
+  /*!
+   * Constructor taking a Shortcode and a shortname as parameter. Assignes a unique ID (based on a uuid).
+   *
+   * @param shortcode A std::string instance
+   * @param shortname A std::string instance
+   */
+  Project(const dsp::Identifier &created_by, const std::string &shortcode, const std::string &shortname);
+
+  /*!
+   * Constructor from JSON
+   * @param json_obj
+   */
+  explicit Project(const nlohmann::json& json_obj);
+
   xsd::DateTimeStamp creation_date_;
-  std::weak_ptr<Agent> created_by_;
+  dsp::Identifier created_by_;
   xsd::DateTimeStamp last_modification_date_;
-  std::weak_ptr<Agent> modified_by_;
+  dsp::Identifier modified_by_;
   dsp::Shortcode shortcode_;
   dsp::Shortname shortname_;
-  std::unordered_map<dsp::Identifier, std::shared_ptr<DataModel>> data_models_;
+  std::unordered_set<dsp::Identifier> data_models_;
 };
 
 using ProjectPtr = std::shared_ptr<Project>;

@@ -26,6 +26,11 @@ class Identifier {
 
   inline explicit Identifier(const Identifier &value) : Identifier() { uuid_ = value.uuid_ ;};
 
+  static Identifier empty_identifier() {
+    uuids::uuid empty;
+    return Identifier(empty);
+  }
+
   Identifier(const std::string &base, const std::string &name);
 
   inline bool operator==(const Identifier &other) const { return uuid_ == other.uuid_; }
