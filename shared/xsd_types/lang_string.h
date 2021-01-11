@@ -30,9 +30,13 @@ class LangString {
 
   LangString(const LangString &lang_string) = default;
 
-  xsd::String &operator[](const std::string  &lang);
+  xsd::String &operator[](const std::string &lang);
 
   xsd::String &operator[](const Language &lang);
+
+  const xsd::String get(const Language &lang);
+
+  const xsd::String get(const std::string &lang);
 
   void add(const Language &language, const xsd::String &text);
 

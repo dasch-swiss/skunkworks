@@ -2,19 +2,12 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_test(
-  name = "data_model_test",
-  srcs = ["data_model_test.cc"],
-  deps = [
-      ":data_model",
-      "@catch2//:catch2_with_main",
-  ],
-)
-
 cc_library(
     name = "data_model",
     srcs = [
-        "configuration.cc",
+        "in_mem_kv_store.cc",
+        "json_mem_kv_store_adapter.cc",
+        "domain_model.cc",
         "data_model.cc",
         "project.cc",
         "agent.cc",
@@ -23,7 +16,11 @@ cc_library(
         "resource_class.cc",
     ],
     hdrs = [
-        "configuration.h",
+        "kv_store.h",
+        "in_mem_kv_store.h",
+        "store_adapter.h",
+        "json_mem_kv_store_adapter.h",
+        "domain_model.h",
         "data_model.h",
         "project.h",
         "agent.h",
@@ -32,8 +29,32 @@ cc_library(
         "resource_class.h",
     ],
     deps = [
+        "@nlohmann//:nlohmann",
         "//shared",
         "//shared/error",
-        "//shared/xsd_types"
+        "//shared/xsd_types",
+        "//shared/dsp_types:identifier",
+        "//shared/dsp_types:shortcode",
+        "//shared/dsp_types:shortname",
     ],
+)
+
+cc_test(
+  name = "data_model_test",
+  srcs = ["data_model_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "domain_model_test",
+  srcs = ["domain_model_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
 )

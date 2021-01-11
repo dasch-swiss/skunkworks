@@ -29,7 +29,7 @@ class ManualConfig {
        const std::shared_ptr<dsp::Status> &status,
        const std::shared_ptr<dsp::Lang> &lang);
 
-  inline std::string id() { return id_->value(); };
+  inline std::string id() { return id_->to_string(); };
   inline std::string username() { return username_->value(); };
   inline std::string email() { return email_->value(); };
   inline std::string password() { return password_->value(); };

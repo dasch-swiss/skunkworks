@@ -1,78 +1,69 @@
 //
-// Created by Ivan Subotic on 23/12/2020.
+// Created by Lukas Rosenthaler on 29.12.20.
 //
 
-#ifndef SKUNKWORKS_ENTITIES_USER_IDENTIFIER_H_
-#define SKUNKWORKS_ENTITIES_USER_IDENTIFIER_H_
+#ifndef SKUNKWORKS_HELPERS_DSP_TYPES_ID_H_
+#define SKUNKWORKS_HELPERS_DSP_TYPES_ID_H_
 
 #include <string>
-#include "shared/uuid.h"
-#include "shared/xsd_types/xsd.h"
+
+#define UUID_SYSTEM_GENERATOR
+
+#include "external/stduuid/gsl/gsl" // compiles but does not work in IDE
+#include "gsl/gsl" // only needed for IDE
+#include "external/stduuid/include/uuid.h" // compiles but does not work in IDE
+#include "include/uuid.h" // only needed for IDE
+
+#include "shared/xsd_types/xsd_string.h"
 
 namespace dsp {
 
 class Identifier {
  public:
-  /*!
-   * Default constructor generating a random UUID. Sets Restrictions.
-   */
-  inline Identifier() = default;
+  Identifier();
 
-  /*!
-   * Constructor taking a std::string as parameter.
-   * @param value
-   */
-  inline explicit Identifier(const std::string &value) : Identifier() { value_ = value; };
+  Identifier(const uuids::uuid &uuid) { uuid_ = uuid; }
 
-  /*!
-   * Constructor taking a xsd::String as parameter.
-   * @param value
-   */
-  inline explicit Identifier(const xsd::String &value) : Identifier() { value_ = value; };
+  Identifier(const std::string &uuid_str);
 
-  /*!
-   * Copy constructor taking a dsp::Identifier as parameter.
-   * @param value
-   */
-  inline Identifier(const Identifier &value) : Identifier() { value_ = value.value_; };
+  inline explicit Identifier(const Identifier &value) : Identifier() { uuid_ = value.uuid_ ;};
 
-  /*!
-   * Direct assignment operator. Allows assigning a std::string directly as a value.
-   * @param value of type std::string which is being directly assigned.
-   * @return
-   */
-  inline Identifier &operator=(const std::string &value) { value_ = value; return *this; };
+  Identifier(const std::string &base, const std::string &name);
 
-  /*!
-   * Set the Identifier to a random v4 UUID.
-   */
-  inline Identifier with_uuid_v4() {value_ = uuid::generate_uuid_v4(); return *this; };
+  inline bool operator==(const Identifier &other) const { return uuid_ == other.uuid_; }
 
-  /*!
-   * Accessor returning the value as std::string.
-   * @return std::string
-   */
-  inline std::string value() { return value_.get(); };
+  inline bool operator!=(const Identifier &other) const { return  uuid_ != other.uuid_; }
 
-  /*!
-   * Check for null.
-   */
-  inline bool is_null() { return value_.empty(); };
+  inline bool operator<(const Identifier &other) const { return  uuid_ < other.uuid_; }
 
-  /*!
-   * Equality comparison operator.
-   * @param rhs the other value that we compare against.
-   * @return true if if both values are the same.
-   */
-  inline bool operator==(const Identifier &rhs) const {
-    return static_cast<std::string>(value_) == static_cast<std::string>(rhs.value_);
+  inline uuids::uuid uuid() { return uuid_; }
+
+  inline std::string to_string() const { return uuids::to_string(uuid_); }
+
+  inline xsd::String to_xsd() const { return xsd::String(uuids::to_string(uuid_)); }
+
+  inline operator std::string() const { return to_string(); }
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, const Identifier &rhs) {
+    out_stream << rhs.to_string();
+    return out_stream;
   }
 
- private:
-  xsd::String value_;
 
+ private:
+  uuids::uuid uuid_;
 };
 
 }
 
-#endif //SKUNKWORKS_ENTITIES_USER_IDENTIFIER_H_
+namespace std {
+
+template<>
+struct hash<dsp::Identifier> {
+  std::size_t operator()(dsp::Identifier id) const noexcept {
+    return std::hash<uuids::uuid>{}(id.uuid());
+  }
+};
+
+}
+#endif //SKUNKWORKS_HELPERS_DSP_TYPES_ID_H_

@@ -19,6 +19,7 @@ build:linux --repo_env=CC=clang-11
 build:linux --repo_env=CXX=clang++-11
 build:linux --cxxopt=-stdlib=libstdc++
 build:linux --host_cxxopt=-std=c++17
+build:linux --linkopt=-luuid
 
 # linux compiler settings for debugging include paths
 # build:linux --cxxopt='-E'
@@ -27,13 +28,6 @@ build:linux --host_cxxopt=-std=c++17
 # macos compiler settings
 build:macos --cxxopt=-std=c++17
 build:macos --host_cxxopt=-std=c++17
-
-# docker-sandobx settings
-build:docker-sandbox --experimental_docker_image=daschswiss/sipi-base:latest
-build:docker-sandbox --spawn_strategy=docker --strategy=Javac=docker --genrule_strategy=docker
-build:docker-sandbox --define=EXECUTOR=remote
-build:docker-sandbox --experimental_docker_verbose
-build:docker-sandbox --experimental_enable_docker_sandbox
 
 # default compiler settings
 build --cxxopt=-std=c++17

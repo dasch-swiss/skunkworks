@@ -2,15 +2,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_test(
-  name = "value_test",
-  srcs = ["value_test.cc"],
-  deps = [
-      ":values",
-      "@catch2//:catch2_with_main",
-  ],
-)
-
 cc_library(
     name = "values",
     srcs = [
@@ -25,4 +16,13 @@ cc_library(
         "//data_model",
         "//shared/xsd_types",
     ],
+)
+
+cc_test(
+  name = "value_test",
+  srcs = ["value_test.cc"],
+  deps = [
+      ":values",
+      "@catch2//:catch2_with_main",
+  ],
 )

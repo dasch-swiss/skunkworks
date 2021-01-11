@@ -5,19 +5,26 @@
 #ifndef SKUNKWORKS_AGENT_H
 #define SKUNKWORKS_AGENT_H
 
-#include "shared/xsd_types/xsd_any_uri.h"
+#include "external/nlohmann/json.hpp"
 
+#include "shared/xsd_types/xsd_any_uri.h"
+#include "shared/dsp_types/identifier.h"
+//#include "shared/generic_object_description/generic_object_description.h"
+#include "external/nlohmann/json.hpp"
 namespace dsp {
 
 class Agent {
  public:
   Agent();
 
-  xsd::AnyUri id() const { return id_; }
+  Agent(const nlohmann::json& object_description);
+
+  [[nodiscard]] inline dsp::Identifier id() const { return id_; }
+
+  nlohmann::json to_json();
 
  private:
-  xsd::AnyUri id_;
-
+  dsp::Identifier id_;
 };
 
 using AgentPtr = std::shared_ptr<Agent>;
