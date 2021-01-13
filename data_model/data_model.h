@@ -5,59 +5,56 @@
 #ifndef SKUNKWORKS_ENTITIES_DATA_MODEL_H_
 #define SKUNKWORKS_ENTITIES_DATA_MODEL_H_
 
+#include <memory>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 
 #include "shared/xsd_types/xsd.h"
 #include "property.h"
+//#include "project.h"
+#include "subject.h"
 #include "resource_class.h"
+#include "model_item.h"
 
 
 namespace dsp {
 
 class Project;
 
-class DataModel : public std::enable_shared_from_this<DataModel>{
+class DataModel : public ModelItem, public Subject {
  public:
-  /*!
-   * Default constructor
-   */
-  DataModel();
 
-  DataModel(const xsd::String &shortname);
-  /*!
-   * Constructor taking a shortname as parameter
-   *
-   * @param shortname
-   */
-  DataModel(const std::string &shortname);
+  static std::shared_ptr<DataModel> Factory(
+      const dsp::Identifier &created_by,
+      const dsp::Shortname& shortname,
+      std::shared_ptr<Observer> obs = {});
 
-  /*!
-   * Getter for ID
-   *
-   * @return
-   */
-  inline dsp::Identifier id() const { return id_; }
+  static std::shared_ptr<DataModel> Factory(const nlohmann::json& json_obj,
+                                            std::shared_ptr<Observer> obs = {});
+
+  ~DataModel() override {  }
+
 
   /*!
    * getter for shortname
    * @return
    */
-  inline std::string shortname() const { return shortname_; }
+  inline dsp::Shortname shortname() const { return shortname_; }
 
+  inline dsp::Identifier project_id() const { return project_; }
   /*!
    * Getter for project (shared_ptr)
    *
    * @return
    */
-  inline std::shared_ptr<Project> project() const { return project_.lock(); }
+  std::shared_ptr<Project> project() const ;
 
   /*!
    * Add a resource class to the data model
    *
    * @param resource_class
    */
-  void add_resource_class(const std::shared_ptr<ResourceClass> &resource_class);
+  void add_resource_class(const Identifier &resource_class);
 
   /*!
    * Get resource class by ID.
@@ -75,12 +72,14 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    */
   std::optional<ResourceClassPtr> remove_resource_class(const dsp::Identifier &resource_class_id);
 
+  std::unordered_set<dsp::Identifier> get_resource_class_ids() { return resource_classes_; }
+
   /*!
    * Add a property to the data model
    *
    * @param property
    */
-  void add_property(const std::shared_ptr<Property> &property);
+  void add_property(const dsp::Identifier& property);
 
   /*!
    * Get a property by ID
@@ -98,17 +97,31 @@ class DataModel : public std::enable_shared_from_this<DataModel>{
    */
   std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id);
 
+  std::unordered_set<dsp::Identifier> get_property_ids() { return properties_; }
+
+
   friend Project; // grant access to class Project to private member variable project_
+
+  nlohmann::json to_json() override;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<DataModel> data_model_ptr) {
+    out_stream << std::setw(4) << data_model_ptr->to_json();
+    return out_stream;
+  }
+
  private:
+  DataModel(const dsp::Identifier &created_by, const dsp::Shortname& shortname);
 
-  dsp::Identifier id_;
-  xsd::String shortname_;
-  std::weak_ptr<Project> project_;
-  std::unordered_map<dsp::Identifier, std::shared_ptr<ResourceClass>> resource_classes_;
-  std::unordered_map<dsp::Identifier, std::shared_ptr<Property>> properties_;
+  explicit DataModel(const nlohmann::json& json_obj);
 
-  //inline void project(const std::shared_ptr<Project> &project) { project_.lock() = project; }
-
+  xsd::DateTimeStamp creation_date_;
+  dsp::Identifier created_by_;
+  xsd::DateTimeStamp last_modification_date_;
+  dsp::Identifier modified_by_;
+  dsp::Shortname shortname_;
+  dsp::Identifier project_;
+  std::unordered_set<dsp::Identifier> resource_classes_;
+  std::unordered_set<dsp::Identifier> properties_;
 };
 
 using DataModelPtr = std::shared_ptr<DataModel>;
