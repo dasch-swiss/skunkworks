@@ -2,15 +2,23 @@
 // Created by Ivan Subotic on 29/11/2020.
 //
 
+#include <string>
+#include <memory>
+#include <unordered_map>
+
 #include "catch2/catch.hpp"
 
 //#include "shared/uuid.h"
 #define UUID_SYSTEM_GENERATOR
 
-#include "third_party/stduuid/gsl/gsl"
-#include "third_party/stduuid/uuid.h"
+#include "external/stduuid/gsl/gsl" // compiles but does not work in IDE
+#include "gsl/gsl" // only needed for IDE
+#include "external/stduuid/include/uuid.h" // compiles but does not work in IDE
+#include "include/uuid.h" // only needed for IDE
 
 #include "identifier.h"
+
+using namespace std::string_literals;
 
 TEST_CASE("identifier value type", "[entities][user][identifier]") {
 

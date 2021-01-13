@@ -9,8 +9,10 @@
 
 #define UUID_SYSTEM_GENERATOR
 
-#include "third_party/stduuid/gsl/gsl"
-#include "third_party/stduuid/uuid.h"
+#include "external/stduuid/gsl/gsl" // compiles but does not work in IDE
+#include "gsl/gsl" // only needed for IDE
+#include "external/stduuid/include/uuid.h" // compiles but does not work in IDE
+#include "include/uuid.h" // only needed for IDE
 
 #include "shared/xsd_types/xsd_string.h"
 

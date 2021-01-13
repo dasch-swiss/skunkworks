@@ -2,28 +2,6 @@ load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 
 package(default_visibility = ["//visibility:public"])
 
-cc_test(
-  name = "data_model_test",
-  srcs = ["data_model_test.cc"],
-  deps = [
-      "@nlohmann//:nlohmann",
-      ":data_model",
-      "//tests:test_main",
-      "@catch2//:catch2",
-  ],
-)
-
-cc_test(
-  name = "domain_model_test",
-  srcs = ["domain_model_test.cc"],
-  deps = [
-      "@nlohmann//:nlohmann",
-      ":data_model",
-      "//tests:test_main",
-      "@catch2//:catch2",
-  ],
-)
-
 cc_library(
     name = "data_model",
     srcs = [
@@ -58,6 +36,28 @@ cc_library(
         "//shared",
         "//shared/error",
         "//shared/xsd_types",
-        "//shared/dsp_types"
+        "//shared/dsp_types:identifier",
+        "//shared/dsp_types:shortcode",
+        "//shared/dsp_types:shortname",
     ],
+)
+
+cc_test(
+  name = "data_model_test",
+  srcs = ["data_model_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "domain_model_test",
+  srcs = ["domain_model_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
 )
