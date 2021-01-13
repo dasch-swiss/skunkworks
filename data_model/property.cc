@@ -29,11 +29,13 @@ std::shared_ptr<Property> Property::Factory(
     const xsd::LangString &label,
     const xsd::LangString &description,
     ValueType value_type,
-    const dsp::Identifier& sub_property_of) {
+    const dsp::Identifier& sub_property_of,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<Property> tmp(new Property(created_by, label, description, value_type, sub_property_of));
+  if (obs) tmp->attach(obs);
   tmp->add_item<Property>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
-
 }
 
 Property::Property(const nlohmann::json& json_obj) : ClassObj(json_obj) {
@@ -49,12 +51,14 @@ Property::Property(const nlohmann::json& json_obj) : ClassObj(json_obj) {
   }
 }
 
-std::shared_ptr<Property> Property::Factory(const nlohmann::json& json_obj) {
+std::shared_ptr<Property> Property::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<Property> tmp(new Property(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
     throw Error(file_, __LINE__, R"("Property" with same "id" already exists!)");
   }
+  if (obs) tmp->attach(obs);
   tmp->add_item<Property>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -64,6 +68,7 @@ bool Property::operator==(const Property& other) {
 
 nlohmann::json Property::to_json() {
   nlohmann::json json_obj = ClassObj::to_json();
+  json_obj["type"] = "Property";
   json_obj["value_type"] = value_type_;
   if (sub_property_of_ != dsp::Identifier::empty_identifier()) json_obj["sub_property_of"] = sub_property_of_;
   return json_obj;

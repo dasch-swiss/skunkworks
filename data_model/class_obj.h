@@ -14,13 +14,14 @@
 #include "shared/dsp_types/identifier.h"
 #include "agent.h"
 //#include "data_model.h"
+#include "subject.h"
 #include "model_item.h"
 
 namespace dsp {
 
 class DataModel;
 
-class ClassObj: public ModelItem {
+class ClassObj: public ModelItem, public Subject {
   /*!
    * Base class for ResourceClass and Property
    */
@@ -113,7 +114,7 @@ class ClassObj: public ModelItem {
   virtual nlohmann::json to_json();
 
  protected:
-  dsp::Identifier id_;
+  //dsp::Identifier id_;
   xsd::DateTimeStamp creation_date_;
   dsp::Identifier created_by_;
   dsp::Identifier in_data_model_;

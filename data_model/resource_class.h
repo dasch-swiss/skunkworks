@@ -12,6 +12,7 @@
 
 #include "shared/xsd_types/xsd.h"
 #include "shared/dsp_types/identifier.h"
+#include "subject.h"
 #include "agent.h"
 #include "class_obj.h"
 #include "property.h"
@@ -43,9 +44,10 @@ class ResourceClass : public ClassObj {
   static std::shared_ptr<ResourceClass> Factory(const dsp::Identifier &created_by,
                                                 const xsd::LangString &class_label,
                                                 const xsd::LangString &class_description,
-                                                const dsp::Identifier sub_class_of = dsp::Identifier::empty_identifier());
+                                                const dsp::Identifier sub_class_of = dsp::Identifier::empty_identifier(),
+                                                std::shared_ptr<Observer> obs = {});
 
-  static std::shared_ptr<ResourceClass> Factory(const nlohmann::json& json_obj);
+  static std::shared_ptr<ResourceClass> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
 
   /*!
    * Destructor removing the instance from the internal list
@@ -90,13 +92,9 @@ class ResourceClass : public ClassObj {
   void remove_property(const dsp::Identifier &property_id);
 
 
-  inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
-    outStream << "ResourceClass:: " << std::endl <<
-              "id=" << rhs.id_ << std::endl;
-    for (auto &ll: rhs.label_) {
-      outStream << ll.first << ": " << ll.second << std::endl;
-    }
-    return outStream;
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<ResourceClass> resource_class_ptr) {
+    out_stream << std::setw(4) << resource_class_ptr->to_json();
+    return out_stream;
   }
 
   friend DataModel; // allows access to data_model_id(...)

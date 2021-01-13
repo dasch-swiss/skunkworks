@@ -12,6 +12,7 @@
 #include "shared/xsd_types/xsd.h"
 #include "property.h"
 //#include "project.h"
+#include "subject.h"
 #include "resource_class.h"
 #include "model_item.h"
 
@@ -20,16 +21,16 @@ namespace dsp {
 
 class Project;
 
-class DataModel : public ModelItem {
+class DataModel : public ModelItem, public Subject {
  public:
 
-  static std::shared_ptr<DataModel> Factory(const dsp::Identifier &created_by, const dsp::Shortname& shortname);
+  static std::shared_ptr<DataModel> Factory(
+      const dsp::Identifier &created_by,
+      const dsp::Shortname& shortname,
+      std::shared_ptr<Observer> obs = {});
 
-  static std::shared_ptr<DataModel> Factory(const dsp::Identifier &created_by, const xsd::String& shortname);
-
-  static std::shared_ptr<DataModel> Factory(const dsp::Identifier &created_by, const std::string& shortname);
-
-  static std::shared_ptr<DataModel> Factory(const nlohmann::json& json_obj);
+  static std::shared_ptr<DataModel> Factory(const nlohmann::json& json_obj,
+                                            std::shared_ptr<Observer> obs = {});
 
   ~DataModel() override {  }
 
@@ -71,6 +72,8 @@ class DataModel : public ModelItem {
    */
   std::optional<ResourceClassPtr> remove_resource_class(const dsp::Identifier &resource_class_id);
 
+  std::unordered_set<dsp::Identifier> get_resource_class_ids() { return resource_classes_; }
+
   /*!
    * Add a property to the data model
    *
@@ -94,18 +97,20 @@ class DataModel : public ModelItem {
    */
   std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id);
 
+  std::unordered_set<dsp::Identifier> get_property_ids() { return properties_; }
+
+
   friend Project; // grant access to class Project to private member variable project_
 
   nlohmann::json to_json() override;
 
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<DataModel> data_model_ptr) {
+    out_stream << std::setw(4) << data_model_ptr->to_json();
+    return out_stream;
+  }
+
  private:
   DataModel(const dsp::Identifier &created_by, const dsp::Shortname& shortname);
-
-  inline DataModel(const dsp::Identifier &created_by, const xsd::String& shortname)
-      : DataModel(created_by, dsp::Shortname(shortname)) {}
-
-  inline DataModel(const dsp::Identifier &created_by, const std::string& shortname)
-      : DataModel(created_by, dsp::Shortname(shortname)) {}
 
   explicit DataModel(const nlohmann::json& json_obj);
 

@@ -54,10 +54,12 @@ ClassObj::ClassObj(const nlohmann::json &json_obj) {
 
 void ClassObj::label(const xsd::LangString &class_label) {
   label_ = class_label;
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 void ClassObj::description(const xsd::LangString &class_description)  {
   description_ = class_description;
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 nlohmann::json ClassObj::to_json() {
@@ -66,7 +68,6 @@ nlohmann::json ClassObj::to_json() {
 
   std::unordered_map<std::string, std::string> description_map;
   for (auto [lang, text]: description_) description_map[lang] = text;
-
   nlohmann::json json_obj = {
       {"version", 1},
       {"id", id_},

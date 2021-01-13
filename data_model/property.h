@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 
+#include "subject.h"
 #include "class_obj.h"
 //#include "resource_class.h"
 
@@ -58,9 +59,10 @@ class Property : public ClassObj {
       const xsd::LangString &label,
       const xsd::LangString &description,
       ValueType value_type,
-      const dsp::Identifier& sub_property_of = dsp::Identifier::empty_identifier());
+      const dsp::Identifier& sub_property_of = dsp::Identifier::empty_identifier(),
+      std::shared_ptr<Observer> obs = {});
 
-  static std::shared_ptr<Property> Factory(const nlohmann::json& json_obj);
+  static std::shared_ptr<Property> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
 
   inline ~Property() override {  }
 
@@ -75,6 +77,11 @@ class Property : public ClassObj {
   inline std::shared_ptr<Property> sub_property_of() { return get_item<Property>(sub_property_of_); }
 
   friend DataModel;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<Property> property_ptr) {
+    out_stream << std::setw(4) << property_ptr->to_json();
+    return out_stream;
+  }
 
  private:
   Property(

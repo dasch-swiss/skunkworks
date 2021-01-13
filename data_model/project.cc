@@ -29,9 +29,12 @@ Project::Project(
 std::shared_ptr<Project> Project::Factory(
     const dsp::Identifier &created_by,
     const dsp::Shortcode &shortcode,
-    const dsp::Shortname &shortname) {
+    const dsp::Shortname &shortname,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<Project> tmp(new Project(created_by, shortcode, shortname));
+  if (obs) tmp->attach(obs);
   tmp->add_item<Project>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -44,18 +47,27 @@ Project::Project(
 std::shared_ptr<Project> Project::Factory(
     const dsp::Identifier &created_by,
     const xsd::String &shortcode,
-    const xsd::String &shortname) {
+    const xsd::String &shortname,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<Project> tmp(new Project(created_by, shortcode, shortname));
+  if (obs) tmp->attach(obs);
   tmp->add_item<Project>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
 Project::Project(const dsp::Identifier &created_by, const std::string &shortcode, const std::string &shortname)
     : Project(dsp::Identifier(created_by), dsp::Shortcode(shortcode), dsp::Shortname(shortname)) { }
 
-std::shared_ptr<Project> Project::Factory(const dsp::Identifier &created_by, const std::string &shortcode, const std::string &shortname) {
+std::shared_ptr<Project> Project::Factory(
+    const dsp::Identifier &created_by,
+    const std::string &shortcode,
+    const std::string &shortname,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<Project> tmp(new Project(created_by, shortcode, shortname));
+  if (obs) tmp->attach(obs);
   tmp->add_item<Project>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -91,12 +103,14 @@ Project::Project(const nlohmann::json& json_obj) : ModelItem() {
   }
 }
 
-std::shared_ptr<Project> Project::Factory(const nlohmann::json& json_obj) {
+std::shared_ptr<Project> Project::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<Project> tmp(new Project(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
     throw Error(file_, __LINE__, R"("Project" with same "id" already exists!)");
   }
+  if (obs) tmp->attach(obs);
   tmp->add_item<Project>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -111,10 +125,6 @@ std::shared_ptr<Project> Project::get(const dsp::Identifier& id) {
 
 void Project::add_data_model(const dsp::Identifier &data_model_id) {
   if (data_models_.find(data_model_id) != data_models_.end()) {
-    std::cerr << "------->" << data_model_id << std::endl;
-    for (const auto &ii: data_models_) {
-      std::cerr << "++++++++>" << ii << std::endl;
-    }
     throw Error(file_,
                 __LINE__,
                 R"(Data model already assigned to project "")" + static_cast<std::string>(shortcode_) + R"(".)");
@@ -122,6 +132,8 @@ void Project::add_data_model(const dsp::Identifier &data_model_id) {
   data_models_.insert(data_model_id);
   std::shared_ptr<DataModel> tmp = get_item<DataModel>(data_model_id);
   tmp->project_ = id_;
+  tmp->notify(ObserverAction::UPDATE, tmp); // DataModel's project_ changed...
+  notify(ObserverAction::UPDATE, shared_from_this());
  }
 
 std::optional<DataModelPtr> Project::get_data_model(const dsp::Identifier &data_model_id) {
@@ -144,6 +156,8 @@ std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &da
     DataModelPtr data_model_ptr = get_item<DataModel>(data_model_id);
     data_models_.erase(data_model_id);
     data_model_ptr->project_ = Identifier::empty_identifier();
+    data_model_ptr->notify(ObserverAction::UPDATE, data_model_ptr); // DataModel's project_ changed...
+    notify(ObserverAction::UPDATE, shared_from_this());
     return data_model_ptr;
   }
 }

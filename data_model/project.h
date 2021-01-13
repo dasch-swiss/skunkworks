@@ -21,13 +21,14 @@
 #include "external/nlohmann/json.hpp"
 #include "model_item.h"
 #include "data_model.h"
+#include "subject.h"
 #include "agent.h"
 
 namespace dsp {
 
 class Domain;
 
-class Project : public ModelItem {
+class Project : public ModelItem, public Subject {
  public:
   /*!
    * Factory for managed Project
@@ -39,7 +40,8 @@ class Project : public ModelItem {
   static std::shared_ptr<Project> Factory(
       const dsp::Identifier &created_by,
       const dsp::Shortcode &shortcode,
-      const dsp::Shortname &shortname);
+      const dsp::Shortname &shortname,
+      std::shared_ptr<Observer> obs = {});
 
   /*!
    * Factory for managed Project
@@ -51,7 +53,8 @@ class Project : public ModelItem {
   static std::shared_ptr<Project> Factory(
       const dsp::Identifier &created_by,
       const xsd::String &shortcode,
-      const xsd::String &shortname);
+      const xsd::String &shortname,
+      std::shared_ptr<Observer> obs = {});
 
   /*!
    * Factory for managed Project
@@ -63,14 +66,16 @@ class Project : public ModelItem {
   static std::shared_ptr<Project> Factory(
       const dsp::Identifier &created_by,
       const std::string &shortcode,
-      const std::string &shortname);
+      const std::string &shortname,
+      std::shared_ptr<Observer> obs = {});
 
   /*!
    * Factory for managed project
    * @param json_obj
    * @return
    */
-  static std::shared_ptr<Project> Factory(const nlohmann::json& json_obj);
+  static std::shared_ptr<Project> Factory(const nlohmann::json& json_obj,
+                                          std::shared_ptr<Observer> obs = {});
 
   virtual ~Project();
 
@@ -120,7 +125,14 @@ class Project : public ModelItem {
    */
   std::optional<DataModelPtr> remove_data_model(const dsp::Identifier &data_model_id);
 
+  inline std::unordered_set<dsp::Identifier> get_data_model_ids() { return data_models_; }
+
   nlohmann::json to_json();
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<Project> project_ptr) {
+    out_stream << std::setw(4) << project_ptr->to_json();
+    return out_stream;
+  }
 
  private:
   /*!

@@ -24,21 +24,14 @@ DataModel::DataModel(const dsp::Identifier &created_by, const dsp::Shortname &sh
   project_ = dsp::Identifier::empty_identifier();
 }
 
-std::shared_ptr<DataModel> DataModel::Factory(const dsp::Identifier &created_by, const dsp::Shortname& shortname) {
+std::shared_ptr<DataModel> DataModel::Factory(
+    const dsp::Identifier &created_by,
+    const dsp::Shortname& shortname,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<DataModel> tmp(new DataModel(created_by, shortname));
+  if (obs) tmp->attach(obs);
   tmp->add_item<DataModel>();
-  return tmp;
-}
-
-std::shared_ptr<DataModel> DataModel::Factory(const dsp::Identifier &created_by, const xsd::String& shortname) {
-  std::shared_ptr<DataModel> tmp(new DataModel(created_by, shortname));
-  tmp->add_item<DataModel>();
-  return tmp;
-}
-
-std::shared_ptr<DataModel> DataModel::Factory(const dsp::Identifier &created_by, const std::string& shortname) {
-  std::shared_ptr<DataModel> tmp(new DataModel(created_by, shortname));
-  tmp->add_item<DataModel>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -76,9 +69,14 @@ DataModel::DataModel(const nlohmann::json& json_obj) {
   }
 }
 
-std::shared_ptr<DataModel> DataModel::Factory(const nlohmann::json& json_obj) {
+std::shared_ptr<DataModel> DataModel::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<DataModel> tmp(new DataModel(json_obj));
+  if (ModelItem::item_exists(tmp->id())) { //
+    throw Error(file_, __LINE__, R"("DataModel" with same "id" already exists!)");
+  }
+  if (obs) tmp->attach(obs);
   tmp->add_item<DataModel>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -89,12 +87,15 @@ std::shared_ptr<Project> DataModel::project() const {
 
 void DataModel::add_resource_class(const Identifier &resource_class_id) {
   if (resource_classes_.find(resource_class_id) != resource_classes_.end()) {
-    ResourceClassPtr tmp = get_item<ResourceClass>(resource_class_id);
-    std::ostringstream ss;
-    ss << "Resource class \"" << tmp->label().get("en") << "\" (" << tmp->id() << ") already exists in data model \"" << id_ << "\"!";
-    throw (Error(file_, __LINE__, ss.str()));
+    throw Error(file_,
+                __LINE__,
+                R"(Data model already assigned to project "")" + static_cast<std::string>(shortname_) + R"(".)");
   }
   resource_classes_.insert(resource_class_id);
+  std::shared_ptr<ResourceClass> tmp = get_item<ResourceClass>(resource_class_id);
+  tmp->in_data_model_ = id_;
+  tmp->notify(ObserverAction::UPDATE, tmp); // DataModel's project_ changed...
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Identifier &resource_class_id) const {
@@ -108,7 +109,7 @@ std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Identif
 
 std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Identifier &resource_class_id) {
   //
-  // ToDo: Check here if data model is in use!!!
+  // ToDo: Check here if resource class is in use!!!
   //
   auto res = resource_classes_.find(resource_class_id);
   if (res == resource_classes_.end()) {
@@ -117,18 +118,23 @@ std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Iden
     ResourceClassPtr resource_class_ptr = get_item<ResourceClass>(resource_class_id);
     resource_classes_.erase(resource_class_id);
     resource_class_ptr->in_data_model_ = Identifier::empty_identifier();
+    resource_class_ptr->notify(ObserverAction::UPDATE, resource_class_ptr); // Property's in_data_model_ changed...
+    notify(ObserverAction::UPDATE, shared_from_this());
     return resource_class_ptr;
   }
 }
 
 void DataModel::add_property(const dsp::Identifier& property_id) {
   if (properties_.find(property_id) != properties_.end()) {
-    PropertyPtr tmp = get_item<Property>(property_id);
-    std::ostringstream ss;
-    ss << "Property \"" << tmp->label().get("en") << "\" (" << tmp->id() << ") already exists in data model \"" << id_ << "\"!";
-    throw (Error(file_, __LINE__, ss.str()));
+    throw Error(file_,
+                __LINE__,
+                R"(Property already assigned to data model "")" + static_cast<std::string>(shortname_) + R"(".)");
   }
   properties_.insert(property_id);
+  std::shared_ptr<Property> tmp = get_item<Property>(property_id);
+  tmp->in_data_model_ = id_;
+  tmp->notify(ObserverAction::UPDATE, tmp); // Property's in_data_model_ changed...
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 std::optional<PropertyPtr> DataModel::get_property(const dsp::Identifier &property_id) const {
@@ -149,8 +155,10 @@ std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &pro
     return {};
   } else {
     PropertyPtr property_ptr = get_item<Property>(property_id);
-    resource_classes_.erase(property_id);
+    properties_.erase(property_id);
     property_ptr->in_data_model_ = Identifier::empty_identifier();
+    property_ptr->notify(ObserverAction::UPDATE, property_ptr); // property's in_data_model_ changed...
+    notify(ObserverAction::UPDATE, shared_from_this());
     return property_ptr;
   }
 }

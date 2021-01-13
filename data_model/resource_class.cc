@@ -25,9 +25,12 @@ std::shared_ptr<ResourceClass> ResourceClass::ResourceClass::Factory(
     const dsp::Identifier &created_by,
     const xsd::LangString &class_label,
     const xsd::LangString &class_description,
-    const dsp::Identifier sub_class_of) {
+    const dsp::Identifier sub_class_of,
+    std::shared_ptr<Observer> obs) {
   std::shared_ptr<ResourceClass> tmp(new ResourceClass(created_by, class_label, class_description, sub_class_of));
+  if (obs) tmp->attach(obs);
   tmp->add_item<ResourceClass>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
@@ -53,17 +56,20 @@ ResourceClass::ResourceClass(const nlohmann::json& json_obj) : ClassObj(json_obj
   }
 }
 
-std::shared_ptr<ResourceClass> ResourceClass::Factory(const nlohmann::json& json_obj) {
+std::shared_ptr<ResourceClass> ResourceClass::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<ResourceClass> tmp(new ResourceClass(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
     throw Error(file_, __LINE__, R"("ResourceClass" with same "id" already exists!)");
   }
+  if (obs) tmp->attach(obs);
   tmp->add_item<ResourceClass>();
+  tmp->notify(ObserverAction::CREATE, tmp);
   return tmp;
 }
 
 nlohmann::json ResourceClass::to_json() {
   nlohmann::json json_obj{ClassObj::to_json()};
+  json_obj["type"] = "ResourceClass";
   if (sub_class_of_ != dsp::Identifier::empty_identifier()) json_obj["sub_class_of"] = sub_class_of_;
   nlohmann::json umap_json;
   for(auto [key, val]: has_properties_) {
@@ -86,6 +92,7 @@ void ResourceClass::add_property(const dsp::Identifier &property_id,
   catch (const std::out_of_range &err) {
     HasProperty hp = {property_id, min_count, max_count};
     has_properties_[property_id] = hp;
+    notify(ObserverAction::UPDATE, shared_from_this());
     return;
   } // TODO: Use C++20 with contains ASAP!
   throw Error(file_, __LINE__, "Property with same id already exists!");
@@ -109,6 +116,7 @@ void ResourceClass::change_min_count(const dsp::Identifier &property_id, int min
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max_count) {
@@ -129,6 +137,7 @@ void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 void ResourceClass::remove_property(const Identifier &property_id) {
@@ -144,6 +153,7 @@ void ResourceClass::remove_property(const Identifier &property_id) {
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
+  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
 

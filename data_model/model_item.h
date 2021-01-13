@@ -36,7 +36,6 @@ class ModelItem : public std::enable_shared_from_this<ModelItem> {
 
   template<typename T>
   inline void add_item() {
-    std::cerr << "add_item(" << id_ << ")" << std::endl;
     items_[id_] = shared_from_this();
     managed_ = true;
   }
@@ -46,17 +45,12 @@ class ModelItem : public std::enable_shared_from_this<ModelItem> {
     try {
       return std::dynamic_pointer_cast<T>(items_.at(id));
     } catch(const std::out_of_range &err) {
-      for (const auto& [key, val]: items_) {
-        std::cerr << "--> " << key << std::endl;
-      }
       throw Error(__FILE__, __LINE__, "Item not found in map! " + id.to_string());
     }
   }
 
   inline void remove_item() {
-    std::cerr << "remove_item(" << id_.to_string() << ")" << std::endl;
     items_.erase(id_);
-    std::cerr << "ITEM REMOVED...." << std::endl;
     managed_ = false;
   }
 
@@ -65,6 +59,20 @@ class ModelItem : public std::enable_shared_from_this<ModelItem> {
     item->remove_item();
     item.reset();
   }
+
+  inline static int size() { return items_.size(); };
+
+  inline static void print() {
+    for (const auto& [key, val]: items_) std::cerr << key << " : " << std::endl << val << std::endl;
+  }
+
+  //virtual void to_cerr() = 0;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<ModelItem> item_ptr) {
+    out_stream << std::setw(4) << item_ptr->to_json();
+    return out_stream;
+  }
+
 
   virtual nlohmann::json to_json() = 0;
 
