@@ -15,12 +15,14 @@
 #include "external/nlohmann/json.hpp"
 
 #include "model_item.h"
+#include "subject.h"
+
 
 namespace dsp {
 
 class Domain;
 
-class Agent : public ModelItem {
+class Agent : public ModelItem, public Subject {
   /*!
    * An "Agent" is an institution or an individual that is able to identify itself and
    * perform requests on the DSP repository. Typically it is a "human" user, but it also
@@ -37,14 +39,14 @@ class Agent : public ModelItem {
    * @param shortname
    * @return
    */
-  static std::shared_ptr<Agent> Factory(const dsp::Shortname& shortname);
+  static std::shared_ptr<Agent> Factory(const dsp::Shortname& shortname, std::shared_ptr<Observer> obs = {});
 
   /*!
    * Agent Factory for creating a managed Agent from the repository
    * @param json_obj
    * @return
    */
-  static std::shared_ptr<Agent> Factory(const nlohmann::json& json_obj);
+  static std::shared_ptr<Agent> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
 
   /*!
    * Destructor
@@ -55,11 +57,22 @@ class Agent : public ModelItem {
 
   inline dsp::Shortname shortname() const { return shortname_; }
 
+  inline void shortname(const dsp::Shortname& shortname) {
+    shortname_ = shortname;
+    notify(ObserverAction::UPDATE, shared_from_this());
+  }
+
   /*!
    * Serialize the Agent instance to a nlohmann::json object
    * @return
    */
   nlohmann::json to_json() override ;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<Agent> agent_ptr) {
+    out_stream << std::setw(4) << agent_ptr->to_json();
+    return out_stream;
+  }
+
 
  private:
   /*!
