@@ -10,6 +10,10 @@
 TEST_CASE("creating the user and getting all value", "[entities][user]") {
 
   SECTION("create user") {
+
+    admin::User empty_user = admin::User();
+    CHECK(empty_user.is_null());
+
     admin::User user = admin::User(
         dsp::Username("dduck"),
         dsp::Email("dduck@example.com"),

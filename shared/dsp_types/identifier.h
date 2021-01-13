@@ -20,6 +20,10 @@ namespace dsp {
 
 class Identifier {
  public:
+
+  /*!
+   * Default constructor returning an initialized identifier.
+   */
   Identifier();
 
   Identifier(const uuids::uuid &uuid) { uuid_ = uuid; }

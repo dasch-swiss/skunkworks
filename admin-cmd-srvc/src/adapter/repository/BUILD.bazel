@@ -9,5 +9,7 @@ cc_library(
     deps = [
         "//admin-cmd-srvc/src/entity:user",
         "//admin-cmd-srvc/src/usecase/port:i_user_repository",
+        "//shared/error",
+        "@nlohmann//:nlohmann",
     ],
 )

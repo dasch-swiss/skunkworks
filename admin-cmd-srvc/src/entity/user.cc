@@ -19,6 +19,13 @@ static const char file_[] = __FILE__;
 namespace admin {
 
 /*!
+ * Default constructor. Creates an empty user.
+ */
+User::User() {
+  id_ = dsp::Identifier("empty");
+}
+
+/*!
  * Construct user from provided values.
  */
 User::User(
@@ -31,8 +38,6 @@ User::User(
     const dsp::Status& status,
     const dsp::Lang& lang) {
 
-  id_.with_uuid_v4();
-
   username_ = username;
   email_ = email;
   password_ = password;
@@ -41,53 +46,53 @@ User::User(
   family_name_ = family_name;
   status_ = status;
   lang_ = lang;
+
+  id_ = dsp::Identifier(username_.value());
 }
 
 /*!
- * Construct user from the the provided GOD serialization.
+ * Construct user from the provided JSON serialization.
  */
-User::User(const std::string& value) {
+User::User(const nlohmann::json& json_obj) {
 
-  nlohmann::json god_obj = nlohmann::json::parse(value);
+  if (json_obj.contains("class") && (json_obj["class"] == "admin::User")) throw dsp::Error(file_, __LINE__, "Deserialization of admin::User failed!");
 
-  if (god_obj.contains("class") && (god_obj["class"] == "admin::User")) throw dsp::Error(file_, __LINE__, "Deserialization of admin::User failed!");
+  if (!json_obj.contains("id")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "id".)");
+  id_ = dsp::Identifier(json_obj["id"]);
 
-  if (!god_obj.contains("id")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "id".)");
-  id_ = dsp::Identifier(god_obj["id"]);
+  if (!json_obj.contains("username")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "username".)");
+  username_ = dsp::Username(json_obj["username"]);
 
-  if (!god_obj.contains("username")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "username".)");
-  username_ = dsp::Username(god_obj["username"]);
+  if (!json_obj.contains("email")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "email".)");
+  email_ = dsp::Email(json_obj["email"]);
 
-  if (!god_obj.contains("email")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "email".)");
-  email_ = dsp::Email(god_obj["email"]);
+  if (!json_obj.contains("password")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "password".)");
+  password_ = dsp::Password(json_obj["password"]);
 
-  if (!god_obj.contains("password")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "password".)");
-  password_ = dsp::Password(god_obj["password"]);
+  if (!json_obj.contains("token")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "token".)");
+  token_ = dsp::Token(json_obj["token"]);
 
-  if (!god_obj.contains("token")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "token".)");
-  token_ = dsp::Token(god_obj["token"]);
+  if (!json_obj.contains("given_name")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "given_name".)");
+  given_name_ = dsp::GivenName(json_obj["given_name"]);
 
-  if (!god_obj.contains("given_name")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "given_name".)");
-  given_name_ = dsp::GivenName(god_obj["given_name"]);
+  if (!json_obj.contains("family_name")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "family_name".)");
+  family_name_ = dsp::FamilyName(json_obj["family_name"]);
 
-  if (!god_obj.contains("family_name")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "family_name".)");
-  family_name_ = dsp::FamilyName(god_obj["family_name"]);
+  if (!json_obj.contains("status")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "status".)");
+  status_ = dsp::Status(json_obj["status"]);
 
-  if (!god_obj.contains("status")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "status".)");
-  status_ = dsp::Status(god_obj["status"]);
-
-  if (!god_obj.contains("lang")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "lang".)");
-  lang_ = dsp::Lang(god_obj["lang"]);
+  if (!json_obj.contains("lang")) throw dsp::Error(file_, __LINE__, R"(GOD object missing "lang".)");
+  lang_ = dsp::Lang(json_obj["lang"]);
 }
 
 /*!
  * Serialize the user to GOD (general object description).
  */
-std::string User::to_god() {
+nlohmann::json User::to_json() {
 
   nlohmann::json json_obj = {
       {"class", "admin::User"},
-      {"id", id_.value()},
+      {"id", id_.to_string()},
       {"username", username_.value()},
       {"email", email_.value()},
       {"password", password_.value()},
@@ -98,7 +103,7 @@ std::string User::to_god() {
       {"lang", lang_.value()}
   };
 
-  return json_obj.dump();
+  return json_obj;
 }
 
 } // namespace admin
