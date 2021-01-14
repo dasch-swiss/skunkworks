@@ -36,21 +36,10 @@ TEST_CASE("identifier value type", "[entities][user][identifier]") {
     CHECK(Identifier(existing_uuid) == Identifier(existing_uuid));
   }
 
-  SECTION("other") {
-    CHECK_NOTHROW(dsp::Identifier());
-    std::unordered_map<dsp::Identifier, std::string> mm;
-    dsp::Identifier id1;
-    dsp::Identifier id2;
-    mm[id1] = "eins"s;
-    mm[id2] = "zwei"s;
-    CHECK(mm[id1] == "eins"s);
-    dsp::Identifier my_id;
-    std::string my_id_string = my_id.to_string();
-    dsp::Identifier my_id2(my_id_string);
-    CHECK(my_id == my_id2);
-    auto named_id1 = dsp::Identifier("dasch.swiss"s, "lukas"s);
-    auto named_id2 = dsp::Identifier("dasch.swiss"s, "lukas"s);
-    CHECK(named_id1 == named_id2);
+  SECTION("Named identifiers") {
+    dsp::Identifier named1("GAGA", "gugus");
+    dsp::Identifier named2("GAGA", "gugus2");
+    CHECK(named1 != named2);
   }
 
 }

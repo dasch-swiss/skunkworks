@@ -11,6 +11,8 @@
 #include <unordered_map>
 
 #include "shared/xsd_types/xsd.h"
+#include "shared/dsp_types/identifier.h"
+#include "subject.h"
 #include "agent.h"
 #include "class_obj.h"
 #include "property.h"
@@ -30,7 +32,7 @@ class ResourceClass : public ClassObj {
    */
  public:
   typedef struct has_property {
-    std::weak_ptr<Property> property_;
+    dsp::Identifier property_;
     int min_count_;
     int max_count_;
   } HasProperty;
@@ -39,25 +41,24 @@ class ResourceClass : public ClassObj {
   typedef std::unordered_map<dsp::Identifier, HasProperty> HasPropertiesMap;
 
  public:
+  static std::shared_ptr<ResourceClass> Factory(const dsp::Identifier &created_by,
+                                                const xsd::LangString &class_label,
+                                                const xsd::LangString &class_description,
+                                                const dsp::Identifier sub_class_of = dsp::Identifier::empty_identifier(),
+                                                std::shared_ptr<Observer> obs = {});
+
+  static std::shared_ptr<ResourceClass> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
 
   /*!
-   * Default constructor
+   * Destructor removing the instance from the internal list
    */
-  ResourceClass() = default;
+  inline virtual ~ResourceClass() {  };
 
   /*!
-   * Constructor for ResourceClass. Please note that the resource class should be added to a data model!
-   *
-   * @param agent
-   * @param class_label
-   * @param class_description
-   * @param sub_class_of
+   * Serialize the resource class as JSON object
+   * @return
    */
-  ResourceClass(
-      const std::shared_ptr<Agent> &agent,
-      const xsd::LangString &class_label,
-      const xsd::LangString &class_description,
-      std::shared_ptr<ResourceClass> sub_class_of = nullptr);
+  nlohmann::json to_json();
 
   /*!
    * Add a property to the resource class with cardinality
@@ -66,7 +67,7 @@ class ResourceClass : public ClassObj {
    * @param min_count
    * @param max_count
    */
-  void add_property(const std::shared_ptr<Property> &property, int min_count, int max_count);
+  void add_property(const dsp::Identifier &property_id, int min_count, int max_count);
 
   /*!
    * Modifiy the min_count of this property
@@ -84,15 +85,16 @@ class ResourceClass : public ClassObj {
    */
   void change_max_count(const dsp::Identifier &property_id, int max_count);
 
+  /*!
+   * Remove a property from the ResourceClass instance
+   * @param property_id
+   */
   void remove_property(const dsp::Identifier &property_id);
 
-  inline friend std::ostream &operator<<(std::ostream &outStream, ResourceClass &rhs) {
-    outStream << "ResourceClass:: " << std::endl <<
-              "id=" << rhs.id_ << std::endl;
-    for (auto &ll: rhs.class_label_) {
-      outStream << ll.first << ": " << ll.second << std::endl;
-    }
-    return outStream;
+
+  inline friend std::ostream &operator<<(std::ostream &out_stream, std::shared_ptr<ResourceClass> resource_class_ptr) {
+    out_stream << std::setw(4) << resource_class_ptr->to_json();
+    return out_stream;
   }
 
   friend DataModel; // allows access to data_model_id(...)
@@ -103,9 +105,28 @@ class ResourceClass : public ClassObj {
   iterator end() { return has_properties_.end(); }
 
  private:
+  /*!
+   * ResourceClass constructor taking several parameters
+   *
+   * @param created_by
+   * @param class_label
+   * @param class_description
+   * @param sub_class_of
+   */
+  ResourceClass(
+      const dsp::Identifier &created_by,
+      const xsd::LangString &class_label,
+      const xsd::LangString &class_description,
+      const dsp::Identifier sub_class_of = dsp::Identifier::empty_identifier());
+
+  /*!
+   * ResourceClass constructor generating an instance from a json object (de-serializing)
+   * @param json_obj
+   */
+  explicit ResourceClass(const nlohmann::json& json_obj);
 
   HasPropertiesMap has_properties_;
-  std::shared_ptr<ResourceClass> sub_class_of_;
+  dsp::Identifier sub_class_of_;
 
 };
 

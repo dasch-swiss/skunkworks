@@ -7,32 +7,44 @@
 
 #include <string>
 #include <unordered_map>
+#include <utility>
 
-#include "agent.h"
-#include "project.h"
+//#include "agent.h"
+//#include "project.h"
 #include "store_adapter.h"
+#include "model_item.h"
 
 namespace dsp {
 
 class DomainModel {
  public:
-  DomainModel(const std::shared_ptr<StoreAdapter> &store_adapter) : store_adapter(store_adapter) {}
+  inline explicit DomainModel(std::shared_ptr<StoreAdapter> store_adapter) : store_adapter_(std::move(store_adapter)) {}
 
-  std::shared_ptr<Agent> agent(const dsp::Identifier &id);
+  template<typename T>
+  inline void create(std::shared_ptr<T> item)  {
+    nlohmann::json json_obj = item->to_json();
+    store_adapter_->create(json_obj);
+  }
 
-  void agent(const std::shared_ptr<Agent> &agent);
+  template<typename T>
+  inline std::shared_ptr<T> read(const dsp::Identifier &id)  {
+    nlohmann::json json_obj = store_adapter_->read(id);
+    std::shared_ptr<T> item_ptr = T::Factory(json_obj);
+    return item_ptr;
+  }
 
-  std::shared_ptr<Project> project(const dsp::Identifier &id);
-
-  void project(const std::shared_ptr<Project> &project);
+  template<typename T>
+  inline void update(const dsp::Identifier &id, const std::shared_ptr<T> &item)  {
+    nlohmann::json old_json_obj = store_adapter_->read(id);
+    nlohmann::json json_obj = item->to_json();
+    store_adapter_->update(id, json_obj);
+  }
 
  private:
-  std::shared_ptr<StoreAdapter> store_adapter;
-  std::unordered_map<dsp::Identifier, std::shared_ptr<Agent>> agents_;
-  std::unordered_map<dsp::Identifier, std::shared_ptr<Project>> projects_;
+  std::shared_ptr<StoreAdapter> store_adapter_;
+  std::unordered_map<dsp::Identifier, std::shared_ptr<ModelItem>> items_;
 };
 
 }
-
 
 #endif //SKUNKWORKS_DATA_MODEL_DOMAIN_MODEL_H_

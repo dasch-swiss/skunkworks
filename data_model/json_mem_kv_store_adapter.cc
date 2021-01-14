@@ -21,7 +21,6 @@ void JsonMemKVStoreAdapter::create(nlohmann::json& json_obj) {
   std::string id = json_obj["id"];
   std::vector<std::uint8_t> cbor_obj = nlohmann::json::to_cbor(json_obj);
   store_->create(id, cbor_obj);
-  std::cerr << std::setw(4) << json_obj << std::endl;
 }
 
 

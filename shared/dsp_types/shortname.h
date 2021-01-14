@@ -84,6 +84,8 @@ class Shortname {
 
   inline operator xsd::String() const { return shortname_; }
 
+  inline std::string to_string() const { return shortname_; }
+
   inline friend std::ostream &operator<<(std::ostream &out_stream, const Shortname &rhs) {
     out_stream << static_cast<std::string>(rhs);
     return out_stream;
