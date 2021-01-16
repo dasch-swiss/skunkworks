@@ -26,34 +26,55 @@ ClassObj::ClassObj(
 
 ClassObj::ClassObj(const nlohmann::json &json_obj) {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type")) {
-    if (json_obj.contains("id")) {
-      id_ = dsp::Identifier(json_obj["id"].get<std::string>());
+    if (!json_obj.contains("type"))
+      throw Error(file_, __LINE__, R"("ClassObj" serialization has no "type".)");
+    if (!json_obj.contains("id"))
+      throw Error(file_, __LINE__, R"("ClassObj" serialization has no "id".)");
+    id_ = dsp::Identifier(json_obj["id"].get<std::string>());
 
-      if (!json_obj.contains("creation_date"))
-        throw Error(file_, __LINE__, R"("Project" has no "creation_date")");
-      creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"].get<std::string>());
+    if (!json_obj.contains("creation_date"))
+      throw Error(file_, __LINE__, R"("ClassObj" has no "creation_date")");
+    creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"].get<std::string>());
 
-      if (!json_obj.contains("created_by"))
-        throw Error(file_, __LINE__, R"("Project" has no "created_by")");
-      created_by_ = dsp::Identifier(json_obj["created_by"].get<std::string>());
+    if (!json_obj.contains("created_by"))
+      throw Error(file_, __LINE__, R"("ClassObj" has no "created_by")");
+    created_by_ = dsp::Identifier(json_obj["created_by"].get<std::string>());
 
-      if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
-        last_modification_date_ = xsd::DateTimeStamp(json_obj["last_modification_date"].get<std::string>());
-        modified_by_ = dsp::Identifier(json_obj["modified_by"].get<std::string>());
-      }
-      if (!json_obj.contains("in_data_model"))
-        throw Error(file_, __LINE__, R"("Project" has no "in_data_model")");
-      in_data_model_ = dsp::Identifier(json_obj["in_data_model"].get<std::string>());
-    } else{
-      throw Error(file_, __LINE__, R"("Project" serialization has no "id".)");
+    if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
+      last_modification_date_ = xsd::DateTimeStamp(json_obj["last_modification_date"].get<std::string>());
+      modified_by_ = dsp::Identifier(json_obj["modified_by"].get<std::string>());
     }
+    if (!json_obj.contains("in_data_model"))
+      throw Error(file_, __LINE__, R"("ClassObj" has no "in_data_model")");
+    in_data_model_ = dsp::Identifier(json_obj["in_data_model"].get<std::string>());
+    if (!json_obj.contains("label"))
+      throw Error(file_, __LINE__, R"("ClassObj" has no "label")");
+    for (const auto& [lang, value]: json_obj["label"].items()) label_[lang] = value;
+    if (json_obj.contains("description"))
+      for (const auto& [lang, value]: json_obj["description"].items()) description_[lang] = value;
   } else {
     throw Error(file_, __LINE__, R"("Object" serialization not consistent.)");
   }
 }
 
-void ClassObj::label(const xsd::LangString &class_label) {
+void ClassObj::label(const xsd::LangString &class_label, const dsp::Identifier& modified_by) {
   label_ = class_label;
+  last_modification_date_ = xsd::DateTimeStamp(); // set actual date & time
+  modified_by_ = modified_by;
+  notify(ObserverAction::UPDATE, shared_from_this());
+}
+
+void ClassObj::label_add(const xsd::Language& lang, const xsd::String& text, const dsp::Identifier& modified_by) {
+  label_.add(lang, text);
+  last_modification_date_ = xsd::DateTimeStamp(); // set actual date & time
+  modified_by_ = modified_by;
+  notify(ObserverAction::UPDATE, shared_from_this());
+}
+
+void ClassObj::label_remove(const xsd::Language& lang, const dsp::Identifier& modified_by) {
+  label_.remove(lang);
+  last_modification_date_ = xsd::DateTimeStamp(); // set actual date & time
+  modified_by_ = modified_by;
   notify(ObserverAction::UPDATE, shared_from_this());
 }
 
@@ -64,10 +85,10 @@ void ClassObj::description(const xsd::LangString &class_description)  {
 
 nlohmann::json ClassObj::to_json() {
   std::unordered_map<std::string, std::string> label_map;
-  for (auto [lang, text]: label_) label_map[lang] = text;
+  for (const auto& [lang, text]: label_) label_map[lang] = text;
 
   std::unordered_map<std::string, std::string> description_map;
-  for (auto [lang, text]: description_) description_map[lang] = text;
+  for (const auto& [lang, text]: description_) description_map[lang] = text;
   nlohmann::json json_obj = {
       {"version", 1},
       {"id", id_},

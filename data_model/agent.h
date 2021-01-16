@@ -17,6 +17,7 @@
 #include "model_item.h"
 #include "subject.h"
 
+using namespace std::string_literals;
 
 namespace dsp {
 
@@ -49,14 +50,22 @@ class Agent : public ModelItem, public Subject {
   static std::shared_ptr<Agent> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
 
   /*!
-   * Destructor
+   * Compares 2 agents for equality
+   * @param other
+   * @return true or false
    */
-  //inline ~Agent() override {  };
-
   bool operator==(const Agent& other) { return id_ == other.id_ && shortname_ == other.shortname_; }
 
+  /*!
+   * Getter for the shortname
+   * @return dsp::Shortname instance
+   */
   inline dsp::Shortname shortname() const { return shortname_; }
 
+  /*!
+   * Setter for the shortname
+   * @param shortname
+   */
   inline void shortname(const dsp::Shortname& shortname) {
     shortname_ = shortname;
     notify(ObserverAction::UPDATE, shared_from_this());
@@ -72,6 +81,10 @@ class Agent : public ModelItem, public Subject {
     out_stream << std::setw(4) << agent_ptr->to_json();
     return out_stream;
   }
+
+  operator std::string() { return shortname_.to_string(); }
+
+  inline std::string  to_string() override { return shortname_.to_string(); }
 
 
  private:

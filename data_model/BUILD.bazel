@@ -7,7 +7,6 @@ cc_library(
     srcs = [
         "in_mem_kv_store.cc",
         "json_mem_kv_store_adapter.cc",
-        "model_item.cc",
         "data_model.cc",
         "project.cc",
         "agent.cc",
@@ -43,8 +42,68 @@ cc_library(
 )
 
 cc_test(
+  name = "model_item_test",
+  srcs = ["model_item_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "class_obj_test",
+  srcs = ["class_obj_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "agent_test",
+  srcs = ["agent_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "project_test",
+  srcs = ["project_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
   name = "data_model_test",
   srcs = ["data_model_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "property_test",
+  srcs = ["property_test.cc"],
+  deps = [
+      ":data_model",
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)
+
+cc_test(
+  name = "resource_class_test",
+  srcs = ["resource_class_test.cc"],
   deps = [
       ":data_model",
       "@nlohmann//:nlohmann",
