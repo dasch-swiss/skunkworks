@@ -58,7 +58,10 @@ class ResourceClass : public ClassObj {
    * Serialize the resource class as JSON object
    * @return
    */
-  nlohmann::json to_json();
+  nlohmann::json to_json() override;
+
+  inline dsp::Identifier sub_class_of_id() { return sub_class_of_; }
+
 
   /*!
    * Add a property to the resource class with cardinality
@@ -96,6 +99,8 @@ class ResourceClass : public ClassObj {
     out_stream << std::setw(4) << resource_class_ptr->to_json();
     return out_stream;
   }
+
+  inline std::string to_string() override { return "gaga"s; }
 
   friend DataModel; // allows access to data_model_id(...)
 

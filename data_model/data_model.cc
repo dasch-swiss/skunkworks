@@ -85,15 +85,19 @@ std::shared_ptr<Project> DataModel::project() const {
 }
 
 
-void DataModel::add_resource_class(const Identifier &resource_class_id) {
+void DataModel::add_resource_class(const Identifier &resource_class_id, const Identifier& agent_id) {
   if (resource_classes_.find(resource_class_id) != resource_classes_.end()) {
     throw Error(file_,
                 __LINE__,
                 R"(Data model already assigned to project "")" + static_cast<std::string>(shortname_) + R"(".)");
   }
   resource_classes_.insert(resource_class_id);
+  last_modification_date_ = xsd::DateTimeStamp();
+  modified_by_ = agent_id;
   std::shared_ptr<ResourceClass> tmp = get_item<ResourceClass>(resource_class_id);
   tmp->in_data_model_ = id_;
+  tmp->modified_by_ = agent_id;
+  tmp->last_modification_date_ = last_modification_date_;
   tmp->notify(ObserverAction::UPDATE, tmp); // DataModel's project_ changed...
   notify(ObserverAction::UPDATE, shared_from_this());
 }
@@ -107,7 +111,7 @@ std::optional<ResourceClassPtr> DataModel::get_resource_class(const dsp::Identif
   }
 }
 
-std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Identifier &resource_class_id) {
+std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, const Identifier& agent_id) {
   //
   // ToDo: Check here if resource class is in use!!!
   //
@@ -117,22 +121,30 @@ std::optional<ResourceClassPtr> DataModel::remove_resource_class(const dsp::Iden
   } else {
     ResourceClassPtr resource_class_ptr = get_item<ResourceClass>(resource_class_id);
     resource_classes_.erase(resource_class_id);
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
     resource_class_ptr->in_data_model_ = Identifier::empty_identifier();
+    resource_class_ptr->last_modification_date_ = last_modification_date_;
+    resource_class_ptr->modified_by_ = agent_id;
     resource_class_ptr->notify(ObserverAction::UPDATE, resource_class_ptr); // Property's in_data_model_ changed...
     notify(ObserverAction::UPDATE, shared_from_this());
     return resource_class_ptr;
   }
 }
 
-void DataModel::add_property(const dsp::Identifier& property_id) {
+void DataModel::add_property(const dsp::Identifier& property_id, const dsp::Identifier &agent_id) {
   if (properties_.find(property_id) != properties_.end()) {
     throw Error(file_,
                 __LINE__,
                 R"(Property already assigned to data model "")" + static_cast<std::string>(shortname_) + R"(".)");
   }
   properties_.insert(property_id);
+  last_modification_date_ = xsd::DateTimeStamp();
+  modified_by_ = agent_id;
   std::shared_ptr<Property> tmp = get_item<Property>(property_id);
   tmp->in_data_model_ = id_;
+  tmp->last_modification_date_ = last_modification_date_;
+  tmp->modified_by_ = modified_by_;
   tmp->notify(ObserverAction::UPDATE, tmp); // Property's in_data_model_ changed...
   notify(ObserverAction::UPDATE, shared_from_this());
 }
@@ -146,7 +158,7 @@ std::optional<PropertyPtr> DataModel::get_property(const dsp::Identifier &proper
   }
 }
 
-std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &property_id) {
+std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &property_id, const dsp::Identifier& agent_id) {
   //
   // ToDo: Check here if data model is in use!!!
   //
@@ -154,12 +166,34 @@ std::optional<PropertyPtr> DataModel::remove_property(const dsp::Identifier &pro
   if (res == properties_.end()) {
     return {};
   } else {
-    PropertyPtr property_ptr = get_item<Property>(property_id);
+    PropertyPtr property = get_item<Property>(property_id);
+    //
+    // Check if property is referenced as super-property
+    //
+    for (const auto& prop_id: properties_) {
+      PropertyPtr p = dsp::ModelItem::get_item<Property>(prop_id);
+      if (p->sub_property_of_id() == property_id) {
+        throw Error(file_, __LINE__, R"("remove_property" failed: Property is referenced as superproperty.)");
+      }
+    }
+    //
+    // Check if property is referenced by and ResourceClass
+    //
+    for (const auto& res_id: resource_classes_) {
+      ResourceClassPtr resclass = dsp::ModelItem::get_item<ResourceClass>(res_id);
+      if (resclass->has_properties_.find(property_id) != resclass->has_properties_.end()) {
+        throw Error(file_, __LINE__, R"("remove_property" failed: Property is referenced in ResourceClass.)");
+      }
+    }
     properties_.erase(property_id);
-    property_ptr->in_data_model_ = Identifier::empty_identifier();
-    property_ptr->notify(ObserverAction::UPDATE, property_ptr); // property's in_data_model_ changed...
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
+    property->in_data_model_ = Identifier::empty_identifier();
+    property->last_modification_date_ = last_modification_date_;
+    property->modified_by_ = modified_by_;
+    property->notify(ObserverAction::UPDATE, property); // property's in_data_model_ changed...
     notify(ObserverAction::UPDATE, shared_from_this());
-    return property_ptr;
+    return property;
   }
 }
 

@@ -83,6 +83,8 @@ class Property : public ClassObj {
     return out_stream;
   }
 
+  inline std::string to_string() override { return "gaga"s; }
+
  private:
   Property(
       const dsp::Identifier& created_by,

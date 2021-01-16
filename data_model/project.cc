@@ -118,12 +118,7 @@ Project::~Project() {
   //if (managed()) remove_item();
 }
 
-std::shared_ptr<Project> Project::get(const dsp::Identifier& id) {
-  return get_item<Project>(id);
-}
-
-
-void Project::add_data_model(const dsp::Identifier &data_model_id) {
+void Project::add_data_model(const dsp::Identifier &data_model_id, const dsp::Identifier& modified_by) {
   if (data_models_.find(data_model_id) != data_models_.end()) {
     throw Error(file_,
                 __LINE__,
@@ -131,7 +126,11 @@ void Project::add_data_model(const dsp::Identifier &data_model_id) {
   }
   data_models_.insert(data_model_id);
   std::shared_ptr<DataModel> tmp = get_item<DataModel>(data_model_id);
+  last_modification_date_ = xsd::DateTimeStamp();
+  modified_by_ = modified_by;
   tmp->project_ = id_;
+  tmp->last_modification_date_ = last_modification_date_;
+  tmp->modified_by_ = modified_by_;
   tmp->notify(ObserverAction::UPDATE, tmp); // DataModel's project_ changed...
   notify(ObserverAction::UPDATE, shared_from_this());
  }
@@ -145,7 +144,7 @@ std::optional<DataModelPtr> Project::get_data_model(const dsp::Identifier &data_
   }
 }
 
-std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &data_model_id) {
+std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &data_model_id, const dsp::Identifier& modified_by) {
   //
   // ToDo: Check here if data model is in use!!!
   //
@@ -155,7 +154,11 @@ std::optional<DataModelPtr> Project::remove_data_model(const dsp::Identifier &da
   } else {
     DataModelPtr data_model_ptr = get_item<DataModel>(data_model_id);
     data_models_.erase(data_model_id);
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = modified_by;
     data_model_ptr->project_ = Identifier::empty_identifier();
+    data_model_ptr->last_modification_date_ = last_modification_date_;
+    data_model_ptr->modified_by_ = modified_by_;
     data_model_ptr->notify(ObserverAction::UPDATE, data_model_ptr); // DataModel's project_ changed...
     notify(ObserverAction::UPDATE, shared_from_this());
     return data_model_ptr;

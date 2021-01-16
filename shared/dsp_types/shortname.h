@@ -20,13 +20,13 @@ class Shortname {
    * Constructor taking a std::string as parameter
    * @param Shortname
    */
-  inline explicit Shortname(const std::string &shortname) : Shortname() { shortname_ = shortname; }
+  inline Shortname(const std::string &shortname) : Shortname() { shortname_ = shortname; }
 
   /*!
    * Constructor taking a xsd::string as parameter
    * @param shortname
    */
-  inline explicit Shortname(const xsd::String &shortname) : Shortname() { shortname_ = shortname; }
+  inline Shortname(const xsd::String &shortname) : Shortname() { shortname_ = shortname; }
 
   /*!
    * Copy constructor taking a dsp::Shortname as parameter

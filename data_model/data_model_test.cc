@@ -4,7 +4,6 @@
 
 #include "external/nlohmann/json.hpp"
 
-#include "shared/xsd_types/lang_string.h"
 #include "shared/xsd_types/xsd_error.h"
 #include "shared/error/error.h"
 
@@ -13,160 +12,204 @@
 #include "project.h"
 #include "agent.h"
 #include "data_model.h"
-#include "resource_class.h"
-#include "property.h"
 
 using namespace std::string_literals;
 
 class MyObserver: public dsp::Observer {
+ public:
+  inline std::string value() { return value_; }
 
-  inline void update(dsp::ObserverAction action, std::shared_ptr<dsp::ModelItem> item) const override {
-    std::string action_str;
+  inline void update(dsp::ObserverAction action, std::shared_ptr<dsp::ModelItem> item) override {
     switch (action) {
-      case dsp::ObserverAction::CREATE: action_str = "CREATE"; break;
-      case dsp::ObserverAction::READ: action_str = "READ"; break;
-      case dsp::ObserverAction::UPDATE: action_str = "UPDATE"; break;
-      case dsp::ObserverAction::REMOVE: action_str = "REMOVE"; break;
+      case dsp::ObserverAction::CREATE: value_ = "CREATE"s; break;
+      case dsp::ObserverAction::READ: value_ = "READ"s; break;
+      case dsp::ObserverAction::UPDATE:  value_ = "UPDATE"s; break;
+      case dsp::ObserverAction::REMOVE: value_ = "REMOVE"; break;
     }
-    std::cerr << "Action=" << action_str << " id=" << item->id() << std::endl;
   }
+
+  inline void reset() { value_ = ""s; }
+ private:
+  std::string value_;
 };
 
 TEST_CASE("Data model tests", "[catch2|") {
-  SECTION("Agent Unit Tests") {
-    std::shared_ptr<MyObserver> obs1(std::make_shared<MyObserver>());
-    dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"), obs1);
-    dsp::Identifier identifier(my_agent->id());
-    dsp::Shortname shortname(my_agent->shortname());
-    nlohmann::json json_agent = my_agent->to_json();
-    CHECK_THROWS_AS(dsp::Agent::Factory(json_agent), dsp::Error);
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    my_agent = dsp::Agent::Factory(json_agent);
-    CHECK(my_agent->id() == identifier);
-    CHECK(my_agent->shortname() == shortname);
-
-    my_agent->shortname(dsp::Shortname("GAGAGAGAG"));
-
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    CHECK(dsp::ModelItem::size() == 0);
-  }
-
-  SECTION("Project Unit tests") {
-    dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
-
-    dsp::ProjectPtr my_project = dsp::Project::Factory(my_agent->id(), "4123", "testproject");
-    REQUIRE(static_cast<std::string>(my_project->shortcode()) == "4123");
-    REQUIRE(static_cast<std::string>(my_project->shortname()) == "testproject");
-    dsp::Identifier id = my_project->id();
-    dsp::Shortcode shortcode = my_project->shortcode();
-    dsp::Shortname shortname1 = my_project->shortname();
-    xsd::DateTimeStamp cd = my_project->creation_date();
-    nlohmann::json json_project = my_project->to_json();
-    dsp::ModelItem::delete_item<dsp::Project>(my_project);
-
-    my_project = dsp::Project::Factory(json_project);
-    CHECK(id == my_project->id());
-    CHECK(cd == my_project->creation_date());
-    CHECK(shortcode == my_project->shortcode());
-    CHECK(shortname1 == my_project->shortname());
-
-    dsp::ProjectPtr mp = dsp::ModelItem::get_item<dsp::Project>(id);
-    CHECK(id == mp->id());
-    CHECK(my_project->id() == mp->id());
-    CHECK(cd == mp->creation_date());
-    CHECK(shortcode == mp->shortcode());
-    CHECK(shortname1 == mp->shortname());
-
-
-    REQUIRE_THROWS_WITH(dsp::Project::Factory(my_agent->id(), "412X", "gaga"), Catch::Matchers::Contains(std::string("Short code restriction"))) ;
-    REQUIRE_THROWS_WITH(dsp::Project::Factory(my_agent->id(), "4122", "2gaga"), Catch::Matchers::Contains(std::string("Short name restriction"))) ;
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    dsp::ModelItem::delete_item<dsp::Project>(mp);
-    CHECK(dsp::ModelItem::size() == 0);
-  }
+  dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
+  dsp::ProjectPtr my_project = dsp::Project::Factory(my_agent->id(), "4123", "testproject");
 
   SECTION("Data model tests...") {
-    dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
-    dsp::ProjectPtr my_project = dsp::Project::Factory(my_agent->id(), "4123", "testproject");
-
     dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model"));
     REQUIRE(my_data_model->shortname() == "test-model");
 
     INFO("Creating a data model with invalid name should fail");
     REQUIRE_THROWS_AS(dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("-test-model")), xsd::Error);
 
-    INFO("Add data model to project.");
-    CHECK_NOTHROW(my_project->add_data_model(my_data_model->id()));
+    INFO("Add data model to project and test if project_id_ is set correctly.");
+    CHECK_NOTHROW(my_project->add_data_model(my_data_model, my_agent));
     REQUIRE(my_data_model->project()->id() == my_project->id());
     REQUIRE(my_data_model->project_id() == my_project->id());
+  }
 
-    INFO("Serialize data model...");
-    nlohmann::json json_data_model = my_data_model->to_json();
-    dsp::Identifier id2 = my_data_model->id();
-    dsp::Shortname shortname2 = my_data_model->shortname();
+  SECTION("Serialization to JSON and back") {
+    dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model"));
+    CHECK_NOTHROW(my_project->add_data_model(my_data_model, my_agent));
+    nlohmann::json json_obj = my_data_model->to_json();
+    REQUIRE(json_obj["version"].get<int>() == 1);
+    REQUIRE(json_obj["type"].get<std::string>() == "DataModel"s);
+    REQUIRE(json_obj["id"].get<std::string>() == my_data_model->id().to_string());
+    REQUIRE(json_obj["shortname"].get<std::string>() == my_data_model->shortname().to_string());
+    REQUIRE(json_obj["creation_date"].get<std::string>() == static_cast<std::string>(my_data_model->creation_date()));
+    REQUIRE(json_obj["created_by"].get<std::string>() == my_data_model->created_by_id().to_string());
+
+    dsp::Identifier id(my_data_model->id());
+    dsp::Identifier created_by(my_data_model->created_by_id());
+    xsd::DateTimeStamp creation_date(my_data_model->creation_date());
+    dsp::Identifier modified_by(my_data_model->modified_by_id());
+    xsd::DateTimeStamp last_modification_date(my_data_model->last_modification_date());
+    dsp::Shortname shortname = my_data_model->shortname();
     dsp::ModelItem::delete_item<dsp::DataModel>(my_data_model);
-    my_data_model = dsp::DataModel::Factory(json_data_model);
-    CHECK(id2 == my_data_model->id());
-    CHECK(shortname2 == my_data_model->shortname());
+    my_data_model = dsp::DataModel::Factory(json_obj);
+    REQUIRE(id == my_data_model->id());
+    REQUIRE(created_by == my_data_model->created_by_id());
+    REQUIRE(creation_date == my_data_model->creation_date());
+    REQUIRE(modified_by == my_data_model->modified_by_id());
+    REQUIRE(last_modification_date == my_data_model->last_modification_date());
+    REQUIRE(shortname == my_data_model->shortname());
+    REQUIRE(my_agent == my_data_model->created_by());
 
     CHECK_NOTHROW(my_data_model->project());
     REQUIRE(my_data_model->project_id() == my_project->id());
     REQUIRE(my_data_model->project()->id() == my_project->id());
+  }
+  SECTION("Adding data models to projects and remove them") {
+    dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model"));
+    CHECK_NOTHROW(my_project->add_data_model(my_data_model, my_agent));
 
-    INFO("Add second data model and remove it...");
     dsp::DataModelPtr my_data_model2 = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model2"));
-    CHECK_NOTHROW(my_project->add_data_model(my_data_model2->id()));
-    REQUIRE(my_data_model2->project()->id() == my_project->id());
-    CHECK_THROWS_WITH(my_project->add_data_model(my_data_model2->id()), Catch::Matchers::Contains(std::string("Data model")));
+    CHECK_NOTHROW(my_project->add_data_model(my_data_model2->id(), my_agent));
 
-    CHECK_NOTHROW(my_project->remove_data_model(my_data_model2->id()));
+    REQUIRE(my_data_model2->project()->id() == my_project->id());
+    CHECK_THROWS_WITH(my_project->add_data_model(my_data_model2->id(), my_agent), Catch::Matchers::Contains(std::string("Data model")));
+
+    CHECK_NOTHROW(my_project->remove_data_model(my_data_model2->id(), my_agent));
     REQUIRE(my_data_model2->project_id() == dsp::Identifier::empty_identifier());
 
     std::optional<dsp::DataModelPtr> pp = my_project->get_data_model(my_data_model->id());
     REQUIRE(pp.value()->id() == my_data_model->id());
-
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    dsp::ModelItem::delete_item<dsp::Project>(my_project);
-    dsp::ModelItem::delete_item<dsp::DataModel>(my_data_model);
-    dsp::ModelItem::delete_item<dsp::DataModel>(my_data_model2);
-
-    CHECK(dsp::ModelItem::size() == 0);
   }
 
-  SECTION("Resource Unit tests...") {
-    dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
-    dsp::ResourceClassPtr my_resource_class =
-        dsp::ResourceClass::Factory(
-            my_agent->id(),
-            xsd::LangString("en", "myResourceClassLabel"),
-            xsd::LangString("en", "MyResourceClassDescription"));
-    REQUIRE(static_cast<std::string>(my_resource_class->label().get("en")) == "myResourceClassLabel");
-    REQUIRE(static_cast<std::string>(my_resource_class->description().get("en")) == "MyResourceClassDescription");
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    dsp::ModelItem::delete_item<dsp::ResourceClass>(my_resource_class);
-    CHECK(dsp::ModelItem::size() == 0);
+  SECTION("Test with observer") {
+    std::shared_ptr<MyObserver> observer1(new MyObserver());
+    std::shared_ptr<MyObserver> observer2(new MyObserver());
+    dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model"), observer1);
+    REQUIRE(observer1->value() == "CREATE"s);
+    dsp::ProjectPtr my_project2 = dsp::Project::Factory(my_agent->id(), "4123", "testproject2", observer2);
+    REQUIRE(observer1->value() == "CREATE"s);
+    my_project2->add_data_model(my_data_model, my_agent);
+    REQUIRE(observer1->value() == "UPDATE"s);
+    REQUIRE(observer2->value() == "UPDATE"s);
+    observer1->reset();
+    observer2->reset();
+    REQUIRE(observer1->value() == ""s);
+    REQUIRE(observer2->value() == ""s);
+    my_project2->remove_data_model(my_data_model, my_agent);
+    REQUIRE(observer1->value() == "UPDATE"s);
+    REQUIRE(observer2->value() == "UPDATE"s);
   }
 
-  SECTION("Property Unit tests") {
-    dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
-    dsp::PropertyPtr my_property =
-        dsp::Property::Factory(
-            my_agent->id(),
-            xsd::LangString("en", "myPropertyLabel"),
-            xsd::LangString("en", "myPropertyLabel"),
-            dsp::ValueType::SimpleText);
-    REQUIRE(static_cast<std::string>(my_property->label().get("en")) == "myPropertyLabel");
-    REQUIRE(static_cast<std::string>(my_property->description().get("en")) == "myPropertyLabel");
-    dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
-    dsp::ModelItem::delete_item<dsp::Property>(my_property);
-    CHECK(dsp::ModelItem::size() == 0);
+  SECTION("Test adding & removing properties") {
+    std::shared_ptr<MyObserver> obs1 = std::make_shared<MyObserver>();
+    std::shared_ptr<MyObserver> obs2 = std::make_shared<MyObserver>();
+    std::shared_ptr<MyObserver> obs3 = std::make_shared<MyObserver>();
+
+    dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(
+        my_agent->id(),
+        dsp::Shortname("test-model"),
+        obs1);
+    REQUIRE(obs1->value() == "CREATE"s);
+
+    dsp::PropertyPtr my_property = dsp::Property::Factory(
+        my_agent->id(),
+        xsd::LangString("en", "MyProperty-Label"),
+        xsd::LangString("en", "MyProperty-Description"),
+        dsp::ValueType::SimpleText,
+        dsp::Identifier::empty_identifier(),
+        obs2);
+    REQUIRE(obs2->value() == "CREATE"s);
+
+    INFO("Checking all overloads or add_property and remove_property");
+    my_data_model->add_property(my_property, my_agent);
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+    obs1->reset();
+    obs2->reset();
+    my_data_model->remove_property(my_property, my_agent);
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+
+    obs1->reset();
+    obs2->reset();
+    my_data_model->add_property(my_property->id(), my_agent);
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+    obs1->reset();
+    obs2->reset();
+    my_data_model->remove_property(my_property->id(), my_agent);
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+
+    obs1->reset();
+    obs2->reset();
+    my_data_model->add_property(my_property, my_agent->id());
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+    obs1->reset();
+    obs2->reset();
+    my_data_model->remove_property(my_property, my_agent->id());
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+
+    obs1->reset();
+    obs2->reset();
+    my_data_model->add_property(my_property->id(), my_agent->id());
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs2->value() == "UPDATE"s);
+    obs1->reset();
+    obs2->reset();
+    my_data_model->remove_property(my_property->id(), my_agent->id());
+
+    INFO("Adding and removing properties with subproperties");
+    my_data_model->add_property(my_property, my_agent);
+    dsp::PropertyPtr my_subproperty = dsp::Property::Factory(
+        my_agent->id(),
+        xsd::LangString("en", "MyProperty-Label"),
+        xsd::LangString("en", "MyProperty-Description"),
+        dsp::ValueType::SimpleText,
+        my_property->id(),
+        obs3);
+    REQUIRE(obs3->value() == "CREATE"s);
+    obs1->reset();
+    my_data_model->add_property(my_subproperty, my_agent);
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs3->value() == "UPDATE"s);
+
+    obs1->reset();
+    obs2->reset();
+    obs3->reset();
+    REQUIRE_THROWS_AS(my_data_model->remove_property(my_property->id(), my_agent->id()), dsp::Error);
+    REQUIRE_NOTHROW(my_data_model->remove_property(my_subproperty->id(), my_agent->id()));
+    REQUIRE(obs1->value() == "UPDATE"s);
+    REQUIRE(obs3->value() == "UPDATE"s);
+    REQUIRE_NOTHROW(my_data_model->remove_property(my_property->id(), my_agent->id()));
+    REQUIRE(obs2->value() == "UPDATE"s);
   }
 
+/*
   SECTION("Test integration") {
     dsp::AgentPtr my_agent = dsp::Agent::Factory(dsp::Shortname("MyAgent"));
     dsp::ProjectPtr my_project = dsp::Project::Factory(my_agent->id(), "4123", "testproject");
     dsp::DataModelPtr my_data_model = dsp::DataModel::Factory(my_agent->id(), dsp::Shortname("test-model"));
-    my_project->add_data_model(my_data_model->id());
+    my_project->add_data_model(my_data_model->id(), my_agent);
 
     dsp::ResourceClassPtr my_resource_class =
         dsp::ResourceClass::Factory(
@@ -202,4 +245,5 @@ TEST_CASE("Data model tests", "[catch2|") {
     dsp::ModelItem::delete_item<dsp::ResourceClass>(my_resource_class2);
     CHECK(dsp::ModelItem::size() == 0);
   }
+  */
 }

@@ -24,6 +24,13 @@ class Project;
 class DataModel : public ModelItem, public Subject {
  public:
 
+  /*!
+   * DataModel factory for managed data model
+   * @param created_by
+   * @param shortname
+   * @param obs [default: empty]
+   * @return
+   */
   static std::shared_ptr<DataModel> Factory(
       const dsp::Identifier &created_by,
       const dsp::Shortname& shortname,
@@ -32,8 +39,19 @@ class DataModel : public ModelItem, public Subject {
   static std::shared_ptr<DataModel> Factory(const nlohmann::json& json_obj,
                                             std::shared_ptr<Observer> obs = {});
 
-  ~DataModel() override {  }
+  ~DataModel() override = default;
 
+  inline xsd::DateTimeStamp creation_date() { return creation_date_; }
+
+  inline dsp::Identifier created_by_id() const { return created_by_; }
+
+  inline AgentPtr created_by() const { return ModelItem::get_item<Agent>(created_by_); }
+
+  inline dsp::Identifier modified_by_id() const { return modified_by_; }
+
+  inline AgentPtr modified_by() const { return ModelItem::get_item<Agent>(modified_by_); }
+
+  inline xsd::DateTimeStamp last_modification_date() { return last_modification_date_; }
 
   /*!
    * getter for shortname
@@ -50,11 +68,38 @@ class DataModel : public ModelItem, public Subject {
   std::shared_ptr<Project> project() const ;
 
   /*!
-   * Add a resource class to the data model
-   *
-   * @param resource_class
+   * Add resource class to data model
+   * @param resource_class_id
+   * @param agent_id
    */
-  void add_resource_class(const Identifier &resource_class);
+  void add_resource_class(const Identifier& resource_class_id, const Identifier& agent_id);
+
+  /*!
+   * Add resource class to data model
+   * @param resource_class
+   * @param agent_id
+   */
+  inline void add_resource_class(const ResourceClassPtr& resource_class, const Identifier& agent_id) {
+    add_resource_class(resource_class->id(), agent_id);
+  }
+
+  /*!
+   * Add resource class to data model
+   * @param resource_class_id
+   * @param agent
+   */
+  inline void add_resource_class(const Identifier& resource_class_id, const AgentPtr& agent) {
+    add_resource_class(resource_class_id, agent->id());
+  }
+
+  /*!
+   * Add resource class to data model
+   * @param resource_class
+   * @param agent
+   */
+  inline void add_resource_class(const ResourceClassPtr& resource_class, const AgentPtr& agent) {
+    add_resource_class(resource_class->id(), agent->id());
+  }
 
   /*!
    * Get resource class by ID.
@@ -62,24 +107,81 @@ class DataModel : public ModelItem, public Subject {
    * @param resource_class_id
    * @return Optional shared_ptr to ResourceClass instance
    */
-  std::optional<ResourceClassPtr> get_resource_class(const dsp::Identifier &resource_class_id) const ;
+  std::optional<ResourceClassPtr> get_resource_class(const Identifier &resource_class_id) const ;
 
   /*!
    * Remove a resource class from the data model
-   *
    * @param resource_class_id
-   * @return Optional shared_ptr to ResourceClass instance that has been removed.
+   * @param agent_id
+   * @return
    */
-  std::optional<ResourceClassPtr> remove_resource_class(const dsp::Identifier &resource_class_id);
+  std::optional<ResourceClassPtr> remove_resource_class(const Identifier &resource_class_id, const Identifier& agent_id);
+
+  /*!
+   * Remove a resource class from the data model
+   * @param resource_class
+   * @param agent_id
+   * @return
+   */
+  inline std::optional<ResourceClassPtr> remove_resource_class(const ResourceClassPtr &resource_class, const Identifier& agent_id) {
+    return remove_resource_class(resource_class->id(), agent_id);
+  }
+
+  /*!
+   * Remove a resource class from the data model
+   * @param resource_class_id
+   * @param agent
+   * @return
+   */
+  inline std::optional<ResourceClassPtr> remove_resource_class(const Identifier &resource_class_id, const AgentPtr& agent) {
+    return remove_resource_class(resource_class_id, agent->id());
+  }
+
+  /*!
+   * Remove a resource class from the data model
+   * @param resource_class
+   * @param agent
+   * @return
+   */
+  inline std::optional<ResourceClassPtr> remove_resource_class(const ResourceClassPtr &resource_class, const AgentPtr& agent) {
+    return remove_resource_class(resource_class->id(), agent->id());
+  }
 
   std::unordered_set<dsp::Identifier> get_resource_class_ids() { return resource_classes_; }
 
   /*!
-   * Add a property to the data model
-   *
-   * @param property
+   * Add property to the data model
+   * @param property_id
+   * @param agent_id
    */
-  void add_property(const dsp::Identifier& property);
+  void add_property(const dsp::Identifier& property_id, const dsp::Identifier& agent_id);
+
+  /*!
+   * Add property ti the data model
+   * @param property_id
+   * @param agent
+   */
+  inline void add_property(const dsp::Identifier& property_id, AgentPtr agent) {
+    add_property(property_id, agent->id());
+  }
+
+  /*!
+   * Add property to the data model
+   * @param property
+   * @param agent_id
+   */
+  inline void add_property(const PropertyPtr property, const dsp::Identifier& agent_id) {
+    add_property(property->id(), agent_id);
+  }
+
+  /*!
+   * Add property to the data model
+   * @param property
+   * @param agent
+   */
+  inline void add_property(const PropertyPtr property, AgentPtr agent) {
+    add_property(property->id(), agent->id());
+  }
 
   /*!
    * Get a property by ID
@@ -91,14 +193,29 @@ class DataModel : public ModelItem, public Subject {
 
   /*!
    * Remove property from data model
-   *
    * @param property_id
-   * @return Optional shared_ptr to Property instance that has been removed
+   * @param agent_id
+   * @return
    */
-  std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id);
+  std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id, const dsp::Identifier& agent_id);
 
+  inline std::optional<PropertyPtr> remove_property(const PropertyPtr& property, const dsp::Identifier& agent_id) {
+    return remove_property(property->id(), agent_id);
+  }
+
+  inline std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id, const AgentPtr& agent) {
+    return remove_property(property_id, agent->id());
+  }
+
+  inline std::optional<PropertyPtr> remove_property(const PropertyPtr& property, const AgentPtr & agent) {
+    return remove_property(property->id(), agent->id());
+  }
+
+  /*!
+   * Get all property ids as set
+   * @return
+   */
   std::unordered_set<dsp::Identifier> get_property_ids() { return properties_; }
-
 
   friend Project; // grant access to class Project to private member variable project_
 
@@ -108,6 +225,8 @@ class DataModel : public ModelItem, public Subject {
     out_stream << std::setw(4) << data_model_ptr->to_json();
     return out_stream;
   }
+
+  std::string to_string() override { return "gaga"s; }
 
  private:
   DataModel(const dsp::Identifier &created_by, const dsp::Shortname& shortname);

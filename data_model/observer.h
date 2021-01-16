@@ -19,7 +19,7 @@ class Observer {
  public:
   virtual ~Observer() {};
 
-  virtual void update(ObserverAction action, std::shared_ptr<ModelItem> item) const = 0;
+  virtual void update(ObserverAction action, std::shared_ptr<ModelItem> item) = 0;
 };
 
 

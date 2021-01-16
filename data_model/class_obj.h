@@ -11,7 +11,9 @@
 #include "external/nlohmann/json.hpp"
 
 #include "shared/xsd_types/xsd.h"
+#include "shared/xsd_types/lang_string.h"
 #include "shared/dsp_types/identifier.h"
+
 #include "agent.h"
 //#include "data_model.h"
 #include "subject.h"
@@ -105,13 +107,25 @@ class ClassObj: public ModelItem, public Subject {
   [[nodiscard]]
   inline xsd::LangString description() const { return description_; }
 
-  void label(const xsd::LangString &label);
+  void label(const xsd::LangString &label, const dsp::Identifier& modified_by);
+
+  void label_add(const xsd::Language& lang, const xsd::String& text, const dsp::Identifier& modified_by);
+
+  inline void label_add(const std::string& lang, const std::string& text, const dsp::Identifier& modified_by) {
+    label_add(xsd::Language(lang), xsd::String(text), modified_by);
+  }
+
+  void label_remove(const xsd::Language& lang, const dsp::Identifier& modified_by);
+
+  inline void label_remove(const std::string& lang, const dsp::Identifier& modified_by) {
+    label_remove(xsd::Language(lang), modified_by);
+  }
 
   void description(const xsd::LangString &description);
 
   bool operator==(const ClassObj &other);
 
-  virtual nlohmann::json to_json();
+  virtual nlohmann::json to_json() override ;
 
  protected:
   //dsp::Identifier id_;
@@ -122,9 +136,6 @@ class ClassObj: public ModelItem, public Subject {
   dsp::Identifier modified_by_;
   xsd::LangString label_;
   xsd::LangString description_;
-
-  //inline void data_model_id(const std::shared_ptr<DataModel> &in_data_model) { in_data_model_ = in_data_model; }
-
 };
 
 
