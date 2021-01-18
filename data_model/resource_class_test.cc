@@ -71,6 +71,8 @@ TEST_CASE("Resource class tests", "[catch2]") {
         xsd::LangString("en", "MyProperty-Label"),
         xsd::LangString("en", "MyProperty-Description"),
         my_resclass->id());
+    my_subresclass->label_add("fr", "MaProperté-Label", my_agent->id());
+
     nlohmann::json json_obj = my_subresclass->to_json();
 
 
@@ -80,6 +82,7 @@ TEST_CASE("Resource class tests", "[catch2]") {
 
     dsp::Identifier id(my_subresclass->id());
     dsp::Identifier subresclass_of(my_subresclass->sub_class_of_id());
+
     dsp::ModelItem::delete_item<dsp::ResourceClass>(my_subresclass);
     my_subresclass = dsp::ResourceClass::Factory(json_obj);
     REQUIRE(id == my_subresclass->id());

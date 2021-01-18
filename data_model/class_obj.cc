@@ -99,6 +99,10 @@ nlohmann::json ClassObj::to_json() {
       {"label", nlohmann::json (label_map)},
       {"description", nlohmann::json (description_map)}
   };
+  if (modified_by_ != dsp::Identifier::empty_identifier()) {
+    json_obj["last_modification_date"] = last_modification_date_;
+    json_obj["modified_by"] = modified_by_.to_string();
+  }
   return json_obj;
 }
 

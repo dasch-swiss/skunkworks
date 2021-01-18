@@ -79,7 +79,7 @@ class DateTime : public DataType {
   int day_;
   int hour_;
   int min_;
-  float second_;
+  double second_;
   int tz_sign_;
   int tz_hour_;
   int tz_min_;

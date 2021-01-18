@@ -40,6 +40,11 @@ class MyClassObj : public dsp::ClassObj {
     return tmp;
   }
 
+  void update(const dsp::Identifier agent_id) {
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
+  }
+
   nlohmann::json to_json() override {
     nlohmann::json json_obj = ClassObj::to_json();
     json_obj["type"] = "MyClassObj";
@@ -104,21 +109,24 @@ TEST_CASE("ClassObj", "Unit") {
   }
 
   SECTION("ClassObj JSON tests") {
+    my_class_obj->update(my_agent->id());
     nlohmann::json json_obj = my_class_obj->to_json();
     REQUIRE(json_obj["version"].get<int>() == 1);
     REQUIRE(json_obj["type"].get<std::string>() == "MyClassObj");
     REQUIRE(json_obj["id"].get<std::string>() == static_cast<std::string>(my_class_obj->id()));
     REQUIRE(json_obj["creation_date"].get<std::string>() == static_cast<std::string>(my_class_obj->creation_date()));
     REQUIRE(json_obj["created_by"].get<std::string>() == static_cast<std::string>(my_class_obj->created_by_id()));
+    REQUIRE(json_obj["last_modification_date"].get<std::string>() == static_cast<std::string>(my_class_obj->last_modification_date()));
+    REQUIRE(json_obj["modified_by"].get<std::string>() == static_cast<std::string>(my_class_obj->modified_by_id()));
     REQUIRE(json_obj["in_data_model"].get<std::string>() == static_cast<std::string>(my_class_obj->in_data_model_id()));
     REQUIRE(json_obj["label"]["en"] == "my_label"s);
     REQUIRE(json_obj["description"]["en"] == "my_description"s);
-    std::cerr << std::setw(4) << json_obj << std::endl;
     std::shared_ptr<MyClassObj> same = MyClassObj::Factory(json_obj);
-    std::cerr << std::setw(4) << same->to_json() << std::endl;
     REQUIRE(same->id() == my_class_obj->id());
     REQUIRE(same->creation_date() == my_class_obj->creation_date());
     REQUIRE(same->created_by_id() == my_class_obj->created_by_id());
+    REQUIRE(same->last_modification_date() == my_class_obj->last_modification_date());
+    REQUIRE(same->modified_by_id() == my_class_obj->modified_by_id());
     REQUIRE(same->in_data_model_id() == my_class_obj->in_data_model_id());
     REQUIRE(same->label() == my_class_obj->label());
     REQUIRE(same->description() == my_class_obj->description());

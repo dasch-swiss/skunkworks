@@ -18,7 +18,7 @@ class JsonMemKVStoreAdapter : public StoreAdapter  {
 
   inline ~JsonMemKVStoreAdapter() override = default;
 
-  void create(nlohmann::json& json_obj) override ;
+  void create(const dsp::Identifier& id, nlohmann::json& json_obj) override ;
 
   nlohmann::json read(const dsp::Identifier& id) override ;
 

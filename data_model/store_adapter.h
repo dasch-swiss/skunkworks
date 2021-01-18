@@ -16,7 +16,7 @@ class StoreAdapter {
   StoreAdapter() = default;
   virtual ~StoreAdapter() {};
 
-  virtual void create(nlohmann::json& obj) = 0;
+  virtual void create(const dsp::Identifier& id, nlohmann::json& obj) = 0;
 
   virtual nlohmann::json read(const dsp::Identifier& id) = 0;
 

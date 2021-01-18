@@ -194,7 +194,9 @@ DateTime::DateTime() {
   strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%S.", std::gmtime(&now_t));
   std::string nanoseconds = std::to_string((std::chrono::duration<long long, std::nano>(now.time_since_epoch() - seconds_since_epoch)).count());
 
-  std::string datetime_str = std::string(time_buf) + std::string(9-nanoseconds.length(),'0') + nanoseconds + "Z";
+  std::string datetime_str = std::string(time_buf) + std::string(9-nanoseconds.length(),'0') + nanoseconds;
+  datetime_str.erase (datetime_str.find_last_not_of('0') + 1, std::string::npos );
+  datetime_str += "Z";
 
   parse(datetime_str);
 }
@@ -256,7 +258,7 @@ bool DateTime::operator==(const DateTime &other) const {
 
   if (hour != ohour) return false;
   if (min != omin) return false;
-  return second_ == other.second_;
+  return (fabs(second_ - other.second_) < 1.0e-5); // accuracy of clock?????
 }
 
 bool DateTime::operator!=(const DateTime &other) const {
