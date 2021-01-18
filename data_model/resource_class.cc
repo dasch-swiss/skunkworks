@@ -85,21 +85,29 @@ nlohmann::json ResourceClass::to_json() {
 
 void ResourceClass::add_property(const dsp::Identifier &property_id,
                                  int min_count,
-                                 int max_count) {
+                                 int max_count,
+                                 const dsp::Identifier &agent_id) {
   try {
     HasProperty tmp = this->has_properties_.at(property_id);
   }
   catch (const std::out_of_range &err) {
+    PropertyPtr property = get_item<Property>(property_id);
+    if ((property->value_type() == ValueType::Boolean) && (max_count > 1)) {
+      throw Error(file_, __LINE__, "Boolean value may not have max_count > 1 !");
+    }
     HasProperty hp = {property_id, min_count, max_count};
     has_properties_[property_id] = hp;
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
     notify(ObserverAction::UPDATE, shared_from_this());
     return;
   } // TODO: Use C++20 with contains ASAP!
   throw Error(file_, __LINE__, "Property with same id already exists!");
 }
 
-void ResourceClass::change_min_count(const dsp::Identifier &property_id, int min_count) {
+void ResourceClass::change_min_count(const Identifier &property_id,int min_count, const Identifier &agent_id) {
   try {
+    PropertyPtr property = get_item<Property>(property_id);
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
     bool in_use = false;
@@ -113,14 +121,20 @@ void ResourceClass::change_min_count(const dsp::Identifier &property_id, int min
       tmp.min_count_ = min_count;
     }
     has_properties_[property_id] = tmp;
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
+    notify(ObserverAction::UPDATE, shared_from_this());
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
-  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
-void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max_count) {
+void ResourceClass::change_max_count(const Identifier &property_id, int max_count, const Identifier &agent_id) {
   try {
+    PropertyPtr property = get_item<Property>(property_id);
+    if ((property->value_type() == ValueType::Boolean) && (max_count > 1)) {
+      throw Error(file_, __LINE__, "Boolean value may not have max_count > 1 !");
+    }
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
     bool in_use = false;
@@ -134,13 +148,15 @@ void ResourceClass::change_max_count(const dsp::Identifier &property_id, int max
       tmp.max_count_ = max_count;
     }
     has_properties_[property_id] = tmp;
+    last_modification_date_ = xsd::DateTimeStamp();
+    modified_by_ = agent_id;
+    notify(ObserverAction::UPDATE, shared_from_this());
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
-  notify(ObserverAction::UPDATE, shared_from_this());
 }
 
-void ResourceClass::remove_property(const Identifier &property_id) {
+void ResourceClass::remove_property(const Identifier &property_id, const Identifier &agent_id) {
   try {
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
@@ -149,14 +165,14 @@ void ResourceClass::remove_property(const Identifier &property_id) {
       throw Error(file_, __LINE__, "Cannot remove property in use (id=" + property_id.to_string() + ")!");
     } else {
       has_properties_.erase(property_id);
+      last_modification_date_ = xsd::DateTimeStamp();
+      modified_by_ = agent_id;
     }
   } catch (const std::out_of_range &err) {
     throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
   }
   notify(ObserverAction::UPDATE, shared_from_this());
 }
-
-
 
 
 }

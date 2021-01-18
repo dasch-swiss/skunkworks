@@ -23,7 +23,7 @@ void InMemKVStore::create(const dsp::Identifier &id, const std::vector<uint8_t> 
 
 std::vector<uint8_t> InMemKVStore::read(const dsp::Identifier &id) {
   try {
-    return kvstore_[id];
+    return kvstore_.at(id);
   } catch (const std::out_of_range &err) {
     throw dsp::Error(file_, __LINE__, "InMemKVStore::read: Key " + static_cast<std::string>(id) + " does not exist in kvstore.");
   }

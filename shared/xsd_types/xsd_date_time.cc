@@ -2,6 +2,7 @@
 // Created by Lukas Rosenthaler on 26.11.20.
 //
 
+#include <chrono>
 #include <ctime>
 #include <cmath>
 #include <locale>
@@ -11,6 +12,8 @@
 static const char file_[] = __FILE__;
 
 namespace xsd {
+
+
 
 // m[0] : total match
 // m[1] : year
@@ -184,10 +187,16 @@ DateTime::DateTime() {
   tz_min_ = 0;
   xsd_type_ = "dateTime";
   char time_buf[21];
-  time_t now;
-  time(&now);
-  strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%SZ", gmtime(&now));
-  parse(time_buf);
+
+  auto now(std::chrono::system_clock::now());
+  auto seconds_since_epoch(std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()));
+  std::time_t now_t( std::chrono::system_clock::to_time_t(std::chrono::system_clock::time_point(seconds_since_epoch)));
+  strftime(time_buf, 21, "%Y-%m-%dT%H:%M:%S.", std::gmtime(&now_t));
+  std::string nanoseconds = std::to_string((std::chrono::duration<long long, std::nano>(now.time_since_epoch() - seconds_since_epoch)).count());
+
+  std::string datetime_str = std::string(time_buf) + std::string(9-nanoseconds.length(),'0') + nanoseconds + "Z";
+
+  parse(datetime_str);
 }
 //=====================================================================
 

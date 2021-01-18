@@ -22,6 +22,7 @@ ClassObj::ClassObj(
 )  : created_by_(created_by), in_data_model_(in_data_model), label_(label), description_(description) {
   id_ = dsp::Identifier();
   creation_date_ = xsd::DateTimeStamp(); // current timestamp
+  modified_by_ = Identifier::empty_identifier();
 }
 
 ClassObj::ClassObj(const nlohmann::json &json_obj) {
