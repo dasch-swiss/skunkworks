@@ -115,7 +115,7 @@ class DataModel : public ModelItem, public Subject {
    * @param agent_id
    * @return
    */
-  std::optional<ResourceClassPtr> remove_resource_class(const Identifier &resource_class_id, const Identifier& agent_id);
+  void remove_resource_class(const Identifier &resource_class_id, const Identifier& agent_id);
 
   /*!
    * Remove a resource class from the data model
@@ -123,8 +123,8 @@ class DataModel : public ModelItem, public Subject {
    * @param agent_id
    * @return
    */
-  inline std::optional<ResourceClassPtr> remove_resource_class(const ResourceClassPtr &resource_class, const Identifier& agent_id) {
-    return remove_resource_class(resource_class->id(), agent_id);
+  inline void remove_resource_class(const ResourceClassPtr &resource_class, const Identifier& agent_id) {
+    remove_resource_class(resource_class->id(), agent_id);
   }
 
   /*!
@@ -133,8 +133,8 @@ class DataModel : public ModelItem, public Subject {
    * @param agent
    * @return
    */
-  inline std::optional<ResourceClassPtr> remove_resource_class(const Identifier &resource_class_id, const AgentPtr& agent) {
-    return remove_resource_class(resource_class_id, agent->id());
+  inline void remove_resource_class(const Identifier &resource_class_id, const AgentPtr& agent) {
+    remove_resource_class(resource_class_id, agent->id());
   }
 
   /*!
@@ -143,8 +143,8 @@ class DataModel : public ModelItem, public Subject {
    * @param agent
    * @return
    */
-  inline std::optional<ResourceClassPtr> remove_resource_class(const ResourceClassPtr &resource_class, const AgentPtr& agent) {
-    return remove_resource_class(resource_class->id(), agent->id());
+  inline void remove_resource_class(const ResourceClassPtr &resource_class, const AgentPtr& agent) {
+    remove_resource_class(resource_class->id(), agent->id());
   }
 
   std::unordered_set<dsp::Identifier> get_resource_class_ids() { return resource_classes_; }
@@ -197,18 +197,18 @@ class DataModel : public ModelItem, public Subject {
    * @param agent_id
    * @return
    */
-  std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id, const dsp::Identifier& agent_id);
+  void remove_property(const dsp::Identifier &property_id, const dsp::Identifier& agent_id);
 
-  inline std::optional<PropertyPtr> remove_property(const PropertyPtr& property, const dsp::Identifier& agent_id) {
-    return remove_property(property->id(), agent_id);
+  inline void remove_property(const PropertyPtr& property, const dsp::Identifier& agent_id) {
+    remove_property(property->id(), agent_id);
   }
 
-  inline std::optional<PropertyPtr> remove_property(const dsp::Identifier &property_id, const AgentPtr& agent) {
-    return remove_property(property_id, agent->id());
+  inline void remove_property(const dsp::Identifier &property_id, const AgentPtr& agent) {
+    remove_property(property_id, agent->id());
   }
 
-  inline std::optional<PropertyPtr> remove_property(const PropertyPtr& property, const AgentPtr & agent) {
-    return remove_property(property->id(), agent->id());
+  inline void remove_property(const PropertyPtr& property, const AgentPtr & agent) {
+    remove_property(property->id(), agent->id());
   }
 
   /*!

@@ -6,6 +6,7 @@
 
 #include <string>
 #include <memory>
+#include <variant>
 
 #include "subject.h"
 #include "class_obj.h"
@@ -56,6 +57,7 @@ class DataModel;
 class Property : public ClassObj {
  public:
 
+/*
   static std::shared_ptr<Property> Factory(
       const dsp::Identifier& created_by,
       const xsd::LangString &label,
@@ -63,8 +65,8 @@ class Property : public ClassObj {
       ValueType value_type,
       const dsp::Identifier& sub_property_of = dsp::Identifier::empty_identifier(),
       std::shared_ptr<Observer> obs = {});
-
-  static std::shared_ptr<Property> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
+*/
+  void remove(dsp::Identifier agent_id, std::shared_ptr<Observer> obs = {});
 
   inline ~Property() override {  }
 
@@ -87,7 +89,7 @@ class Property : public ClassObj {
 
   inline std::string to_string() override { return "gaga"s; }
 
- private:
+ protected:
   Property(
       const dsp::Identifier& created_by,
       const xsd::LangString &label,
@@ -97,8 +99,13 @@ class Property : public ClassObj {
 
   explicit Property(const nlohmann::json& json_obj);
 
+  static std::shared_ptr<Property> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
+
   ValueType value_type_;
+
+ private:
   dsp::Identifier sub_property_of_;
+  dsp::Identifier reference_to_; // ID of ResourceClass if LinkValue, ID of List, if ListValue
 
 };
 

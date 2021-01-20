@@ -85,9 +85,9 @@ class ModelItem : public std::enable_shared_from_this<ModelItem> {
    * @param item
    */
   template<typename T>
-  inline static void delete_item(std::shared_ptr<T> &item) {
+  inline static void delete_item(std::shared_ptr<ModelItem> item) {
     item->remove_item();
-    item.reset();
+    //item.reset();
   }
 
   /*!

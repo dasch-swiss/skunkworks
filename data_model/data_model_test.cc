@@ -12,6 +12,7 @@
 #include "project.h"
 #include "agent.h"
 #include "data_model.h"
+#include "all_properties.h"
 
 using namespace std::string_literals;
 
@@ -128,11 +129,10 @@ TEST_CASE("Data model tests", "[catch2|") {
         obs1);
     REQUIRE(obs1->value() == "CREATE"s);
 
-    dsp::PropertyPtr my_property = dsp::Property::Factory(
+    dsp::PropertyPtr my_property = dsp::SimpleTextProperty::Factory(
         my_agent->id(),
         xsd::LangString("en", "MyProperty-Label"),
         xsd::LangString("en", "MyProperty-Description"),
-        dsp::ValueType::SimpleText,
         dsp::Identifier::empty_identifier(),
         obs2);
     REQUIRE(obs2->value() == "CREATE"s);
@@ -180,11 +180,10 @@ TEST_CASE("Data model tests", "[catch2|") {
 
     INFO("Adding and removing properties with subproperties");
     my_data_model->add_property(my_property, my_agent);
-    dsp::PropertyPtr my_subproperty = dsp::Property::Factory(
+    dsp::PropertyPtr my_subproperty = dsp::SimpleTextProperty::Factory(
         my_agent->id(),
         xsd::LangString("en", "MyProperty-Label"),
         xsd::LangString("en", "MyProperty-Description"),
-        dsp::ValueType::SimpleText,
         my_property->id(),
         obs3);
     REQUIRE(obs3->value() == "CREATE"s);

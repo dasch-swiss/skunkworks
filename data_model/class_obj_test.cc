@@ -134,7 +134,7 @@ TEST_CASE("ClassObj", "Unit") {
 
   SECTION("ClassObj unit tests with observer") {
     std::shared_ptr<MyObserver> observer(new MyObserver());
-    dsp::ModelItem::delete_item(my_class_obj);
+    dsp::ModelItem::delete_item<MyClassObj>(my_class_obj);
     my_class_obj = MyClassObj::Factory(
         my_agent->id(),
         my_data_model->id(),

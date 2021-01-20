@@ -17,7 +17,7 @@
 #include "project.h"
 #include "agent.h"
 #include "data_model.h"
-#include "property.h"
+#include "all_properties.h"
 
 using namespace std::string_literals;
 
@@ -95,17 +95,15 @@ TEST_CASE("Resource class tests", "[catch2]") {
         xsd::LangString("en", "MyResclass-Label"),
         xsd::LangString("en", "MyResclass-Description"));
     REQUIRE(my_resclass->modified_by_id() == dsp::Identifier::empty_identifier());
-    dsp::PropertyPtr my_property1 = dsp::Property::Factory(
+    dsp::PropertyPtr my_property1 = dsp::SimpleTextProperty::Factory(
         my_agent->id(),
         xsd::LangString("en", "MyProperty1-Label"),
-        xsd::LangString("en", "MyProperty1-Description"),
-        dsp::ValueType::SimpleText);
+        xsd::LangString("en", "MyProperty1-Description"));
 
-    dsp::PropertyPtr my_property2 = dsp::Property::Factory(
+    dsp::PropertyPtr my_property2 = dsp::BooleanProperty::Factory(
         my_agent->id(),
         xsd::LangString("en", "MyProperty1-Label"),
-        xsd::LangString("en", "MyProperty1-Description"),
-        dsp::ValueType::Boolean);
+        xsd::LangString("en", "MyProperty1-Description"));
 
     my_resclass->add_property(my_property1, 0, dsp::ResourceClass::HasProperty::unlimited, my_agent);
     REQUIRE(my_resclass->modified_by_id() == my_agent->id());

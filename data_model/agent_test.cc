@@ -57,6 +57,7 @@ TEST_CASE("Agent", "Unit") {
     dsp::Identifier id = my_agent->id();
     dsp::Shortname shortname = my_agent->shortname();
     dsp::ModelItem::delete_item<dsp::Agent>(my_agent);
+    my_agent.reset();
     REQUIRE(dsp::ModelItem::size() == 0);
 
     REQUIRE(my_agent == nullptr);

@@ -114,7 +114,7 @@ TEST_CASE("Project", "Unit") {
     xsd::DateTimeStamp last_modification_date(my_project->last_modification_date());
     dsp::Shortcode shortcode(my_project->shortcode());
     dsp::Shortname shortname(my_project->shortname());
-    dsp::ModelItem::delete_item(my_project);
+    dsp::ModelItem::delete_item<dsp::Project>(my_project);
     my_project = dsp::Project::Factory(json_obj, observer1);
     REQUIRE(observer1->value() == "CREATE"s);
     REQUIRE(id == my_project->id());

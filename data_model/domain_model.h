@@ -45,7 +45,6 @@ class DomainModel {
 
  private:
   std::shared_ptr<StoreAdapter> store_adapter_;
-  // std::unordered_map<dsp::Identifier, std::shared_ptr<ModelItem>> items_;
 };
 
 }

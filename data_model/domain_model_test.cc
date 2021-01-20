@@ -17,7 +17,7 @@
 #include "agent.h"
 #include "data_model.h"
 #include "resource_class.h"
-#include "property.h"
+#include "all_properties.h"
 #include "domain_model.h"
 #include "observer.h"
 #include "in_mem_kv_store.h"
@@ -73,18 +73,16 @@ TEST_CASE("Data model tests", "[catch2|") {
       obs1);
   my_data_model->add_resource_class(my_resclass_1->id(), my_agent);
 
-  dsp::PropertyPtr my_prop1 = dsp::Property::Factory(my_agent->id(),
+  dsp::PropertyPtr my_prop1 = dsp::SimpleTextProperty::Factory(my_agent->id(),
                                                      xsd::LangString("en", "MyProperty1"),
                                                      xsd::LangString("en", "My Property 1..."),
-                                                     dsp::ValueType::SimpleText,
                                                      dsp::Identifier::empty_identifier(),
                                                      obs1);
   my_data_model->add_property(my_prop1->id(), my_agent);
 
-  dsp::PropertyPtr my_prop2 = dsp::Property::Factory(my_agent->id(),
+  dsp::PropertyPtr my_prop2 = dsp::SimpleTextProperty::Factory(my_agent->id(),
                                                      xsd::LangString("en", "MyProperty2"),
                                                      xsd::LangString("en", "My Property 2..."),
-                                                     dsp::ValueType::SimpleText,
                                                      dsp::Identifier::empty_identifier(),
                                                      obs1);
   my_data_model->add_property(my_prop2->id(), my_agent);
@@ -190,7 +188,7 @@ TEST_CASE("Data model tests", "[catch2|") {
   }
   SECTION("Reread properties and resclasses") {
     for (const auto& prop_id: same_data_model->get_property_ids()) {
-      dsp::PropertyPtr same_prop = model->read<dsp::Property>(prop_id);
+      dsp::PropertyPtr same_prop = model->read<dsp::SimpleTextProperty>(prop_id);
       if (same_prop->id() == my_prop1_id) {
         REQUIRE(same_prop->value_type() == my_prop1_value_type);
         REQUIRE(same_prop->id() == my_prop1_id);

@@ -53,7 +53,8 @@ TEST_CASE("ModelItem", "Unit") {
 
   SECTION("Internal bookkeeping") {
     REQUIRE(dsp::ModelItem::size() == 1);
-    dsp::ModelItem::delete_item(my_item);
+    dsp::ModelItem::delete_item<MyModelItem>(my_item);
+    my_item.reset();
     REQUIRE(dsp::ModelItem::size() == 0);
     REQUIRE(my_item == nullptr);
   }
