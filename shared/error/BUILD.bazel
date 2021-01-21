@@ -10,4 +10,17 @@ cc_library(
     hdrs = [
         "error.h",
     ],
+    deps = [
+        "@fmt//:fmt",
+    ]
+)
+
+cc_test(
+  name = "error_test",
+  srcs = ["error_test.cc"],
+  deps = [
+      "@fmt//:fmt",
+      "@catch2//:catch2_with_main",
+      "//shared/error",
+  ],
 )

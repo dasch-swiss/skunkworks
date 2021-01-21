@@ -137,6 +137,15 @@ http_archive(
     sha256 = "94c634d499558a76fa649edb13721dce6e98fb1e7018dfaeba3cd7a083945e91",
 )
 
+# fmt library for C++
+http_archive(
+    name = "fmt",
+    build_file = "@//third_party:fmt.BUILD",
+    strip_prefix = "fmt-7.1.3",
+    url = "https://github.com/fmtlib/fmt/releases/download/7.1.3/fmt-7.1.3.zip",
+    sha256 = "5d98c504d0205f912e22449ecdea776b78ce0bb096927334f80781e720084c9f"
+)
+
 all_and_magic_files = """
 filegroup(name = "all", srcs = glob(["**"]), visibility = ["//visibility:public"])
 filegroup(name = "magic_files", srcs = glob(["magic/Magdir/**"]), visibility = ["//visibility:public"])

@@ -11,6 +11,7 @@
 #include "project.h"
 #include "resource_class.h"
 #include "data_model.h"
+#include "all_properties.h"
 
 static const char file_[] = __FILE__;
 
@@ -127,6 +128,20 @@ void DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, 
     ResourceClassPtr r = ModelItem::get_item<ResourceClass>(rc_id);
     if (r->sub_class_of_id() == resource_class_id)
       throw Error(file_, __LINE__, "ResourceClass to be removed is super class of another!");
+  }
+  //
+  // Check if resource class is referenced by some property in the project (ToDo:: search all data models of project)
+  //
+  for (const auto& prop_id: properties_) {
+    PropertyPtr property_ptr = ModelItem::get_item<Property>(prop_id);
+    if (property_ptr->value_type() == ValueType::Link) {
+      LinkPropertyPtr link_property_ptr = std::dynamic_pointer_cast<LinkProperty>(property_ptr);
+      if (link_property_ptr != nullptr) {
+        if (link_property_ptr->to_resource_class_id() == resource_class_id) {
+          throw Error(file_, __LINE__, "ResourceClass is referenced by LinkValue property!");
+        }
+      }
+    }
   }
 
   resource_classes_.erase(resource_class_id);
