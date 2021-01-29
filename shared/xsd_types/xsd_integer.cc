@@ -11,9 +11,7 @@ static const char file_[] = __FILE__;
 namespace xsd {
 
 
-Integer::Integer(const std::string &strval) {
-  xsd_type_ = "integer";
-  val_ = 0;
+Integer::Integer(const std::string &strval) : Integer() {
   parse(strval);
 }
 
@@ -53,12 +51,7 @@ Integer &Integer::operator=(int64_t val) {
   return *this;
 }
 
-bool Integer::operator==(const Integer &other) const  {
-  return val_ == other.val_;
-}
-
 void Integer::parse(const std::string &strval) {
-  val_ = 0;
   if (std::regex_match(strval, std::regex("([ ]*)(\\+|\\-)?([0-9]+)([ ]*)"))) {
     val_ = std::stoll(strval);
   } else {

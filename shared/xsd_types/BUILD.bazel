@@ -53,3 +53,11 @@ cc_library(
     ],
 )
 
+cc_test(
+  name = "xsd_integer_test",
+  srcs = ["xsd_integer_test.cc"],
+  deps = [
+      ":xsd_types",
+      "@catch2//:catch2_with_main",
+  ],
+)

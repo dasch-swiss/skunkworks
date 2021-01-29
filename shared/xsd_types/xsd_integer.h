@@ -42,7 +42,7 @@ class Integer : public DataType {
   }
 
   /*!
-   * Constructor with string parameter
+   * Constructor with string parameter // Example: xsd::Integer gaga("42");
    * @param val
    */
   explicit Integer(const std::string &val);
@@ -84,7 +84,7 @@ class Integer : public DataType {
   inline Integer(const std::string &val, const std::vector<std::shared_ptr<Restriction>> &restrictions);
 
   /*!
-   * Conversion to int64_t
+   * Conversion to int64_t  // int64_t ival = static_cast<int64_t>(xsd_int);
    * @return
    */
   inline explicit operator int64_t () const { return val_; }
@@ -93,7 +93,7 @@ class Integer : public DataType {
 
   Integer &operator=(int64_t val);
 
-  bool operator==(const Integer &other) const ;
+  inline bool operator==(const Integer &other) const { return val_ == other.val_; }
 
   /*!
    * Getter for value as int64_t
