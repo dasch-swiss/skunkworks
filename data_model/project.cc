@@ -75,16 +75,25 @@ Project::Project(const nlohmann::json& json_obj) : ModelItem() {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "Project")) {
     if (json_obj.contains("id")) {
       id_ = dsp::Identifier(json_obj["id"].get<std::string>());
-      if (!json_obj.contains("creation_date")) throw Error(file_, __LINE__, R"("Project" has no "creation_date")");
+
+      if (!json_obj.contains("creation_date"))
+        throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) has no "creation_date")",
+            shortname_.to_string(), static_cast<std::string>(shortcode_)));
       creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"].get<std::string>());
 
-      if (!json_obj.contains("created_by")) throw Error(file_, __LINE__, R"("Project" has no "created_by")");
+      if (!json_obj.contains("created_by"))
+        throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) has no "created_by")",
+            shortname_.to_string(), static_cast<std::string>(shortcode_)));
       created_by_ = dsp::Identifier(json_obj["created_by"].get<std::string>());
 
-      if (!json_obj.contains("shortcode")) throw Error(file_, __LINE__, R"("Project" has no "shortcode")");
+      if (!json_obj.contains("shortcode"))
+        throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) has no "shortcode")",
+            shortname_.to_string(), static_cast<std::string>(shortcode_)));
       shortcode_ = json_obj["shortcode"].get<std::string>();
 
-      if (!json_obj.contains("shortname")) throw Error(file_, __LINE__, R"("Project" has no "shortname")");
+      if (!json_obj.contains("shortname"))
+        throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) has no "shortname")",
+            shortname_.to_string(), static_cast<std::string>(shortcode_)));
       shortname_ = json_obj["shortname"].get<std::string>();
 
       std::vector<std::string> data_model_ids = json_obj["data_models"];
@@ -96,17 +105,20 @@ Project::Project(const nlohmann::json& json_obj) : ModelItem() {
           modified_by_ = dsp::Identifier(json_obj["modified_by"].get<std::string>());
       }
     } else{
-      throw Error(file_, __LINE__, R"("Project" serialization has no "id".)");
+      throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({})  serialization has no "id".)"s,
+          shortname_.to_string(), static_cast<std::string>(shortcode_)));
     }
   } else {
-    throw Error(file_, __LINE__, R"("Object" serialization not consistent.)");
+    throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) serialization not consistent.)",
+        shortname_.to_string(), static_cast<std::string>(shortcode_)));
   }
 }
 
 std::shared_ptr<Project> Project::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<Project> tmp(new Project(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
-    throw Error(file_, __LINE__, R"("Project" with same "id" already exists!)");
+    throw Error(file_, __LINE__, fmt::format(R"(Project "{}" ({}) with same id={} already exists!)",
+        tmp->shortname().to_string(), static_cast<std::string>(tmp->shortcode()), tmp->id().to_string()));
   }
   if (obs) tmp->attach(obs);
   tmp->add_item<Project>();
@@ -120,9 +132,8 @@ Project::~Project() {
 
 void Project::add_data_model(const dsp::Identifier &data_model_id, const dsp::Identifier& modified_by) {
   if (data_models_.find(data_model_id) != data_models_.end()) {
-    throw Error(file_,
-                __LINE__,
-                R"(Data model already assigned to project "")" + static_cast<std::string>(shortcode_) + R"(".)");
+    throw Error(file_, __LINE__,fmt::format(R"(Data model with id={} already assigned to project "{}" ({}))",
+        data_model_id.to_string(), shortname_.to_string(), static_cast<std::string>(shortcode_)));
   }
   data_models_.insert(data_model_id);
   std::shared_ptr<DataModel> tmp = get_item<DataModel>(data_model_id);

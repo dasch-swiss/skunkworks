@@ -10,34 +10,27 @@
 #include <exception>
 #include <stdexcept>
 
+#include "fmt/core.h"
+#include "fmt/format.h"
+
 namespace dsp {
 
 class Error : public std::runtime_error {
  protected:
-  int line;            //!< Linenumber where the exception has been throwns
-  std::string file;    //!< Name of source code file where the exception has been thrown
-  std::string message; //!< Description of the problem
-  int sysErrno;        //!< If there is a system error number
+  int line_;            //!< Linenumber where the exception has been throwns
+  std::string file_;    //!< Name of source code file where the exception has been thrown
+  std::string message_; //!< Description of the problem
+  int sys_errno_;        //!< If there is a system error number
 
  public:
 
-  inline int getLine(void) const { return line; }
+  inline int getLine(void) const { return line_; }
 
-  inline std::string getFile(void) const { return file; }
+  inline std::string getFile(void) const { return file_; }
 
-  inline std::string getMessage(void) const { return message; }
+  inline std::string getMessage(void) const { return message_; }
 
-  inline int getSysErrno(void) const { return sysErrno; }
-
-  /*!
-  * Constructor with all (char *) strings
-  *
-  * \param[in] file The filename, usually the __FILE__ macro.
-  * \param[in] line The source code line, usually the __LINE__ macro.
-  * \param[in] msg The message describing the error.
-  * \param[in] errno_p Retrieve and display the system error message from errno.
-  */
-  Error(const char *file, const int line, const char *msg, int errno_p = 0);
+  inline int getSysErrno(void) const { return sys_errno_; }
 
   /*!
   * Constructor with std::string strings for the message. The file parameter is
@@ -49,9 +42,10 @@ class Error : public std::runtime_error {
   * \param[in] msg The message describing the error.
   * \param[in] syserr Retrieve and display the system error message from errno.
   */
-  Error(const char *file, const int line, const std::string &msg, int errno_p = 0);
+  Error(const char *file, int line, const std::string msg, int errno = 0);
 
   inline ~Error() throw() {};
+
 
   /*!
    * Returns the error as a one-line string

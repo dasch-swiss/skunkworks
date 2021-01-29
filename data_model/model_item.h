@@ -13,6 +13,8 @@
 #include "shared/error/error.h"
 #include "shared/dsp_types/identifier.h"
 
+using namespace std::string_literals;
+
 namespace dsp {
 
 class ModelItem : public std::enable_shared_from_this<ModelItem> {
@@ -75,7 +77,7 @@ class ModelItem : public std::enable_shared_from_this<ModelItem> {
     try {
       return std::dynamic_pointer_cast<T>(items_.at(id));
     } catch(const std::out_of_range &err) {
-      throw Error(__FILE__, __LINE__, "Item not found in map! " + id.to_string());
+      throw Error(__FILE__, __LINE__, fmt::format(R"(Item with id="{}" not found in map!)"s, id.to_string()));
     }
   }
 

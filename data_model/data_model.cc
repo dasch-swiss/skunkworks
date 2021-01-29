@@ -40,16 +40,20 @@ DataModel::DataModel(const nlohmann::json& json_obj) {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type") && (json_obj["type"] == "DataModel")) {
     if (json_obj.contains("id")) {
       id_ = dsp::Identifier(json_obj["id"].get<std::string>());
-      if (!json_obj.contains("creation_date")) throw Error(file_, __LINE__, R"("DataModel" has no "creation_date")");
+      if (!json_obj.contains("creation_date")) throw Error(file_, __LINE__,
+          fmt::format(R"(DataModel with id="{}" has no "creation_date")"s, id_.to_string()));
       creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"].get<std::string>());
 
-      if (!json_obj.contains("created_by")) throw Error(file_, __LINE__, R"("DataModel" has no "created_by")");
+      if (!json_obj.contains("created_by")) throw Error(file_, __LINE__,
+          fmt::format(R"(DataModel with id="{}" has no "created_by")"s, id_.to_string()));
       created_by_ = dsp::Identifier(json_obj["created_by"].get<std::string>());
 
-      if (!json_obj.contains("shortname")) throw Error(file_, __LINE__, R"("DataModel" has no "shortname")");
+      if (!json_obj.contains("shortname")) throw Error(file_, __LINE__,
+          fmt::format(R"(DataModel with id="{}" has no "shortname")"s, id_.to_string()));
       shortname_ = json_obj["shortname"].get<std::string>();
 
-      if (!json_obj.contains("project")) throw Error(file_, __LINE__, R"("DataModel" has no "project")");
+      if (!json_obj.contains("project")) throw Error(file_, __LINE__,
+          fmt::format(R"(DataModel with id="{}" has no "project")"s, id_.to_string()));
       project_ = dsp::Identifier(json_obj["project"].get<std::string>());
 
       std::vector<std::string> resource_class_ids = json_obj["resource_classes"];
@@ -63,17 +67,18 @@ DataModel::DataModel(const nlohmann::json& json_obj) {
         modified_by_ = dsp::Identifier(json_obj["modified_by"]);
       }
     } else{
-      throw Error(file_, __LINE__, R"("DataModel" serialization has no "id".)");
+      throw Error(file_, __LINE__, R"(DataModel serialization has no "id".)"s);
     }
   } else{
-    throw Error(file_, __LINE__, R"("DataModel" serialization not consistent.)");
+    throw Error(file_, __LINE__, R"(DataModel serialization is not consistent.)"s);
   }
 }
 
 std::shared_ptr<DataModel> DataModel::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<DataModel> tmp(new DataModel(json_obj));
   if (ModelItem::item_exists(tmp->id())) { //
-    throw Error(file_, __LINE__, R"("DataModel" with same "id" already exists!)");
+    throw Error(file_, __LINE__,
+        fmt::format(R"(DataModel with same id="{}" already exists!)"s, tmp->id().to_string()));
   }
   if (obs) tmp->attach(obs);
   tmp->add_item<DataModel>();
@@ -88,9 +93,9 @@ std::shared_ptr<Project> DataModel::project() const {
 
 void DataModel::add_resource_class(const Identifier &resource_class_id, const Identifier& agent_id) {
   if (resource_classes_.find(resource_class_id) != resource_classes_.end()) {
-    throw Error(file_,
-                __LINE__,
-                R"(Data model already assigned to project "")" + static_cast<std::string>(shortname_) + R"(".)");
+    throw Error(file_, __LINE__,
+        fmt::format(R"(ResourceClass width id="{}" already assigned to data model "{}" ({}))"s,
+            resource_class_id.to_string(), shortname_.to_string(), id_.to_string()));
   }
   resource_classes_.insert(resource_class_id);
   last_modification_date_ = xsd::DateTimeStamp();
@@ -118,7 +123,8 @@ void DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, 
   //
   auto res = resource_classes_.find(resource_class_id);
   if (res == resource_classes_.end()) {
-    throw Error(file_, __LINE__, "Resource class is not in data model!");
+    throw Error(file_, __LINE__, fmt::format(R"(Resource class with id="{}" is not in data model "{}"!)",
+        resource_class_id.to_string(), shortname_.to_string()));
   }
   //
   // Check if resource class is super class of another resource class
@@ -127,7 +133,8 @@ void DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, 
   for (const auto& rc_id: resource_classes_) {
     ResourceClassPtr r = ModelItem::get_item<ResourceClass>(rc_id);
     if (r->sub_class_of_id() == resource_class_id)
-      throw Error(file_, __LINE__, "ResourceClass to be removed is super class of another!");
+      throw Error(file_, __LINE__, fmt::format(R"(ResourceClass "{}" to be removed from data model "{}" is super class of "{}"!)"s,
+          static_cast<std::string>(resource_class_ptr->label().get("en")) , shortname_.to_string(), static_cast<std::string>(r->label().get("en"))));
   }
   //
   // Check if resource class is referenced by some property in the project (ToDo:: search all data models of project)
@@ -138,7 +145,9 @@ void DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, 
       LinkPropertyPtr link_property_ptr = std::dynamic_pointer_cast<LinkProperty>(property_ptr);
       if (link_property_ptr != nullptr) {
         if (link_property_ptr->to_resource_class_id() == resource_class_id) {
-          throw Error(file_, __LINE__, "ResourceClass is referenced by LinkValue property!");
+          throw Error(file_, __LINE__,
+              fmt::format(R"(ResourceClass "{}" is referenced by LinkValue "{}"!)"s,
+                          static_cast<std::string>(resource_class_ptr->label().get("en")), static_cast<std::string>(link_property_ptr->label().get("en"))));
         }
       }
     }
@@ -156,9 +165,9 @@ void DataModel::remove_resource_class(const dsp::Identifier &resource_class_id, 
 
 void DataModel::add_property(const dsp::Identifier& property_id, const dsp::Identifier &agent_id) {
   if (properties_.find(property_id) != properties_.end()) {
-    throw Error(file_,
-                __LINE__,
-                R"(Property already assigned to data model "")" + static_cast<std::string>(shortname_) + R"(".)");
+    throw Error(file_, __LINE__,
+        fmt::format(R"(Property with id="{}" already assigned to data model "{}")"s,
+            property_id.to_string(), shortname_.to_string()));
   }
   properties_.insert(property_id);
   last_modification_date_ = xsd::DateTimeStamp();
@@ -186,7 +195,9 @@ void DataModel::remove_property(const dsp::Identifier &property_id, const dsp::I
   //
   auto prop = properties_.find(property_id);
   if (prop == properties_.end()) {
-    throw Error(file_, __LINE__, "Property is not in data model!");
+    throw Error(file_, __LINE__,
+        fmt::format(R"(Property with id="{}" is not in data model "{}"!)"s,
+            property_id.to_string(), shortname_.to_string()));
   }
   PropertyPtr property = get_item<Property>(property_id);
   //
@@ -195,7 +206,9 @@ void DataModel::remove_property(const dsp::Identifier &property_id, const dsp::I
   for (const auto& prop_id: properties_) {
     PropertyPtr p = dsp::ModelItem::get_item<Property>(prop_id);
     if (p->sub_property_of_id() == property_id) {
-      throw Error(file_, __LINE__, R"("remove_property" failed: Property is referenced as superproperty.)");
+      throw Error(file_, __LINE__,
+          fmt::format(R"(Property "{}" is referenced as superproperty by "{}"!)"s,
+                      static_cast<std::string>(property->label().get("en")), static_cast<std::string>(p->label().get("en"))));
     }
   }
   //
@@ -204,7 +217,9 @@ void DataModel::remove_property(const dsp::Identifier &property_id, const dsp::I
   for (const auto& res_id: resource_classes_) {
     ResourceClassPtr resclass = dsp::ModelItem::get_item<ResourceClass>(res_id);
     if (resclass->has_properties_.find(property_id) != resclass->has_properties_.end()) {
-      throw Error(file_, __LINE__, R"("remove_property" failed: Property is referenced in ResourceClass.)");
+      throw Error(file_, __LINE__,
+          fmt::format(R"(Property "{}" is referenced in ResourceClass.)"s,
+                      static_cast<std::string>(property->label().get("en")), static_cast<std::string>(resclass->label().get("en"))));
     }
   }
   properties_.erase(property_id);

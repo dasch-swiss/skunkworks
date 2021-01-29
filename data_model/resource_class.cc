@@ -59,7 +59,8 @@ ResourceClass::ResourceClass(const nlohmann::json& json_obj) : ClassObj(json_obj
 std::shared_ptr<ResourceClass> ResourceClass::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<ResourceClass> tmp(new ResourceClass(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
-    throw Error(file_, __LINE__, R"("ResourceClass" with same "id" already exists!)");
+    throw Error(file_, __LINE__, fmt::format(R"(ResourceClass "{}" with same id="{}" already exists!)"s,
+        static_cast<std::string>(tmp->label().get("en")),  tmp->id().to_string()));
   }
   if (obs) tmp->attach(obs);
   tmp->add_item<ResourceClass>();
@@ -93,7 +94,8 @@ void ResourceClass::add_property(const dsp::Identifier &property_id,
   catch (const std::out_of_range &err) {
     PropertyPtr property = get_item<Property>(property_id);
     if ((property->value_type() == ValueType::Boolean) && (max_count > 1)) {
-      throw Error(file_, __LINE__, "Boolean value may not have max_count > 1 !");
+      throw Error(file_, __LINE__, fmt::format(R"(Boolean (property="{}") value may not have max_count > 1 !)"s,
+          static_cast<std::string>(property->label().get("en"))));
     }
     HasProperty hp = {property_id, min_count, max_count};
     has_properties_[property_id] = hp;
@@ -115,7 +117,7 @@ void ResourceClass::change_min_count(const Identifier &property_id,int min_count
       if (min_count <= tmp.min_count_) {
         tmp.min_count_ = min_count;
       } else {
-        throw Error(file_, __LINE__, "Cannot make min_count more restrictive for property in use (id=" + property_id.to_string() + ")!");
+        throw Error(file_, __LINE__, fmt::format(R"(Cannot make min_count more restrictive for property in use (id="{}"!)"s, property_id.to_string()));
       }
     } else {
       tmp.min_count_ = min_count;
@@ -125,7 +127,7 @@ void ResourceClass::change_min_count(const Identifier &property_id,int min_count
     modified_by_ = agent_id;
     notify(ObserverAction::UPDATE, shared_from_this());
   } catch (const std::out_of_range &err) {
-    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
+    throw Error(file_, __LINE__, fmt::format(R"(Property with id="{}" does not exist!)"s, property_id.to_string()));
   }
 }
 
@@ -133,7 +135,8 @@ void ResourceClass::change_max_count(const Identifier &property_id, int max_coun
   try {
     PropertyPtr property = get_item<Property>(property_id);
     if ((property->value_type() == ValueType::Boolean) && (max_count > 1)) {
-      throw Error(file_, __LINE__, "Boolean value may not have max_count > 1 !");
+      throw Error(file_, __LINE__, fmt::format(R"(Boolean (property="{}") value may not have max_count > 1 !)"s,
+                                               static_cast<std::string>(property->label().get("en"))));
     }
     HasProperty tmp = has_properties_.at(property_id);
     // ToDo: Check if property is in use.
@@ -152,7 +155,7 @@ void ResourceClass::change_max_count(const Identifier &property_id, int max_coun
     modified_by_ = agent_id;
     notify(ObserverAction::UPDATE, shared_from_this());
   } catch (const std::out_of_range &err) {
-    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
+    throw Error(file_, __LINE__, fmt::format(R"(Property with id="{}" does not exist!)"s, property_id.to_string()));
   }
 }
 
@@ -169,7 +172,7 @@ void ResourceClass::remove_property(const Identifier &property_id, const Identif
       modified_by_ = agent_id;
     }
   } catch (const std::out_of_range &err) {
-    throw Error(file_, __LINE__, "Property with id=" + property_id.to_string() + " does not exist!");
+    throw Error(file_, __LINE__, fmt::format(R"(Property with id="{}" does not exist!)"s, property_id.to_string()));
   }
   notify(ObserverAction::UPDATE, shared_from_this());
 }

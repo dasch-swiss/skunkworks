@@ -28,17 +28,19 @@ ClassObj::ClassObj(
 ClassObj::ClassObj(const nlohmann::json &json_obj) {
   if (json_obj.contains("version") && (json_obj["version"] == 1) && json_obj.contains("type")) {
     if (!json_obj.contains("type"))
-      throw Error(file_, __LINE__, R"("ClassObj" serialization has no "type".)");
+      throw Error(file_, __LINE__, R"(ClassObj serialization has no "type".)"s);
     if (!json_obj.contains("id"))
-      throw Error(file_, __LINE__, R"("ClassObj" serialization has no "id".)");
+      throw Error(file_, __LINE__, R"(ClassObj serialization has no "id".)"s);
     id_ = dsp::Identifier(json_obj["id"].get<std::string>());
 
     if (!json_obj.contains("creation_date"))
-      throw Error(file_, __LINE__, R"("ClassObj" has no "creation_date")");
+      throw Error(file_, __LINE__, fmt::format(R"(ClassObj with id="{}" has no "creation_date")"s,
+          id_.to_string()));
     creation_date_ = xsd::DateTimeStamp(json_obj["creation_date"].get<std::string>());
 
     if (!json_obj.contains("created_by"))
-      throw Error(file_, __LINE__, R"("ClassObj" has no "created_by")");
+      throw Error(file_, __LINE__, fmt::format(R"(ClassObj with id="{}" has no "created_by")"s,
+          id_.to_string()));
     created_by_ = dsp::Identifier(json_obj["created_by"].get<std::string>());
 
     if (json_obj.contains("last_modification_date") && json_obj.contains("modified_by")) {
@@ -46,15 +48,17 @@ ClassObj::ClassObj(const nlohmann::json &json_obj) {
       modified_by_ = dsp::Identifier(json_obj["modified_by"].get<std::string>());
     }
     if (!json_obj.contains("in_data_model"))
-      throw Error(file_, __LINE__, R"("ClassObj" has no "in_data_model")");
+      throw Error(file_, __LINE__, fmt::format(R"(ClassObj with id="{}" has no "in_data_model")"s,
+          id_.to_string()));
     in_data_model_ = dsp::Identifier(json_obj["in_data_model"].get<std::string>());
     if (!json_obj.contains("label"))
-      throw Error(file_, __LINE__, R"("ClassObj" has no "label")");
+      throw Error(file_, __LINE__, fmt::format(R"(ClassObj with id="{}" has no "label")"s,
+          id_.to_string()));
     for (const auto& [lang, value]: json_obj["label"].items()) label_[lang] = value;
     if (json_obj.contains("description"))
       for (const auto& [lang, value]: json_obj["description"].items()) description_[lang] = value;
   } else {
-    throw Error(file_, __LINE__, R"("Object" serialization not consistent.)");
+    throw Error(file_, __LINE__, R"(ClassObj: serialization not consistent.)"s);
   }
 }
 

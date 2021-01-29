@@ -275,6 +275,9 @@ class Project : public ModelItem, public Subject {
 
   /*!
    * Constructor from JSON
+   *
+   * May throw dsp::Error
+   *
    * @param json_obj
    */
   explicit Project(const nlohmann::json& json_obj);

@@ -13,6 +13,8 @@
 
 const char file_[] = __FILE__;
 
+using namespace std::string_literals;
+
 namespace dsp {
 
 class ResourceClass;
@@ -26,7 +28,10 @@ Property::Property(const dsp::Identifier& created_by,
     sub_property_of_(sub_property_of) {
   if (sub_property_of_ != Identifier::empty_identifier()) {
     PropertyPtr sub_property_ptr = ModelItem::get_item<Property>(sub_property_of_);
-    if (value_type_ != sub_property_ptr->value_type()) throw Error(file_, __LINE__, "Property is not of same value type as superproperty!");
+    if (value_type_ != sub_property_ptr->value_type())
+      throw Error(file_, __LINE__, fmt::format(R"(Property "{}" ("{}") is not of same value type as superproperty "{}" ({})!)"s,
+          static_cast<std::string>(label_.get("en")), id_.to_string(),
+          static_cast<std::string>(sub_property_ptr->label().get("en")), sub_property_ptr->id().to_string()));
   }
   reference_to_ = Identifier::empty_identifier();
 }
@@ -55,14 +60,14 @@ Property::Property(const nlohmann::json& json_obj) : ClassObj(json_obj) {
       sub_property_of_ = dsp::Identifier::empty_identifier();
     }
   } else {
-    throw Error(file_, __LINE__, R"("Property" serialization not consistent.)");
+    throw Error(file_, __LINE__, R"(Property serialization not consistent.)"s);
   }
 }
 
 std::shared_ptr<Property> Property::Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs) {
   std::shared_ptr<Property> tmp(new Property(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
-    throw Error(file_, __LINE__, R"("Property" with same "id" already exists!)");
+    throw Error(file_, __LINE__, fmt::format(R"(Property with same id="{}" already exists!)"s, tmp->id().to_string()));
   }
   if (obs) tmp->attach(obs);
   tmp->add_item<Property>();
