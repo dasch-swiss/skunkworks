@@ -19,13 +19,6 @@ static const char file_[] = __FILE__;
 namespace admin {
 
 /*!
- * Default constructor. Creates an empty user.
- */
-User::User() {
-  id_ = dsp::Identifier("empty");
-}
-
-/*!
  * Construct user from provided values.
  */
 User::User(
@@ -47,7 +40,7 @@ User::User(
   status_ = status;
   lang_ = lang;
 
-  id_ = dsp::Identifier(username_.value());
+  id_ = dsp::Identifier("user",username_.value());
 }
 
 /*!

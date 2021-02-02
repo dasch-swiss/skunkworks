@@ -1,0 +1,15 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+    name = "in_memory_user_repository",
+    srcs = ["in_memory_user_repository.cpp"],
+    size = "small",
+    deps = [
+        "//admin-cmd-srvc/src/entity:user",
+        "//admin-cmd-srvc/src/adapter/repository:in_memory_user_repository",
+        "//shared/error",
+        "@catch2//:catch2_with_main",
+    ],
+)

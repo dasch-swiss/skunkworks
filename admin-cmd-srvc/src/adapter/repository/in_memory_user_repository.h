@@ -18,9 +18,14 @@ class InMemoryUserRepository : public IUserRepository {
   inline InMemoryUserRepository() = default;
 
   /*!
-   * Write user to unordered_map.
+   * Write new user to unordered_map.
    */
-  void write(const std::shared_ptr<User> &user);
+  void create(const std::shared_ptr<User> &user);
+
+  /*!
+   * Update existing user in unordered_map.
+   */
+  void update(const std::shared_ptr<User> &user);
 
   /*!
    * Read user from unordered_map.

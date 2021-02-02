@@ -28,7 +28,7 @@ class User {
   /*!
    * Default constructor. Creates an empty user.
    */
-   User();
+   inline User() = default;
 
   /*!
    * Constructor for creating a fully populated user.
@@ -62,7 +62,7 @@ class User {
    * the default constructor, then the Identifier is null.
    * @return
    */
-  inline bool is_null() { return id_.to_string() == "empty"; };
+  inline bool is_empty() { return id_.to_string() == dsp::Identifier::empty_identifier().to_string(); };
 
   /*!
    * Serialize user to JSON.
@@ -71,7 +71,7 @@ class User {
 
 
  private:
-  dsp::Identifier id_;
+  dsp::Identifier id_ = dsp::Identifier::empty_identifier();
   dsp::Username username_;
   dsp::Email email_;
   dsp::Password password_;

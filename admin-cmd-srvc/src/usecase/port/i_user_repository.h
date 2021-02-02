@@ -20,9 +20,14 @@ class IUserRepository
 {
  public:
   /*!
-   * Write user to repository. Existing user should be overwritten.
+   * Write new user to the repository. There should be no user in the repository with the same id.
    */
-  virtual void write(const std::shared_ptr<User> &user) = 0;
+  virtual void create(const std::shared_ptr<User> &user) = 0;
+
+  /*!
+   * Write existing user to the repository. There should be a user with the same id in the repository, which should be overwritten.
+   */
+  virtual void update(const std::shared_ptr<User> &user) = 0;
 
   /*!
    * Read user (by id) from repository.

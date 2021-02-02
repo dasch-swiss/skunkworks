@@ -11,10 +11,10 @@ namespace admin {
 
 void CreateUser::create(const std::shared_ptr<User> &user) {
 
-  if (user->is_null()) {
+  if (user->is_empty()) {
     throw dsp::Error(file_, __LINE__, "Creating an empty user is not allowed!");
   }
-  repository_->write(user);
+  repository_->create(user);
 }
 
 }

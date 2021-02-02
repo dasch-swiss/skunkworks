@@ -7,13 +7,14 @@
 #include "shared/error/error.h"
 #include "admin-cmd-srvc/src/entity/user.h"
 
-TEST_CASE("creating the user and getting all value", "[entities][user]") {
+TEST_CASE("creating the user", "[entities][user]") {
 
-  SECTION("create user") {
-
+  SECTION("empty") {
     admin::User empty_user = admin::User();
-    CHECK(empty_user.is_null());
+    CHECK(empty_user.is_empty());
+  }
 
+  SECTION("fully populated") {
     admin::User user = admin::User(
         dsp::Username("dduck"),
         dsp::Email("dduck@example.com"),
