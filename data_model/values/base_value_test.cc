@@ -123,7 +123,7 @@ TEST_CASE("Simple catch2 tests", "[catch2|") {
     REQUIRE(json_obj["modified_by"].get<std::string>() == static_cast<std::string>(base_value_ptr->modified_by()));
     REQUIRE(json_obj["delete_date"].get<std::string>() == static_cast<std::string>(base_value_ptr->delete_date()));
     REQUIRE(json_obj["deleted_by"].get<std::string>() == static_cast<std::string>(base_value_ptr->deleted_by()));
-    REQUIRE(json_obj["delete_comment"]["en"] == "was_useless!"s);
+    REQUIRE(json_obj["delete_comment"]["en"] == "was useless!"s);
   }
 }
 
