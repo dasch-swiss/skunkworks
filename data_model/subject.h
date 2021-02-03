@@ -13,13 +13,16 @@ namespace dsp {
 class Subject {
 
  public:;
+  inline Subject() = default;
+  inline Subject(std::shared_ptr<Observer> observer) { observers_.insert(observer); }
+  inline Subject(std::set<ObserverPtr>& observers) {observers_ = observers; }
   inline void attach(std::shared_ptr<Observer> observer) { observers_.insert(observer); }
   inline void detach(std::shared_ptr<Observer> observer) { observers_.erase(observer); }
   inline void notify(ObserverAction action, std::shared_ptr<ModelItem> item) {
     for (const auto& observer: observers_) observer->update(action, item);
   }
  private:
-  std::set<std::shared_ptr<Observer>> observers_;
+  std::set<ObserverPtr> observers_;
 };
 
 

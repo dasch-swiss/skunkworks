@@ -14,7 +14,7 @@ Agent::Agent(const dsp::Shortname& shortname) : ModelItem() {
   shortname_ = shortname;
 }
 
-std::shared_ptr<Agent> Agent::Factory(const dsp::Shortname& shortname, std::shared_ptr<Observer> obs) {
+std::shared_ptr<Agent> Agent::Factory(const dsp::Shortname& shortname, ObserverPtr obs) {
   std::shared_ptr<Agent> tmp(new Agent(shortname));
   if (obs) tmp->attach(obs);
   tmp->add_item<Agent>();
@@ -36,7 +36,7 @@ Agent::Agent(const nlohmann::json &json_obj) : ModelItem() {
   }
 }
 
-std::shared_ptr<Agent> Agent::Factory(const nlohmann::json &json_obj, std::shared_ptr<Observer> obs) {
+std::shared_ptr<Agent> Agent::Factory(const nlohmann::json &json_obj, ObserverPtr obs) {
   std::shared_ptr<Agent> tmp(new Agent(json_obj)); // construct Agent object using private constructor
   if (ModelItem::item_exists(tmp->id())) { //
     throw Error(file_, __LINE__, fmt::format(R"(Agent "{}" with same id={} already exists!)",

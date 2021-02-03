@@ -40,14 +40,14 @@ class Agent : public ModelItem, public Subject {
    * @param shortname
    * @return
    */
-  static std::shared_ptr<Agent> Factory(const dsp::Shortname& shortname, std::shared_ptr<Observer> obs = {});
+  static std::shared_ptr<Agent> Factory(const dsp::Shortname& shortname, ObserverPtr obs = {});
 
   /*!
    * Agent Factory for creating a managed Agent from the repository
    * @param json_obj
    * @return
    */
-  static std::shared_ptr<Agent> Factory(const nlohmann::json& json_obj, std::shared_ptr<Observer> obs = {});
+  static std::shared_ptr<Agent> Factory(const nlohmann::json& json_obj, ObserverPtr obs = {});
 
   /*!
    * Compares 2 agents for equality

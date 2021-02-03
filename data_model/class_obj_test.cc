@@ -43,6 +43,7 @@ class MyClassObj : public dsp::ClassObj {
   void update(const dsp::Identifier agent_id) {
     last_modification_date_ = xsd::DateTimeStamp();
     modified_by_ = agent_id;
+    notify(dsp::ObserverAction::UPDATE, shared_from_this());
   }
 
   nlohmann::json to_json() override {

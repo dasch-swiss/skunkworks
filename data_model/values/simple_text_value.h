@@ -5,12 +5,25 @@
 #ifndef SKUNKWORKS_ENTITIES_VALUES_SIMPLE_TEXT_VALUE_CLASS_H_
 #define SKUNKWORKS_ENTITIES_VALUES_SIMPLE_TEXT_VALUE_CLASS_H_
 
+
 #include "base_value.h"
 
 namespace dsp {
 
 class SimpleTextValue : public BaseValue {
+ public:
+  SimpleTextValue(
+      xsd::String text,
+      dsp::Identifier agent_id,
+      ObserverPtr obs = {}): BaseValue(agent_id, obs), text_(text) {
+  }
 
+  SimpleTextValue(const nlohmann::json &json_obj);
+
+  nlohmann::json to_json();
+
+ private:
+  xsd::String text_;
 };
 
 }

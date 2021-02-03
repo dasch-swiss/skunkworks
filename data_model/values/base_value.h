@@ -8,49 +8,104 @@
 #include <memory>
 #include <string>
 
+#include "external/nlohmann/json.hpp"
+
 #include "shared/xsd_types/xsd.h"
 #include "data_model/agent.h"
+#include "data_model/subject.h"
 
 namespace dsp {
 
-class BaseValue {
+class BaseValue : public ModelItem, public Subject {
  public:
 
-  inline BaseValue() { modified_ = false; }
-
-  BaseValue(std::shared_ptr<Agent> created_by, const xsd::LangString &comment);
-
-  /**
-   * Getter for creation_date
-   *
-   * @return xsd::DateTimeStamp
+  /*!
+   * \brief Default constructor
    */
+  BaseValue() = delete;
+
+
+  BaseValue(const dsp::Identifier &created_by);
+
+
+  inline BaseValue(const xsd::LangString &comment, const dsp::Identifier &created_by) : BaseValue(created_by) {
+    comment_ = comment;
+  }
+
+
+  BaseValue(const nlohmann::json& json_obj);
+
+
+  inline ~BaseValue() {}
+
+  void remove(const dsp::Identifier &deleted_by);
+
+  void remove(const xsd::LangString& delete_comment, const Identifier &deleted_by);
+
+  /*!
+ * \brief getter for creation date
+ * \return
+ */
   inline xsd::DateTimeStamp creation_date() { return creation_date_; }
 
-  virtual void create() = 0;
+  inline Identifier created_by() { return created_by_; }
 
-  virtual void remove(std::shared_ptr<Agent> deleted_by);
+  inline xsd::DateTimeStamp last_modification_date() { return last_modification_date_; }
 
-  virtual void remove(std::shared_ptr<Agent> deleted_by, const xsd::LangString &lang_string);
+  inline bool is_modified() { return modified_by_ != Identifier::empty_identifier(); }
 
-  virtual void remove(std::shared_ptr<Agent> deleted_by, const xsd::Language &language, const xsd::String &text);
+  inline Identifier modified_by() {return modified_by_; }
 
-  virtual void remove(std::shared_ptr<Agent> deleted_by, const std::string &language, const std::string &text);
+  inline bool is_deleted() { return deleted_by_ != Identifier::empty_identifier(); }
 
-  virtual std::string to_string() = 0;
+  inline xsd::DateTimeStamp delete_date() { return delete_date_; }
+
+  inline Identifier deleted_by() { return deleted_by_; }
+
+  /*!
+   * \brief Getter for Comment
+   * \return
+   */
+  inline xsd::LangString comment() { return comment_; }
+
+  /*!
+   * \brief Getter for the comment of a given language. It lang does not exist, the first lang existing will be returned
+   * \param lang
+   * \return
+   */
+  inline xsd::String comment(xsd::Language lang) { return comment_.get(lang); }
+
+  inline xsd::String comment(std::string lang) { return comment_.get(lang); }
+
+  void comment(const xsd::LangString &label, const dsp::Identifier& modified_by);
+
+  void comment_add(const xsd::Language& lang, const xsd::String& text, const dsp::Identifier& modified_by);
+
+  inline void comment_add(const std::string& lang, const std::string& text, const dsp::Identifier& modified_by) {
+    comment_add(xsd::Language(lang), xsd::String(text), modified_by);
+  }
+
+  void comment_remove(const xsd::Language& lang, const dsp::Identifier& modified_by);
+
+  inline void comment_remove(const std::string& lang, const dsp::Identifier& modified_by) {
+    comment_remove(xsd::Language(lang), modified_by);
+  }
+
+
+  bool operator==(const BaseValue &other);
+
+  virtual nlohmann::json to_json() override ;
 
  protected:
-
- private:
-  xsd::AnyUri id_;
+  std::string  type_;
   xsd::DateTimeStamp creation_date_;
-  std::shared_ptr<Agent> created_by_;
-  xsd::Boolean is_deleted_;
+  dsp::Identifier created_by_;
+  xsd::DateTimeStamp last_modification_date_;
+  dsp::Identifier modified_by_;
   xsd::DateTimeStamp delete_date_;
-  std::shared_ptr<Agent> deleted_by_;
+  dsp::Identifier deleted_by_;
   xsd::LangString delete_comment_;
   xsd::LangString comment_;
-  bool modified_;
 };
 
 }

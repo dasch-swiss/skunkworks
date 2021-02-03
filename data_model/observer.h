@@ -22,7 +22,7 @@ class Observer {
   virtual void update(ObserverAction action, std::shared_ptr<ModelItem> item) = 0;
 };
 
-
+using ObserverPtr = std::shared_ptr<Observer>;
 
 }
 #endif //SKUNKWORKS_DATA_MODEL_OBSERVER_H_

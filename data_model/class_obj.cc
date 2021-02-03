@@ -98,7 +98,7 @@ nlohmann::json ClassObj::to_json() {
       {"version", 1},
       {"id", id_},
       {"creation_date", creation_date_},
-      {"created_by", created_by_},
+      {"created_by", created_by_.to_string()},
       {"in_data_model", in_data_model_.to_string()},
       {"label", nlohmann::json (label_map)},
       {"description", nlohmann::json (description_map)}
@@ -112,8 +112,8 @@ nlohmann::json ClassObj::to_json() {
 
 bool ClassObj::operator==(const ClassObj &other) {
   return id_ == other.id_ && creation_date_ == other.creation_date_ &&
-  created_by_ == other.created_by_ && in_data_model_ == other.in_data_model_;
-  // ToDo:  LangString with "==" operator
+  created_by_ == other.created_by_ && in_data_model_ == other.in_data_model_ &&
+  label_ == other.label_ && description_ == other.description_;
 }
 
 }

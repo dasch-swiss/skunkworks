@@ -128,7 +128,6 @@ class ClassObj: public ModelItem, public Subject {
   virtual nlohmann::json to_json() override ;
 
  protected:
-  //dsp::Identifier id_;
   xsd::DateTimeStamp creation_date_;
   dsp::Identifier created_by_;
   dsp::Identifier in_data_model_;

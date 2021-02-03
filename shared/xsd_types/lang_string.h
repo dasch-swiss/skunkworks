@@ -42,6 +42,8 @@ class LangString {
 
   void remove(const Language &lang);
 
+  inline bool empty() { return lang_string_.size() == 0; }
+
   inline bool operator==(const LangString& other) const { return lang_string_ == other.lang_string_; }
 
   typedef LangStringMap::iterator iterator;
