@@ -104,7 +104,7 @@ class BaseValue : public ModelItem, public Subject {
   dsp::Identifier modified_by_;
   xsd::DateTimeStamp delete_date_;
   dsp::Identifier deleted_by_;
-  xsd::LangString delete_comment_;
+  xsd::LangString deletion_comment_;
   xsd::LangString comment_;
 };
 

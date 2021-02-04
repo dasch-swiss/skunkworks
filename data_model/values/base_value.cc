@@ -62,7 +62,7 @@ void BaseValue::remove(const dsp::Identifier &deleted_by) {
 void BaseValue::remove(const xsd::LangString& delete_comment, const Identifier &deleted_by) {
   delete_date_ = xsd::DateTimeStamp{};
   deleted_by_ = deleted_by;
-  delete_comment_ = delete_comment;
+  deletion_comment_ = delete_comment;
   notify(ObserverAction::REMOVE, shared_from_this());
 }
 
@@ -122,9 +122,9 @@ nlohmann::json BaseValue::to_json() {
     json_obj["delete_date"] = delete_date_;
     json_obj["deleted_by"] = deleted_by_.to_string();
   }
-  if (!delete_comment_.empty()) {
+  if (!deletion_comment_.empty()) {
     std::unordered_map<std::string, std::string> delete_comment_map;
-    for (const auto& [lang, text]: delete_comment_) delete_comment_map[lang] = text;
+    for (const auto& [lang, text]: deletion_comment_) delete_comment_map[lang] = text;
     json_obj["delete_comment"] = nlohmann::json (delete_comment_map);
   }
   return json_obj;

@@ -12,17 +12,23 @@ namespace dsp {
 
 class SimpleTextValue : public BaseValue {
  public:
-  SimpleTextValue(
-      xsd::String text,
-      dsp::Identifier agent_id,
-      ObserverPtr obs = {}): BaseValue(agent_id, obs), text_(text) {
-  }
+  static std::shared_ptr<SimpleTextValue> Factory(
+      const xsd::String& text,
+      const Identifier& identifier,
+      std::shared_ptr<dsp::Observer> obs = {}
+      );
 
-  SimpleTextValue(const nlohmann::json &json_obj);
+  static std::shared_ptr<SimpleTextValue> Factory(const nlohmann::json& json_obj);
 
-  nlohmann::json to_json();
+  inline std::string to_string() {}
+
+  inline nlohmann::json  to_json() {}
 
  private:
+  inline SimpleTextValue(xsd::String text, Identifier agent_id) : BaseValue(agent_id), text_(text) {}
+
+  SimpleTextValue(const nlohmann::json& json_obj);
+
   xsd::String text_;
 };
 

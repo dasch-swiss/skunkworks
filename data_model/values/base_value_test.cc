@@ -124,6 +124,26 @@ TEST_CASE("Simple catch2 tests", "[catch2|") {
     REQUIRE(json_obj["delete_date"].get<std::string>() == static_cast<std::string>(base_value_ptr->delete_date()));
     REQUIRE(json_obj["deleted_by"].get<std::string>() == static_cast<std::string>(base_value_ptr->deleted_by()));
     REQUIRE(json_obj["delete_comment"]["en"] == "was useless!"s);
+    MyBaseValuePtr same = MyBaseValue::Factory(json_obj);
+    REQUIRE(same->id() == base_value_ptr->id());
+    REQUIRE(same->creation_date() == base_value_ptr->creation_date());
+    REQUIRE(same->created_by() == base_value_ptr->created_by());
+    REQUIRE(same->last_modification_date() == base_value_ptr->last_modification_date());
+    REQUIRE(same->modified_by() == base_value_ptr->modified_by());
+    REQUIRE(same->delete_date() == base_value_ptr->delete_date());
+    REQUIRE(same->deleted_by() == base_value_ptr->deleted_by());
+    REQUIRE(same->comment() == base_value_ptr->comment());
+    REQUIRE(same->comment() == base_value_ptr->comment());
+  }
+
+  SECTION("BaseValue with observer") {
+    std::shared_ptr<MyObserver> observer(new MyObserver());
+    MyBaseValuePtr base_value_ptr(MyBaseValue::Factory(lang_string, my_agent->id(), observer));
+    REQUIRE(value_ == "CREATE"s);
+    base_value_ptr->comment_add("fr"s, "français"s, my_agent->id());
+    REQUIRE(value_ == "UPDATE"s);
+    base_value_ptr->remove(my_agent->id());
+    REQUIRE(value_ == "REMOVE"s);
   }
 }
 
