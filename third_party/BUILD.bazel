@@ -103,5 +103,6 @@ cmake_external(
     ],
     deps = [
         "@zlib//:zlib",
+        "@com_github_gflags_gflags//:gflags",
     ]
 )

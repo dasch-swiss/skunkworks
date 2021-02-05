@@ -183,6 +183,18 @@ http_archive(
     sha256 = stduuid_sha256,
 )
 
+#gflags - needed by rocksdb
+gflags_tag = "2.2.2"
+gflags_sha256 = "19713a36c9f32b33df59d1c79b4958434cb005b5b47dc5400a7a4b078111d9b5"
+http_archive(
+    name = "com_github_gflags_gflags",
+    strip_prefix = "gflags-{}".format(gflags_tag),
+    type = "zip",
+    url = "https://github.com/gflags/gflags/archive/v{}.zip".format(gflags_tag),
+    sha256 = gflags_sha256,
+)
+
+
 # RocksDB
 rocksdb_tag = "6.15.4"
 rocksdb_sha256 = "9c4a68e6c3a3e86d1b6224156b0d8b6c4ce270b76251b8c0bebd6c500391b033"
