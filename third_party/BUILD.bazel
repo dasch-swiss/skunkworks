@@ -97,7 +97,10 @@ configure_make(
 # build rocksdb
 cmake_external(
     name = "rocksdb",
-    env_vars = {"CXXFLAGS": "-Dredacted='\\\"redacted\\\"'"},
+    env_vars = {
+        "CXXFLAGS": "-Dredacted='\\\"redacted\\\"'",
+        "MAKEFLAGS": "-j"
+    },
     lib_source = "@rocksdb//:all",
     static_libraries = [
         "librocksdb.a"
