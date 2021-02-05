@@ -55,6 +55,30 @@ exceptions which are documented in this section.
   ```
   $ brew install cmake
   ```
+ 
+## Linux Container
+
+To test if the build and tests run under Linux, you can start a Linux Docker container,
+which matches your current CPU platform:
+```bash
+$ make start-linux-amd64-container
+$ make start-linux-arm64-container
+$ make start-linux-armv7-container
+```
+
+Then inside the container, change into the `src` directory, and run
+the `test-linux` make target:
+```bash
+$ cd src
+$ make test-linux
+```
+
+## Experimental Apple Silicon Support
+
+To run the tests on a Apple Silicon machine, run the following:
+```bash
+$ USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
+```
 
 ## References
 
@@ -68,4 +92,3 @@ exceptions which are documented in this section.
 
 ### Other
 - Performance Matters (CppCon 2020): https://youtu.be/koTf7u0v41o
-

@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "nlohmann_json_test",
+  srcs = ["nlohmann_json_test.cc"],
+  deps = [
+      "@nlohmann//:nlohmann",
+      "@catch2//:catch2_with_main",
+  ],
+)

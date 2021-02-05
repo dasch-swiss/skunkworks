@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_test")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -6,8 +6,8 @@ cc_test(
   name = "stduuid_test",
   srcs = ["stduuid_test.cc"],
   deps = [
-      "@stduuid//:stduuid",
-      "//tests:test_main",
-      "@catch2//:catch2",
+      "@stduuid//:uuid",
+      "@stduuid//:gsl",
+      "@catch2//:catch2_with_main",
   ],
 )

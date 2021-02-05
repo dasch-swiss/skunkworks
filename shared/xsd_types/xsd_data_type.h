@@ -10,8 +10,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "xsd_error.h"
-#include "xsd_restriction.h"
+#include "shared/xsd_types/xsd_error.h"
+#include "shared/xsd_types/xsd_restriction.h"
 
 namespace xsd {
 
@@ -26,6 +26,7 @@ class DataType {
    */
   inline DataType() = default;
 
+  virtual ~DataType() {};
 
   /*!
    * Getter for the data type
@@ -82,7 +83,7 @@ class DataType {
     for (auto r: restrictions_) {
       Restriction::Result result = r->validate(static_cast<std::string>(*this));
       if (!result.success) throw Error(__FILE__, __LINE__,
-          "The type " + xsd_type_ + "did not pass validation of restrictions: " + result.msg + "!");
+          "The type xsd::" + xsd_type_ + " did not pass validation of restrictions: " + result.msg + "!");
     }
   }
 
@@ -95,6 +96,7 @@ class DataType {
    */
   virtual std::ostream &print_to_stream(std::ostream &out_stream) const = 0;
 };
+
 
 }
 

@@ -2,8 +2,8 @@
 // Created by Lukas Rosenthaler on 27.11.20.
 //
 
-#ifndef SKUNKWORKS_HELPERS_ERROR_H_
-#define SKUNKWORKS_HELPERS_ERROR_H_
+#ifndef SKUNKWORKS_HELPERS_DSP_ERROR_H_
+#define SKUNKWORKS_HELPERS_DSP_ERROR_H_
 
 #include <iostream>
 #include <string>

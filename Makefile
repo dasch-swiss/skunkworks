@@ -22,13 +22,41 @@ docs-publish: ## build and publish docs to Github Pages
 install-python-requirements: ## install python requirements for documentation
 	pip3 install -r requirements.txt
 
-.PHONY:build
+.PHONY: build
 build: ## build the project
 	bazel build //...
 
-.PHONY:test
+.PHONY: build-linux
+build-linux: ## build the project under Linux
+	bazel build --config=linux //...
+
+.PHONY: build-darwin-arm64
+build-darwin-arm64: ## build the project on an Apple Silicon machine
+	USE_BAZEL_VERSION=last_green bazel build -c opt --cpu=darwin_arm64 //...
+
+.PHONY: test
 test: ## test the project
 	bazel test //...
+
+.PHONY: test-linux
+test-linux: ## test the project under linux
+	bazel test --config=linux //...
+
+.PHONY: test-darwin-arm64
+test-darwin-arm64: ## test the project on an Apple Silicon machine
+	USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
+
+.PHONY: start-linux-amd64-container
+start-linux-amd64-container: ## Start the Linux amd64 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/amd64 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
+
+.PHONY: start-linux-arm64-container
+start-linux-arm64-container: ## Start the Linux arm64 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/arm64 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
+
+.PHONY: start-linux-armv7-container
+start-linux-armv7-container: ## Start the Linux arm/v7 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/arm/v7 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
 
 .PHONY: help
 help: ## this help

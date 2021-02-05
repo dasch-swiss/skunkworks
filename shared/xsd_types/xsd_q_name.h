@@ -65,6 +65,8 @@ class QName : public DataType {
    */
   QName &operator=(const std::string &strval) override ;
 
+  inline bool operator==(const QName& other) const { return (prefix_ == other.prefix_) && (name_ == other.name_); }
+
   /*!
    * Setter with std::string
    * @param strval

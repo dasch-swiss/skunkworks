@@ -97,8 +97,10 @@ class String : public DataType {
     enforce_restrictions();
   }
 
+  inline bool empty() const { return strval_.empty(); }
 
-  inline String &operator=(const std::string &strval) override { strval_ = strval; return *this; }
+
+  inline String &operator=(const std::string &strval) override { strval_ = strval; enforce_restrictions(); return *this; }
 
   inline String &operator=(const String &str) { strval_ = str.strval_; enforce_restrictions(); return *this; }
 

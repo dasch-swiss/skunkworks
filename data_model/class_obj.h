@@ -6,52 +6,125 @@
 #define SKUNKWORKS_ENTITIES_CLASS_OBJ_H_
 
 #include <set>
+#include <memory>
+
+#include "external/nlohmann/json.hpp"
 
 #include "shared/xsd_types/xsd.h"
-#include "configuration.h"
+#include "shared/dsp_types/identifier.h"
 #include "agent.h"
-#include "data_model.h"
+//#include "data_model.h"
+#include "subject.h"
+#include "model_item.h"
 
 namespace dsp {
 
-class ClassObj {
- public:
-  ClassObj() { configuration_ = Configuration::init(); }
+class DataModel;
 
+class ClassObj: public ModelItem, public Subject {
+  /*!
+   * Base class for ResourceClass and Property
+   */
+ public:
+  ClassObj() = delete ;
+
+  /*!
+   * Constructor taking all necessary parameters
+   *
+   * @param in_data_model
+   * @param agent
+   * @param class_label
+   * @param class_description
+   */
   ClassObj(
-      std::shared_ptr<DataModel> in_data_model,
-      std::shared_ptr<Agent> agent,
-      xsd::LangString class_label,
-      xsd::LangString class_description
+      const dsp::Identifier& created_by,
+      const dsp::Identifier& in_data_model,
+      const xsd::LangString& class_label,
+      const xsd::LangString& class_description
   );
 
-  ClassObj(const xsd::AnyUri &id);
 
-  inline xsd::AnyUri id() { return id_; }
-  inline std::shared_ptr<DataModel> in_data_model() { return in_data_model_; };
-  inline xsd::DateTimeStamp creation_date() { return creation_date_; }
-  inline std::shared_ptr<Agent> created_by() { return created_by_; }
-  inline xsd::DateTimeStamp last_modification_date() { return last_modification_date_; }
-  inline std::shared_ptr<Agent> modified_by() { return modified_by_; }
-  inline xsd::LangString class_label() { return class_label_; }
-  inline xsd::LangString class_description() { return class_description_; }
-  inline std::set<std::string> changed() { return changed_; }
+  ClassObj(const nlohmann::json &json_obj);
 
-  void class_label(const xsd::LangString &class_label);
-  void class_description(const xsd::LangString &class_description);
+  inline ~ClassObj() { }
 
+  /*!
+   * Getter for in_data_model
+   * @return
+   */
+  [[nodiscard]]
+  inline dsp::Identifier in_data_model_id() const { return in_data_model_; };
+
+  std::shared_ptr<DataModel> in_data_model() const { return get_item<DataModel>(in_data_model_); }
+
+
+  /*!
+   * Getter for creation_date
+   *
+   * @return
+   */
+  [[nodiscard]]
+  inline xsd::DateTimeStamp creation_date() const { return creation_date_; }
+
+  /*!
+   * Getter for creator
+   *
+   * @return
+   */
+  [[nodiscard]]
+  inline dsp::Identifier created_by_id() const { return created_by_; }
+
+  /*!
+   * Getter for lastmodification date
+   *
+   * @return
+   */
+  [[nodiscard]]
+  inline xsd::DateTimeStamp last_modification_date() const { return last_modification_date_; }
+
+  /*!
+   * Getter for modified_by
+   *
+   * @return
+   */
+  [[nodiscard]]
+  inline dsp::Identifier modified_by_id() const { return modified_by_; }
+
+  /*!
+   * Getter for label
+   * @return
+   */
+  [[nodiscard]]
+  inline xsd::LangString label() const { return label_; }
+
+  /*!
+   * Getter for description
+   *
+   * @return
+   */
+  [[nodiscard]]
+  inline xsd::LangString description() const { return description_; }
+
+  void label(const xsd::LangString &label);
+
+  void description(const xsd::LangString &description);
+
+  bool operator==(const ClassObj &other);
+
+  virtual nlohmann::json to_json();
 
  protected:
-  xsd::AnyUri id_;
-  std::shared_ptr<DataModel> in_data_model_;
+  //dsp::Identifier id_;
   xsd::DateTimeStamp creation_date_;
-  std::shared_ptr<Agent> created_by_;
+  dsp::Identifier created_by_;
+  dsp::Identifier in_data_model_;
   xsd::DateTimeStamp last_modification_date_;
-  std::shared_ptr<Agent> modified_by_;
-  xsd::LangString class_label_;
-  xsd::LangString class_description_;
-  Configuration *configuration_;
-  std::set<std::string> changed_;
+  dsp::Identifier modified_by_;
+  xsd::LangString label_;
+  xsd::LangString description_;
+
+  //inline void data_model_id(const std::shared_ptr<DataModel> &in_data_model) { in_data_model_ = in_data_model; }
+
 };
 
 
