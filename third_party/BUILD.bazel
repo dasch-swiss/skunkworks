@@ -92,3 +92,16 @@ configure_make(
 #    lib_source = "@zlib//:all",
 #    static_libraries = ["libz.a"],
 #)
+
+
+# build rocksdb
+cmake_external(
+    name = "rocksdb",
+    lib_source = "@rocksdb//:all",
+    static_libraries = [
+        "librocksdb.a"
+    ],
+    deps = [
+        "@zlib//:zlib",
+    ]
+)

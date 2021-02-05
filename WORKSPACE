@@ -182,3 +182,15 @@ http_archive(
     url = "https://github.com/mariusbancila/stduuid/archive/{}.zip".format(stduuid_tag),
     sha256 = stduuid_sha256,
 )
+
+# RocksDB
+rocksdb_tag = "6.15.4"
+rocksdb_sha256 = "9c4a68e6c3a3e86d1b6224156b0d8b6c4ce270b76251b8c0bebd6c500391b033"
+http_archive(
+    name = "rocksdb",
+    build_file_content = all_content,
+    strip_prefix = "rocksdb-{}".format(rocksdb_tag),
+    type = "zip",
+    url = "https://github.com/facebook/rocksdb/archive/v{}.zip".format(rocksdb_tag),
+    sha256 = rocksdb_sha256,
+)
