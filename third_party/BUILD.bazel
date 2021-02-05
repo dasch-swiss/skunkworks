@@ -99,7 +99,8 @@ cmake_external(
     name = "rocksdb",
     env_vars = {
         "CXXFLAGS": "-Dredacted='\\\"redacted\\\"'",
-        "MAKEFLAGS": "-j"
+        "MAKEFLAGS": "-j",
+        "LDFLAGS": "-lpthread"
     },
     lib_source = "@rocksdb//:all",
     static_libraries = [
