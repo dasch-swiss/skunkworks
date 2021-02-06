@@ -65,7 +65,7 @@ TEST_CASE("rocksdb tests", "[rocksdb|") {
     db->Get(ReadOptions(), db->DefaultColumnFamily(), "key2", &pinnable_val);
     CHECK(pinnable_val == "value");
     // If the value is not pinned, the internal buffer must have the value.
-    CHECK(pinnable_val.IsPinned() || string_val == "value");
+    assert(pinnable_val.IsPinned() || string_val == "value");
   }
 
   PinnableSlice pinnable_val;
