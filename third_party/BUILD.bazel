@@ -101,7 +101,7 @@ cmake_external(
         "CFLAGS": "-pthread",
         "CXXFLAGS": "-Dredacted='\\\"redacted\\\"' -pthread",
         "MAKEFLAGS": "-j6 --load-average=6",
-        "LDFLAGS": "-pthread"
+        "LDFLAGS": "-pthread -latomic"
     },
     lib_source = "@rocksdb//:all",
     static_libraries = [
