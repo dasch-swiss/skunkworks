@@ -42,21 +42,21 @@ test: ## test the project
 test-linux: ## test the project under linux
 	bazel test --config=linux //...
 
-.PHONY: test-darwin-arm64
-test-darwin-arm64: ## test the project on an Apple Silicon machine
+.PHONY: test-apple-silicon
+test-apple-silicon: ## test the project on an Apple Silicon machine
 	USE_BAZEL_VERSION=last_green bazel test -c opt --cpu=darwin_arm64 //...
 
-.PHONY: start-linux-amd64-container
-start-linux-amd64-container: ## Start the Linux amd64 Docker container which can be used to run builds inside
-	docker run -it --rm --platform linux/amd64 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
+.PHONY: start-linux-intel-container
+start-linux-intel-container: ## Start the Linux amd64 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/amd64 -v ${PWD}:/src daschswiss/sipi-base:2.3 bin/bash
 
-.PHONY: start-linux-arm64-container
-start-linux-arm64-container: ## Start the Linux arm64 Docker container which can be used to run builds inside
-	docker run -it --rm --platform linux/arm64 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
+.PHONY: start-linux-arm-container
+start-linux-arm-container: ## Start the Linux arm64 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/arm64 -v ${PWD}:/src daschswiss/sipi-base:2.3 bin/bash
 
-.PHONY: start-linux-armv7-container
-start-linux-armv7-container: ## Start the Linux arm/v7 Docker container which can be used to run builds inside
-	docker run -it --rm --platform linux/arm/v7 -v ${PWD}:/src daschswiss/sipi-base:latest bin/bash
+.PHONY: start-linux-rpi-container
+start-linux-rpi-container: ## Start the Linux arm/v7 Docker container which can be used to run builds inside
+	docker run -it --rm --platform linux/arm/v7 -v ${PWD}:/src daschswiss/sipi-base:2.3 bin/bash
 
 .PHONY: help
 help: ## this help
