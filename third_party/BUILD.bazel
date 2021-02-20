@@ -98,7 +98,7 @@ configure_make(
 cmake_external(
     name = "rocksdb",
     env_vars = {
-        "CFLAGS": "-pthread",
+        "CFLAGS": "-pthread -latomic",
         "CXXFLAGS": "-Dredacted='\\\"redacted\\\"' -pthread",
         "MAKEFLAGS": "-j6 --load-average=6",
         "LDFLAGS": "-pthread -latomic"

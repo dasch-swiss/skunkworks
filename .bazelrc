@@ -20,14 +20,11 @@ build:linux --repo_env=CXX=clang++-11
 build:linux --cxxopt=-stdlib=libstdc++
 build:linux --host_cxxopt=-std=c++17
 build:linux --linkopt=-luuid
+build:linux --linkopt=-latomic
 
 # linux compiler settings for debugging include paths
 # build:linux --cxxopt='-E'
 # build:linux --cxxopt='-v'
-
-# macos compiler settings
-build:macos --cxxopt=-std=c++17
-build:macos --host_cxxopt=-std=c++17
 
 # default compiler settings
 build --cxxopt=-std=c++17
