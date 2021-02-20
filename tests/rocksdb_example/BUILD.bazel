@@ -1,0 +1,12 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_test(
+  name = "rocksdb_example",
+  srcs = ["rocksdb_example.cc"],
+  deps = [
+      "//third_party:rocksdb",
+      "@catch2//:catch2_with_main",
+  ],
+)
